@@ -11,7 +11,7 @@ from src.config import settings
 from src.models import Event, EventSource, Venue
 
 BASE_URL = "https://api.songkick.com/api/3.0"
-MADRID_METRO_AREA_ID = 31802
+MADRID_METRO_AREA_ID = 28755
 
 
 class SongkickCollector:

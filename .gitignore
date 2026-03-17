@@ -10,3 +10,4 @@ venv/
 *.egg
 .ruff_cache/
 .pytest_cache/
+data/

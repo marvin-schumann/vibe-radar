@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, Query, Request
@@ -12,15 +14,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 
-from src.collectors.events.bandsintown import BandsintownCollector
-from src.collectors.events.resident_advisor import ResidentAdvisorCollector
-from src.collectors.events.songkick import SongkickCollector
-from src.collectors.soundcloud import SoundCloudCollector
-from src.collectors.spotify import SpotifyCollector
 from src.config import settings
-from src.matching.exact import ExactMatcher
-from src.matching.vibe import VibeMatcher, build_taste_profile
 from src.models import Match, MatchType, TasteProfile
+
+DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -43,9 +40,38 @@ templates = Jinja2Templates(directory="src/web/templates")
 _cache: dict[str, Any] = {
     "taste_profile": None,
     "matches": [],
+    "events": [],
     "last_refresh": None,
     "refreshing": False,
 }
+
+
+def _load_snapshot_data() -> bool:
+    """Load pre-collected data from snapshot files if available."""
+    spotify_path = DATA_DIR / "spotify_snapshot.json"
+    events_path = DATA_DIR / "madrid_events.json"
+
+    if not spotify_path.exists() or not events_path.exists():
+        return False
+
+    try:
+        with open(spotify_path) as f:
+            spotify_data = json.load(f)
+        with open(events_path) as f:
+            events_data = json.load(f)
+
+        _cache["spotify_snapshot"] = spotify_data
+        _cache["events_snapshot"] = events_data
+        _cache["last_refresh"] = events_data.get("collected_at", datetime.now(tz=timezone.utc).isoformat())
+        logger.info("Loaded snapshot data: {} artists, {} events", len(spotify_data.get("artists", {})), len(events_data.get("events", [])))
+        return True
+    except Exception as exc:
+        logger.warning("Failed to load snapshot data: {}", exc)
+        return False
+
+
+# Try loading snapshot on startup
+_load_snapshot_data()
 
 
 # ---------------------------------------------------------------------------
@@ -55,6 +81,14 @@ _cache: dict[str, Any] = {
 
 async def _run_pipeline() -> None:
     """Run the full data collection and matching pipeline, updating the cache."""
+    from src.collectors.events.bandsintown import BandsintownCollector
+    from src.collectors.events.resident_advisor import ResidentAdvisorCollector
+    from src.collectors.events.songkick import SongkickCollector
+    from src.collectors.soundcloud import SoundCloudCollector
+    from src.collectors.spotify import SpotifyCollector
+    from src.matching.exact import ExactMatcher
+    from src.matching.vibe import VibeMatcher, build_taste_profile
+
     logger.info("Starting Vibe Radar pipeline refresh...")
 
     # -- 1. Collect user artists from music sources --
@@ -255,10 +289,40 @@ async def dashboard(request: Request) -> HTMLResponse:
 @app.get("/api/taste")
 async def get_taste_profile() -> JSONResponse:
     """Return the user's taste profile as JSON."""
+    # Try live profile first, fall back to snapshot
     profile = _cache.get("taste_profile")
+    if profile is not None:
+        return JSONResponse(
+            content={
+                "taste_profile": _serialize_taste_profile(profile),
+                "last_refresh": _cache.get("last_refresh"),
+            }
+        )
+
+    # Build from snapshot
+    spotify_data = _cache.get("spotify_snapshot", {})
+    artists = spotify_data.get("artists", {})
+    if not artists:
+        return JSONResponse(content={"taste_profile": _serialize_taste_profile(None), "last_refresh": None})
+
+    # Aggregate genres
+    genre_count: dict[str, int] = {}
+    for a in artists.values():
+        for g in a.get("genres", []):
+            genre_count[g] = genre_count.get(g, 0) + 1
+    top_genres = sorted(genre_count.items(), key=lambda x: -x[1])
+
+    # Source breakdown
+    sources = {"spotify": len(artists)}
+
     return JSONResponse(
         content={
-            "taste_profile": _serialize_taste_profile(profile),
+            "taste_profile": {
+                "top_genres": [{"genre": g, "count": c} for g, c in top_genres[:20]],
+                "avg_features": None,
+                "total_artists": len(artists),
+                "sources": sources,
+            },
             "last_refresh": _cache.get("last_refresh"),
         }
     )
@@ -276,31 +340,103 @@ async def get_events(
     ),
 ) -> JSONResponse:
     """Return upcoming matched events as JSON."""
-    matches: list[Match] = _cache.get("matches", [])
+    # Try live matches first
+    live_matches: list[Match] = _cache.get("matches", [])
+    if live_matches:
+        filtered = live_matches
+        if match_type and match_type != "all":
+            try:
+                mt = MatchType(match_type)
+                filtered = [m for m in filtered if m.match_type == mt]
+            except ValueError:
+                pass
+        return JSONResponse(
+            content={
+                "matches": [_serialize_match(m) for m in filtered],
+                "total": len(filtered),
+                "match_type": match_type or "all",
+                "last_refresh": _cache.get("last_refresh"),
+            }
+        )
 
-    # Filter by match type
-    if match_type and match_type != "all":
-        try:
-            mt = MatchType(match_type)
-            matches = [m for m in matches if m.match_type == mt]
-        except ValueError:
-            pass
+    # Fall back to snapshot data
+    events_data = _cache.get("events_snapshot", {})
+    snapshot_matches = events_data.get("matches", [])
+    all_events = events_data.get("events", [])
 
-    # Filter by days ahead
-    effective_days = days_ahead if days_ahead is not None else settings.days_ahead
-    cutoff = datetime.now(tz=timezone.utc)
-    from datetime import timedelta
+    results = []
+    # Serve exact matches from snapshot
+    for m in snapshot_matches:
+        entry = {
+            "event": {
+                "name": m.get("event", ""),
+                "date": m.get("date", ""),
+                "url": m.get("url", ""),
+                "image_url": None,
+                "source": m.get("source", "").lower().replace(" ", "_"),
+                "artists": [m.get("event_artist", "")],
+                "venue": {"name": m.get("venue", ""), "city": "Madrid", "address": None},
+                "price": None,
+                "description": None,
+            },
+            "matched_artist": {
+                "name": m.get("your_artist", ""),
+                "source": "spotify",
+                "image_url": None,
+                "genres": [],
+            },
+            "event_artist_name": m.get("event_artist", ""),
+            "match_type": "exact" if m.get("score", 0) >= 95 else "vibe",
+            "confidence": m.get("score", 0) / 100.0,
+            "match_reason": f"{'Exact' if m.get('score', 0) >= 95 else 'Close'} match ({m.get('score', 0)}%)",
+        }
+        if match_type == "all" or match_type is None or entry["match_type"] == match_type:
+            results.append(entry)
 
-    deadline = cutoff + timedelta(days=effective_days)
-    matches = [
-        m for m in matches
-        if m.event.date.tzinfo is not None and m.event.date <= deadline
-    ]
+    # Also include vibe-matching events (keyword matches)
+    import re
+    vibe_keywords = {"techno", "hypertechno", "hard techno", "trance", "drum and bass",
+                     "house", "edm", "minimal", "hardstyle", "frenchcore", "hardcore",
+                     "tekno", "acid", "psytrance", "melodic", "gabber", "rave",
+                     "electronic", "bass", "dnb", "hard house"}
+    matched_event_names = {m.get("event", "") for m in snapshot_matches}
+
+    for ev in all_events:
+        if ev["name"] in matched_event_names:
+            continue
+        name_lower = ev["name"].lower()
+        artists_lower = " ".join(a.lower() for a in ev.get("artists", []))
+        combined = f"{name_lower} {artists_lower}"
+        matched_kw = [k for k in vibe_keywords if k in combined]
+        if matched_kw and (match_type in ("all", None, "vibe")):
+            results.append({
+                "event": {
+                    "name": ev["name"],
+                    "date": ev.get("date", "")[:10] if ev.get("date") else "",
+                    "url": ev.get("url", ""),
+                    "image_url": None,
+                    "source": ev.get("source", "").lower().replace(" ", "_"),
+                    "artists": ev.get("artists", []),
+                    "venue": {"name": ev.get("venue", ""), "city": "Madrid", "address": None},
+                    "price": None,
+                    "description": None,
+                },
+                "matched_artist": {
+                    "name": ", ".join(matched_kw),
+                    "source": "genre_match",
+                    "image_url": None,
+                    "genres": matched_kw,
+                },
+                "event_artist_name": ", ".join(ev.get("artists", [])[:3]),
+                "match_type": "vibe",
+                "confidence": min(len(matched_kw) * 0.3, 1.0),
+                "match_reason": f"Genre match: {', '.join(matched_kw)}",
+            })
 
     return JSONResponse(
         content={
-            "matches": [_serialize_match(m) for m in matches],
-            "total": len(matches),
+            "matches": results,
+            "total": len(results),
             "match_type": match_type or "all",
             "last_refresh": _cache.get("last_refresh"),
         }

@@ -36,7 +36,7 @@ query GET_EVENTS($filters: FilterInputDtoInput, $pageSize: Int) {
 }
 """
 
-RA_MADRID_AREA_ID = 49
+RA_MADRID_AREA_ID = 41
 
 
 class ResidentAdvisorCollector:
