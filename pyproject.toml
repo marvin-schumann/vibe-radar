@@ -1,0 +1,35 @@
+[project]
+name = "vibe-radar"
+version = "0.1.0"
+description = "Match your Spotify/SoundCloud taste to DJ events in Madrid"
+requires-python = ">=3.11"
+dependencies = [
+    "spotipy>=2.23.0",
+    "httpx>=0.27.0",
+    "beautifulsoup4>=4.12.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "jinja2>=3.1.0",
+    "python-dotenv>=1.0.0",
+    "thefuzz[speedup]>=0.22.0",
+    "plotly>=5.18.0",
+    "loguru>=0.7.0",
+    "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.2.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

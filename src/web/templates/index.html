@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Radar — {{ city }} Music Events</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <style>
+        /* ============================================================
+           CSS RESET & VARIABLES
+           ============================================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121c;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #222240;
+            --border: #2a2a45;
+            --border-glow: #3a3a60;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888aa;
+            --text-muted: #555577;
+            --cyan: #00f0ff;
+            --cyan-dim: rgba(0, 240, 255, 0.15);
+            --cyan-glow: rgba(0, 240, 255, 0.4);
+            --magenta: #ff00aa;
+            --magenta-dim: rgba(255, 0, 170, 0.15);
+            --magenta-glow: rgba(255, 0, 170, 0.4);
+            --green: #00ff88;
+            --green-dim: rgba(0, 255, 136, 0.15);
+            --amber: #ffaa00;
+            --amber-dim: rgba(255, 170, 0, 0.15);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================================================
+           BACKGROUND EFFECTS
+           ============================================================ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(255, 0, 170, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        /* ============================================================
+           HEADER / HERO
+           ============================================================ */
+        header {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 3rem 1.5rem 2rem;
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .radar-icon {
+            position: relative;
+            width: 56px;
+            height: 56px;
+        }
+
+        .radar-icon .ring {
+            position: absolute;
+            border: 2px solid var(--cyan);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: radar-pulse 3s ease-out infinite;
+        }
+
+        .radar-icon .ring:nth-child(1) { width: 20px; height: 20px; animation-delay: 0s; }
+        .radar-icon .ring:nth-child(2) { width: 36px; height: 36px; animation-delay: 0.6s; }
+        .radar-icon .ring:nth-child(3) { width: 52px; height: 52px; animation-delay: 1.2s; }
+
+        .radar-icon .dot {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px var(--cyan-glow), 0 0 24px var(--cyan-glow);
+        }
+
+        .radar-icon .sweep {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 28px; height: 2px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            transform-origin: 0% 50%;
+            animation: radar-sweep 3s linear infinite;
+        }
+
+        @keyframes radar-pulse {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @keyframes radar-sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 300;
+            margin-top: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .subtitle span {
+            color: var(--cyan);
+            font-weight: 500;
+        }
+
+        .status-bar {
+            margin-top: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .status-dot.offline { background: var(--text-muted); box-shadow: none; animation: none; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ============================================================
+           LAYOUT
+           ============================================================ */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title .accent {
+            color: var(--cyan);
+        }
+
+        /* ============================================================
+           TASTE PROFILE SECTION
+           ============================================================ */
+        .taste-section {
+            margin-bottom: 3rem;
+            animation: fade-up 0.6s ease-out 0.2s both;
+        }
+
+        .taste-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .taste-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-wrapper canvas {
+            width: 100% !important;
+        }
+
+        /* Stats */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-row:last-child { border-bottom: none; }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .stat-value.magenta { color: var(--magenta); }
+
+        /* ============================================================
+           EVENTS SECTION
+           ============================================================ */
+        .events-section {
+            animation: fade-up 0.6s ease-out 0.4s both;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s;
+            letter-spacing: 0.02em;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--cyan);
+            color: var(--text-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--cyan-dim);
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+        }
+
+        .filter-tab .count {
+            margin-left: 0.4rem;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        /* Event cards grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .events-grid { grid-template-columns: 1fr; }
+        }
+
+        .event-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            animation: fade-up 0.4s ease-out both;
+        }
+
+        .event-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .event-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .event-name {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .match-badge {
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .match-badge.exact {
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .match-badge.vibe {
+            background: var(--amber-dim);
+            color: var(--amber);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .event-meta-item svg {
+            width: 14px; height: 14px;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .event-artist-match {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .artist-avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .artist-info .artist-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+        }
+
+        .artist-info .artist-source {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s ease-out;
+        }
+
+        .confidence-fill.exact { background: linear-gradient(90deg, var(--green), #66ffbb); }
+        .confidence-fill.vibe { background: linear-gradient(90deg, var(--amber), #ffcc44); }
+
+        .match-reason {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .event-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--cyan);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .event-link:hover { opacity: 0.7; }
+
+        .event-link svg {
+            width: 12px; height: 12px;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 64px; height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            max-width: 400px;
+            margin: 0 auto;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================================
+           REFRESH BUTTON
+           ============================================================ */
+        .refresh-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1px solid var(--cyan);
+            background: var(--bg-card);
+            color: var(--cyan);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(0, 240, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .refresh-fab:hover {
+            background: var(--cyan-dim);
+            transform: scale(1.1);
+            box-shadow: 0 8px 32px rgba(0, 240, 255, 0.35);
+        }
+
+        .refresh-fab svg {
+            width: 24px; height: 24px;
+            transition: transform 0.3s;
+        }
+
+        .refresh-fab.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .refresh-fab .tooltip {
+            position: absolute;
+            bottom: calc(100% + 0.5rem);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .refresh-fab:hover .tooltip { opacity: 1; }
+
+        /* ============================================================
+           LOADING SKELETON
+           ============================================================ */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            height: 200px;
+            border-radius: var(--radius);
+        }
+
+        .skeleton-chart {
+            height: 250px;
+            border-radius: var(--radius);
+        }
+
+        /* ============================================================
+           TOAST / NOTIFICATION
+           ============================================================ */
+        .toast {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 200;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-left: 3px solid var(--green); }
+        .toast.error { border-left: 3px solid var(--magenta); }
+        .toast.info { border-left: 3px solid var(--cyan); }
+
+        /* ============================================================
+           ANIMATIONS
+           ============================================================ */
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           SCROLLBAR
+           ============================================================ */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <!-- ================================================================
+         HEADER
+         ================================================================ -->
+    <header>
+        <div class="logo-container">
+            <div class="radar-icon">
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="ring"></div>
+                <div class="dot"></div>
+                <div class="sweep"></div>
+            </div>
+            <h1>Vibe Radar</h1>
+        </div>
+        <p class="subtitle">Your music taste matched to <span>{{ city }}</span> events</p>
+        <div class="status-bar">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Loading...</span>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         MAIN CONTENT
+         ================================================================ -->
+    <div class="container">
+
+        <!-- Taste Profile Section -->
+        <section class="taste-section">
+            <h2 class="section-title"><span class="accent">//</span> Your Taste Profile</h2>
+            <div class="taste-grid">
+                <!-- Genre Distribution -->
+                <div class="card">
+                    <div class="card-title">Top Genres</div>
+                    <div class="chart-wrapper" id="genreChartWrapper">
+                        <div class="skeleton skeleton-chart"></div>
+                    </div>
+                </div>
+
+                <!-- Audio Features Radar -->
+                <div class="card">
+                    <div class="card-title">Audio DNA</div>
+                    <div class="chart-wrapper" id="featuresChartWrapper">
+                        <div class="skeleton skeleton-chart"></div>
+                    </div>
+                </div>
+
+                <!-- Source Breakdown & Stats -->
+                <div class="card">
+                    <div class="card-title">Sources</div>
+                    <div id="sourceSection">
+                        <div class="chart-wrapper" style="max-width: 200px; margin: 0 auto 1rem;">
+                            <canvas id="sourceChart"></canvas>
+                        </div>
+                        <div id="statsContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section class="events-section">
+            <h2 class="section-title"><span class="accent">//</span> Matched Events</h2>
+
+            <div class="filter-tabs" id="filterTabs">
+                <button class="filter-tab active" data-filter="all">All <span class="count" id="countAll">0</span></button>
+                <button class="filter-tab" data-filter="exact">Exact Matches <span class="count" id="countExact">0</span></button>
+                <button class="filter-tab" data-filter="vibe">Vibe Matches <span class="count" id="countVibe">0</span></button>
+            </div>
+
+            <div class="events-grid" id="eventsGrid">
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating Refresh Button -->
+    <button class="refresh-fab" id="refreshBtn" aria-label="Refresh data">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        <span class="tooltip">Refresh data</span>
+    </button>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ================================================================
+         JAVASCRIPT
+         ================================================================ -->
+    <script>
+        // ============================================================
+        // State
+        // ============================================================
+        let allMatches = [];
+        let tasteProfile = null;
+        let genreChart = null;
+        let featuresChart = null;
+        let sourceChart = null;
+        let currentFilter = 'all';
+
+        // ============================================================
+        // Chart.js global defaults
+        // ============================================================
+        Chart.defaults.color = '#8888aa';
+        Chart.defaults.borderColor = '#2a2a45';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        // ============================================================
+        // Toast notifications
+        // ============================================================
+        function showToast(message, type = 'info', duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), duration);
+        }
+
+        // ============================================================
+        // Status bar
+        // ============================================================
+        function updateStatus(text, online = true) {
+            document.getElementById('statusText').textContent = text;
+            const dot = document.getElementById('statusDot');
+            if (online) {
+                dot.classList.remove('offline');
+            } else {
+                dot.classList.add('offline');
+            }
+        }
+
+        // ============================================================
+        // Format helpers
+        // ============================================================
+        function formatDate(isoStr) {
+            const d = new Date(isoStr);
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return d.toLocaleDateString('en-GB', options);
+        }
+
+        function formatSource(src) {
+            const map = {
+                'resident_advisor': 'Resident Advisor',
+                'bandsintown': 'Bandsintown',
+                'songkick': 'Songkick',
+                'spotify': 'Spotify',
+                'soundcloud': 'SoundCloud',
+            };
+            return map[src] || src;
+        }
+
+        function capitalise(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // ============================================================
+        // Fetch taste profile
+        // ============================================================
+        async function loadTasteProfile() {
+            try {
+                const resp = await fetch('/api/taste');
+                const data = await resp.json();
+                tasteProfile = data.taste_profile;
+                renderGenreChart(tasteProfile.top_genres);
+                renderFeaturesChart(tasteProfile.avg_features);
+                renderSourceBreakdown(tasteProfile.sources, tasteProfile.total_artists);
+            } catch (err) {
+                console.error('Failed to load taste profile:', err);
+            }
+        }
+
+        // ============================================================
+        // Fetch events
+        // ============================================================
+        async function loadEvents() {
+            try {
+                const resp = await fetch('/api/events?match_type=all');
+                const data = await resp.json();
+                allMatches = data.matches || [];
+                updateCounts();
+                renderEvents(currentFilter);
+
+                const total = allMatches.length;
+                const exact = allMatches.filter(m => m.match_type === 'exact').length;
+                const vibe = allMatches.filter(m => m.match_type === 'vibe').length;
+
+                if (data.last_refresh) {
+                    const d = new Date(data.last_refresh);
+                    updateStatus(`${total} matches found \u00b7 Last refresh: ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
+                } else {
+                    updateStatus('No data yet \u2014 hit refresh to start', false);
+                }
+            } catch (err) {
+                console.error('Failed to load events:', err);
+                updateStatus('Failed to load events', false);
+            }
+        }
+
+        // ============================================================
+        // Update tab counts
+        // ============================================================
+        function updateCounts() {
+            document.getElementById('countAll').textContent = allMatches.length;
+            document.getElementById('countExact').textContent = allMatches.filter(m => m.match_type === 'exact').length;
+            document.getElementById('countVibe').textContent = allMatches.filter(m => m.match_type === 'vibe').length;
+        }
+
+        // ============================================================
+        // Genre Chart (horizontal bar)
+        // ============================================================
+        function renderGenreChart(genres) {
+            const wrapper = document.getElementById('genreChartWrapper');
+            if (!genres || genres.length === 0) {
+                wrapper.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 2rem 0;">No genre data available. Hit refresh to collect your music data.</p>';
+                return;
+            }
+
+            const top = genres.slice(0, 12);
+            wrapper.innerHTML = '<canvas id="genreChart"></canvas>';
+            const ctx = document.getElementById('genreChart').getContext('2d');
+
+            const gradient = ctx.createLinearGradient(0, 0, wrapper.offsetWidth, 0);
+            gradient.addColorStop(0, '#00f0ff');
+            gradient.addColorStop(1, '#ff00aa');
+
+            genreChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: top.map(g => capitalise(g.genre)),
+                    datasets: [{
+                        data: top.map(g => g.count),
+                        backgroundColor: top.map((_, i) => {
+                            const ratio = i / Math.max(top.length - 1, 1);
+                            const r = Math.round(0 + ratio * 255);
+                            const g2 = Math.round(240 - ratio * 240);
+                            const b = Math.round(255 - ratio * 85);
+                            return `rgba(${r}, ${g2}, ${b}, 0.7)`;
+                        }),
+                        borderColor: 'transparent',
+                        borderRadius: 4,
+                        barThickness: 18,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1a1a2e',
+                            titleColor: '#e8e8f0',
+                            bodyColor: '#8888aa',
+                            borderColor: '#2a2a45',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 10,
+                            callbacks: {
+                                label: ctx => `${ctx.raw} artists`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(42, 42, 69, 0.5)', drawBorder: false },
+                            ticks: { font: { size: 11 } }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // Set canvas height based on number of genres
+            const canvasEl = document.getElementById('genreChart');
+            canvasEl.parentElement.style.height = Math.max(200, top.length * 30) + 'px';
+        }
+
+        // ============================================================
+        // Audio Features Radar Chart
+        // ============================================================
+        function renderFeaturesChart(features) {
+            const wrapper = document.getElementById('featuresChartWrapper');
+            if (!features) {
+                wrapper.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 2rem 0;">No audio features available yet.</p>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="featuresChart"></canvas>';
+            const ctx = document.getElementById('featuresChart').getContext('2d');
+
+            // Normalize tempo from BPM to 0-1 range for the radar
+            const tempoNormalized = Math.min(Math.max((features.tempo - 60) / 140, 0), 1);
+
+            const labels = ['Danceability', 'Energy', 'Tempo', 'Valence', 'Acousticness', 'Instrumentalness', 'Liveness', 'Speechiness'];
+            const values = [
+                features.danceability,
+                features.energy,
+                tempoNormalized,
+                features.valence,
+                features.acousticness,
+                features.instrumentalness,
+                features.liveness,
+                features.speechiness
+            ];
+
+            featuresChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Your Profile',
+                        data: values,
+                        backgroundColor: 'rgba(0, 240, 255, 0.12)',
+                        borderColor: '#00f0ff',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00f0ff',
+                        pointBorderColor: '#00f0ff',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1a1a2e',
+                            titleColor: '#e8e8f0',
+                            bodyColor: '#8888aa',
+                            borderColor: '#2a2a45',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(ctx) {
+                                    const idx = ctx.dataIndex;
+                                    if (idx === 2) return `Tempo: ${features.tempo.toFixed(0)} BPM`;
+                                    return `${ctx.label}: ${(ctx.raw * 100).toFixed(0)}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                stepSize: 0.2,
+                                display: false,
+                            },
+                            grid: { color: 'rgba(42, 42, 69, 0.6)' },
+                            angleLines: { color: 'rgba(42, 42, 69, 0.4)' },
+                            pointLabels: {
+                                font: { size: 10, family: "'Inter', sans-serif" },
+                                color: '#8888aa',
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        // Source Breakdown (Pie + Stats)
+        // ============================================================
+        function renderSourceBreakdown(sources, totalArtists) {
+            const statsContainer = document.getElementById('statsContainer');
+            const canvas = document.getElementById('sourceChart');
+
+            if (!sources || Object.keys(sources).length === 0) {
+                canvas.style.display = 'none';
+                statsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No source data yet.</p>';
+                return;
+            }
+
+            // Pie chart
+            const labels = Object.keys(sources).map(formatSource);
+            const values = Object.values(sources);
+            const colors = ['#00f0ff', '#ff00aa', '#00ff88', '#ffaa00'];
+
+            sourceChart = new Chart(canvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors.slice(0, labels.length).map(c => c + '99'),
+                        borderColor: colors.slice(0, labels.length),
+                        borderWidth: 2,
+                        hoverOffset: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyleWidth: 8,
+                                font: { size: 11 },
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1a1a2e',
+                            titleColor: '#e8e8f0',
+                            bodyColor: '#8888aa',
+                            borderColor: '#2a2a45',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: ctx => `${ctx.label}: ${ctx.raw} artists`
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Stats
+            statsContainer.innerHTML = `
+                <div class="stat-row">
+                    <span class="stat-label">Total Artists</span>
+                    <span class="stat-value">${totalArtists}</span>
+                </div>
+                ${Object.entries(sources).map(([src, count]) => `
+                    <div class="stat-row">
+                        <span class="stat-label">${formatSource(src)}</span>
+                        <span class="stat-value" style="font-size: 1.1rem;">${count}</span>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        // ============================================================
+        // Render event cards
+        // ============================================================
+        function renderEvents(filter) {
+            const grid = document.getElementById('eventsGrid');
+            let matches = allMatches;
+
+            if (filter === 'exact') {
+                matches = allMatches.filter(m => m.match_type === 'exact');
+            } else if (filter === 'vibe') {
+                matches = allMatches.filter(m => m.match_type === 'vibe');
+            }
+
+            if (matches.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/>
+                        </svg>
+                        <h3>No matches yet</h3>
+                        <p>Hit the refresh button to scan your music taste and find matching events in the city.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = matches.map((match, idx) => {
+                const e = match.event;
+                const isExact = match.match_type === 'exact';
+                const badgeClass = isExact ? 'exact' : 'vibe';
+                const badgeText = isExact ? 'Exact' : 'Vibe';
+                const confidence = Math.round(match.confidence * 100);
+
+                // Artist avatar (fallback to a gradient circle)
+                const avatarHtml = match.matched_artist.image_url
+                    ? `<img class="artist-avatar" src="${match.matched_artist.image_url}" alt="${match.matched_artist.name}" loading="lazy">`
+                    : `<div class="artist-avatar" style="background: linear-gradient(135deg, var(--cyan), var(--magenta));"></div>`;
+
+                // Venue
+                const venueName = e.venue ? e.venue.name : 'Venue TBA';
+
+                return `
+                    <div class="event-card" style="animation-delay: ${idx * 0.05}s;">
+                        <div class="event-card-header">
+                            <div class="event-name">${escapeHtml(e.name)}</div>
+                            <span class="match-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+
+                        <div class="event-meta">
+                            <span class="event-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                                ${formatDate(e.date)}
+                            </span>
+                            <span class="event-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                                ${escapeHtml(venueName)}
+                            </span>
+                            <span class="event-meta-item" style="color: var(--text-muted); font-size: 0.7rem;">
+                                via ${formatSource(e.source)}
+                            </span>
+                        </div>
+
+                        <div class="event-artist-match">
+                            ${avatarHtml}
+                            <div class="artist-info">
+                                <div class="artist-name">${escapeHtml(match.matched_artist.name)}</div>
+                                <div class="artist-source">${formatSource(match.matched_artist.source)}</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 0.7rem; color: var(--text-muted);">Confidence</span>
+                                <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">${confidence}%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill ${badgeClass}" style="width: ${confidence}%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="match-reason">${escapeHtml(match.match_reason)}</div>
+
+                        ${e.url ? `
+                            <a class="event-link" href="${e.url}" target="_blank" rel="noopener">
+                                View event
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+                            </a>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================================
+        // HTML escape helper
+        // ============================================================
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // ============================================================
+        // Filter tabs
+        // ============================================================
+        document.getElementById('filterTabs').addEventListener('click', (e) => {
+            const tab = e.target.closest('.filter-tab');
+            if (!tab) return;
+
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            currentFilter = tab.dataset.filter;
+            renderEvents(currentFilter);
+        });
+
+        // ============================================================
+        // Refresh button
+        // ============================================================
+        document.getElementById('refreshBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('refreshBtn');
+            if (btn.classList.contains('spinning')) return;
+
+            btn.classList.add('spinning');
+            updateStatus('Refreshing data...', true);
+            showToast('Scanning your music taste and matching events...', 'info', 5000);
+
+            try {
+                const resp = await fetch('/api/refresh');
+                const data = await resp.json();
+
+                if (data.status === 'ok') {
+                    showToast('Data refreshed successfully!', 'success');
+                    await Promise.all([loadTasteProfile(), loadEvents()]);
+                } else if (data.status === 'already_running') {
+                    showToast('A refresh is already in progress...', 'info');
+                } else {
+                    showToast('Refresh failed: ' + (data.message || 'Unknown error'), 'error', 5000);
+                }
+            } catch (err) {
+                showToast('Network error during refresh', 'error');
+                console.error('Refresh failed:', err);
+            } finally {
+                btn.classList.remove('spinning');
+            }
+        });
+
+        // ============================================================
+        // Auth status check (on page load)
+        // ============================================================
+        function checkAuthParams() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('auth_success') === '1') {
+                showToast('Spotify connected successfully!', 'success');
+                window.history.replaceState({}, '', '/');
+            } else if (params.get('auth_error') === '1') {
+                showToast('Spotify authentication failed. Please try again.', 'error', 5000);
+                window.history.replaceState({}, '', '/');
+            }
+        }
+
+        // ============================================================
+        // Initialise
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuthParams();
+            Promise.all([loadTasteProfile(), loadEvents()]);
+        });
+    </script>
+</body>
+</html>
