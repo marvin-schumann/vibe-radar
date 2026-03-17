@@ -394,13 +394,18 @@ async def get_events(
     results = []
     # Serve exact matches from snapshot
     for m in snapshot_matches:
+        artist_source = m.get("source", "spotify")
+        if "soundcloud" in artist_source:
+            artist_source_tag = "soundcloud"
+        else:
+            artist_source_tag = "spotify"
         entry = {
             "event": {
                 "name": m.get("event", ""),
                 "date": m.get("date", ""),
                 "url": m.get("url", ""),
                 "image_url": None,
-                "source": m.get("source", "").lower().replace(" ", "_"),
+                "source": m.get("event_source", m.get("source", "")).lower().replace(" ", "_"),
                 "artists": [m.get("event_artist", "")],
                 "venue": {"name": m.get("venue", ""), "city": "Madrid", "address": None},
                 "price": None,
@@ -408,14 +413,14 @@ async def get_events(
             },
             "matched_artist": {
                 "name": m.get("your_artist", ""),
-                "source": "spotify",
+                "source": artist_source_tag,
                 "image_url": None,
                 "genres": [],
             },
             "event_artist_name": m.get("event_artist", ""),
             "match_type": "exact" if m.get("score", 0) >= 95 else "vibe",
             "confidence": m.get("score", 0) / 100.0,
-            "match_reason": f"{'Exact' if m.get('score', 0) >= 95 else 'Close'} match ({m.get('score', 0)}%)",
+            "match_reason": f"{'Exact' if m.get('score', 0) >= 95 else 'Close'} match ({m.get('score', 0)}%): {m.get('your_artist', '')} on your {artist_source_tag.title()}",
         }
         if match_type == "all" or match_type is None or entry["match_type"] == match_type:
             results.append(entry)
