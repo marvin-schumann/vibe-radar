@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, Query, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from loguru import logger
@@ -508,6 +508,321 @@ async def refresh_data() -> JSONResponse:
             },
             status_code=500,
         )
+
+
+# ---------------------------------------------------------------------------
+# Routes: PDF Export
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/report/pdf")
+async def export_pdf() -> Response:
+    """Generate a PDF report of taste profile and matching events."""
+    from fpdf import FPDF
+
+    events_data = _cache.get("events_snapshot", {})
+    spotify_data = _cache.get("spotify_snapshot", {})
+    soundcloud_data = _cache.get("soundcloud_snapshot", {})
+
+    snapshot_matches = events_data.get("matches", [])
+    all_events = events_data.get("events", [])
+    sp_artists = spotify_data.get("artists", {})
+    sc_artists = soundcloud_data.get("artists", {})
+    avg_features = spotify_data.get("audio_features_estimated", {})
+
+    # Genre counts
+    genre_count: dict[str, int] = {}
+    for a in sp_artists.values():
+        for g in a.get("genres", []):
+            genre_count[g] = genre_count.get(g, 0) + 1
+    top_genres = sorted(genre_count.items(), key=lambda x: -x[1])[:15]
+
+    # Vibe keyword matches
+    vibe_keywords = {
+        "techno", "hypertechno", "hard techno", "trance", "drum and bass",
+        "house", "edm", "minimal", "hardstyle", "frenchcore", "hardcore",
+        "tekno", "acid", "psytrance", "melodic", "gabber", "rave",
+        "electronic", "bass", "dnb", "hard house",
+    }
+    matched_event_names = {m.get("event", "") for m in snapshot_matches}
+    vibe_matches = []
+    for ev in all_events:
+        if ev["name"] in matched_event_names:
+            continue
+        combined = f"{ev['name']} {' '.join(ev.get('artists', []))}".lower()
+        kw = [k for k in vibe_keywords if k in combined]
+        if kw:
+            vibe_matches.append({**ev, "keywords": kw})
+
+    # ── Build PDF ──
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=20)
+
+    # -- Colors --
+    DARK = (15, 12, 25)
+    CYAN = (0, 240, 255)
+    MAGENTA = (255, 0, 170)
+    WHITE = (255, 255, 255)
+    MUTED = (160, 160, 180)
+    CARD_BG = (25, 22, 40)
+    GREEN = (0, 220, 130)
+    AMBER = (255, 190, 50)
+
+    def add_page_bg():
+        pdf.set_fill_color(*DARK)
+        pdf.rect(0, 0, 210, 297, "F")
+
+    # ── Page 1: Title + Taste Profile ──
+    pdf.add_page()
+    add_page_bg()
+
+    # Title
+    pdf.set_text_color(*CYAN)
+    pdf.set_font("Helvetica", "B", 32)
+    pdf.cell(0, 20, "VIBE RADAR", align="C", new_x="LMARGIN", new_y="NEXT")
+
+    pdf.set_text_color(*MUTED)
+    pdf.set_font("Helvetica", "", 12)
+    pdf.cell(0, 8, "Your Music Taste x Madrid Events Report", align="C", new_x="LMARGIN", new_y="NEXT")
+
+    pdf.set_font("Helvetica", "", 9)
+    generated = datetime.now().strftime("%B %d, %Y at %H:%M")
+    pdf.cell(0, 6, f"Generated {generated}", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(8)
+
+    # Stats bar
+    total_artists = len(set(n.lower() for n in sp_artists) | set(n.lower() for n in sc_artists))
+    pdf.set_fill_color(*CARD_BG)
+    pdf.rect(15, pdf.get_y(), 180, 18, "F")
+    y = pdf.get_y() + 4
+    pdf.set_xy(20, y)
+    pdf.set_text_color(*WHITE)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(55, 10, f"{total_artists} Artists")
+    pdf.cell(55, 10, f"{len(all_events)} Events Scanned")
+    pdf.cell(55, 10, f"{len(snapshot_matches) + len(vibe_matches)} Matches")
+    pdf.ln(22)
+
+    # Source breakdown
+    pdf.set_text_color(*CYAN)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "YOUR LIBRARY", new_x="LMARGIN", new_y="NEXT")
+
+    pdf.set_text_color(*WHITE)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(90, 7, f"Spotify: {len(sp_artists)} artists", new_x="RIGHT")
+    pdf.cell(90, 7, f"SoundCloud: {len(sc_artists)} artists", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(4)
+
+    # Top Genres - horizontal bars
+    pdf.set_text_color(*CYAN)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "TOP GENRES", new_x="LMARGIN", new_y="NEXT")
+
+    if top_genres:
+        max_count = top_genres[0][1]
+        for genre, count in top_genres:
+            bar_width = (count / max_count) * 100
+            y = pdf.get_y()
+
+            # Genre name
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 9)
+            pdf.cell(50, 6, genre)
+
+            # Bar
+            ratio = count / max_count
+            r = int(CYAN[0] + (MAGENTA[0] - CYAN[0]) * ratio)
+            g = int(CYAN[1] + (MAGENTA[1] - CYAN[1]) * ratio)
+            b = int(CYAN[2] + (MAGENTA[2] - CYAN[2]) * ratio)
+            pdf.set_fill_color(r, g, b)
+            pdf.rect(65, y + 1, bar_width, 4, "F")
+
+            # Count
+            pdf.set_xy(168, y)
+            pdf.set_text_color(*WHITE)
+            pdf.cell(20, 6, str(count), align="R")
+            pdf.ln(6)
+
+    # Audio DNA
+    if avg_features:
+        pdf.ln(4)
+        pdf.set_text_color(*CYAN)
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 10, "AUDIO DNA", new_x="LMARGIN", new_y="NEXT")
+
+        features_display = [
+            ("Danceability", avg_features.get("danceability", 0)),
+            ("Energy", avg_features.get("energy", 0)),
+            ("Valence", avg_features.get("valence", 0)),
+            ("Acousticness", avg_features.get("acousticness", 0)),
+            ("Instrumentalness", avg_features.get("instrumentalness", 0)),
+            ("Liveness", avg_features.get("liveness", 0)),
+            ("Speechiness", avg_features.get("speechiness", 0)),
+        ]
+        for fname, fval in features_display:
+            y = pdf.get_y()
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 9)
+            pdf.cell(50, 6, fname)
+
+            # Bar background
+            pdf.set_fill_color(40, 35, 60)
+            pdf.rect(65, y + 1, 100, 4, "F")
+
+            # Bar fill
+            pdf.set_fill_color(*CYAN)
+            pdf.rect(65, y + 1, fval * 100, 4, "F")
+
+            # Value
+            pdf.set_xy(168, y)
+            pdf.set_text_color(*WHITE)
+            pdf.cell(20, 6, f"{fval:.0%}", align="R")
+            pdf.ln(6)
+
+        pdf.set_text_color(*MUTED)
+        pdf.set_font("Helvetica", "", 9)
+        pdf.cell(0, 6, f"Average Tempo: {avg_features.get('tempo', 0):.0f} BPM", new_x="LMARGIN", new_y="NEXT")
+
+    # ── Page 2+: Matches ──
+    pdf.add_page()
+    add_page_bg()
+
+    pdf.set_text_color(*CYAN)
+    pdf.set_font("Helvetica", "B", 22)
+    pdf.cell(0, 14, "MATCHING EVENTS", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(4)
+
+    # Exact matches
+    if snapshot_matches:
+        pdf.set_text_color(*GREEN)
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 10, f"EXACT MATCHES ({len(snapshot_matches)})", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
+
+        for m in sorted(snapshot_matches, key=lambda x: x.get("date", "zzz")):
+            if pdf.get_y() > 260:
+                pdf.add_page()
+                add_page_bg()
+
+            y = pdf.get_y()
+            # Card background
+            pdf.set_fill_color(*CARD_BG)
+            pdf.rect(15, y, 180, 22, "F")
+
+            # Green accent bar
+            pdf.set_fill_color(*GREEN)
+            pdf.rect(15, y, 2, 22, "F")
+
+            pdf.set_xy(20, y + 2)
+
+            # Date
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 9)
+            date_str = m.get("date", "TBA")
+            pdf.cell(22, 5, date_str)
+
+            # Event name
+            pdf.set_text_color(*WHITE)
+            pdf.set_font("Helvetica", "B", 10)
+            pdf.cell(110, 5, m.get("event", "")[:60])
+
+            # Confidence
+            pdf.set_text_color(*GREEN)
+            pdf.set_font("Helvetica", "B", 10)
+            pdf.cell(30, 5, f"{m.get('score', 100)}%", align="R")
+
+            # Second line: artist + venue
+            pdf.set_xy(42, y + 9)
+            pdf.set_text_color(*CYAN)
+            pdf.set_font("Helvetica", "B", 9)
+            src = m.get("source", "spotify")
+            src_label = "SC" if "soundcloud" in src else "SP"
+            pdf.cell(60, 5, f"{m.get('your_artist', '')} [{src_label}]")
+
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 8)
+            pdf.cell(80, 5, f"@ {m.get('venue', '')[:40]}")
+
+            # Third line: URL
+            url = m.get("url", "")
+            if url:
+                pdf.set_xy(42, y + 15)
+                pdf.set_text_color(100, 100, 120)
+                pdf.set_font("Helvetica", "", 7)
+                pdf.cell(140, 5, url[:80])
+
+            pdf.set_y(y + 24)
+
+    # Vibe matches
+    if vibe_matches:
+        pdf.ln(4)
+        if pdf.get_y() > 240:
+            pdf.add_page()
+            add_page_bg()
+
+        pdf.set_text_color(*AMBER)
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 10, f"VIBE MATCHES ({len(vibe_matches)})", new_x="LMARGIN", new_y="NEXT")
+        pdf.ln(2)
+
+        for ev in sorted(vibe_matches, key=lambda x: x.get("date", "zzz"))[:30]:
+            if pdf.get_y() > 265:
+                pdf.add_page()
+                add_page_bg()
+
+            y = pdf.get_y()
+            pdf.set_fill_color(*CARD_BG)
+            pdf.rect(15, y, 180, 16, "F")
+            pdf.set_fill_color(*AMBER)
+            pdf.rect(15, y, 2, 16, "F")
+
+            pdf.set_xy(20, y + 2)
+
+            # Date
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 9)
+            date_str = ev.get("date", "")[:10] if ev.get("date") else "TBA"
+            pdf.cell(22, 5, date_str)
+
+            # Event
+            pdf.set_text_color(*WHITE)
+            pdf.set_font("Helvetica", "B", 9)
+            pdf.cell(115, 5, ev.get("name", "")[:65])
+
+            # Keywords
+            pdf.set_text_color(*AMBER)
+            pdf.set_font("Helvetica", "", 8)
+            pdf.cell(30, 5, ", ".join(ev.get("keywords", [])[:2]), align="R")
+
+            # Second line
+            pdf.set_xy(42, y + 8)
+            artists = ", ".join(ev.get("artists", [])[:3])
+            pdf.set_text_color(*MUTED)
+            pdf.set_font("Helvetica", "", 8)
+            venue = ev.get("venue", "")
+            line2 = f"{artists}" if artists else ""
+            if venue:
+                line2 += f"  @  {venue[:30]}"
+            pdf.cell(140, 5, line2)
+
+            pdf.set_y(y + 18)
+
+    # Footer
+    pdf.ln(10)
+    pdf.set_text_color(80, 80, 100)
+    pdf.set_font("Helvetica", "I", 8)
+    pdf.cell(0, 5, f"Vibe Radar  |  {total_artists} artists  |  {len(all_events)} events scanned  |  Generated {generated}", align="C")
+
+    # Output
+    pdf_bytes = pdf.output()
+
+    filename = f"vibe-radar-madrid-{datetime.now().strftime('%Y-%m-%d')}.pdf"
+    return Response(
+        content=bytes(pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 # ---------------------------------------------------------------------------
