@@ -339,11 +339,14 @@ async def get_taste_profile() -> JSONResponse:
     # Count unique combined
     all_names = set(n.lower().strip() for n in sp_artists) | set(n.lower().strip() for n in sc_artists)
 
+    # Audio features (estimated from genre profile)
+    avg_features = spotify_data.get("audio_features_estimated")
+
     return JSONResponse(
         content={
             "taste_profile": {
                 "top_genres": [{"genre": g, "count": c} for g, c in top_genres[:20]],
-                "avg_features": None,
+                "avg_features": avg_features,
                 "total_artists": len(all_names),
                 "sources": sources,
             },
