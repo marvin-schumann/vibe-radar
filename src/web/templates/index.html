@@ -850,7 +850,7 @@
         // ============================================================
         async function loadEvents() {
             try {
-                const resp = await fetch('/api/events?match_type=all');
+                const resp = await fetch('/api/events?match_type=all&days_ahead=365');
                 const data = await resp.json();
                 allMatches = data.matches || [];
                 updateCounts();

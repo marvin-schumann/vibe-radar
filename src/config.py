@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     country: str = "Spain"
     match_threshold: float = 0.6  # Minimum confidence for vibe matches
     fuzzy_match_threshold: int = 85  # Minimum fuzz ratio for exact matches
-    days_ahead: int = 30  # How far ahead to look for events
+    days_ahead: int = 90  # How far ahead to look for events
 
 
 settings = Settings()
