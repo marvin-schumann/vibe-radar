@@ -49,21 +49,35 @@ _cache: dict[str, Any] = {
 def _load_snapshot_data() -> bool:
     """Load pre-collected data from snapshot files if available."""
     spotify_path = DATA_DIR / "spotify_snapshot.json"
+    soundcloud_path = DATA_DIR / "soundcloud_snapshot.json"
     events_path = DATA_DIR / "madrid_events.json"
 
-    if not spotify_path.exists() or not events_path.exists():
+    if not events_path.exists():
         return False
 
     try:
-        with open(spotify_path) as f:
-            spotify_data = json.load(f)
+        spotify_data = {}
+        if spotify_path.exists():
+            with open(spotify_path) as f:
+                spotify_data = json.load(f)
+
+        soundcloud_data = {}
+        if soundcloud_path.exists():
+            with open(soundcloud_path) as f:
+                soundcloud_data = json.load(f)
+
         with open(events_path) as f:
             events_data = json.load(f)
 
         _cache["spotify_snapshot"] = spotify_data
+        _cache["soundcloud_snapshot"] = soundcloud_data
         _cache["events_snapshot"] = events_data
         _cache["last_refresh"] = events_data.get("collected_at", datetime.now(tz=timezone.utc).isoformat())
-        logger.info("Loaded snapshot data: {} artists, {} events", len(spotify_data.get("artists", {})), len(events_data.get("events", [])))
+
+        sp_count = len(spotify_data.get("artists", {}))
+        sc_count = len(soundcloud_data.get("artists", {}))
+        ev_count = len(events_data.get("events", []))
+        logger.info("Loaded snapshot: {} Spotify + {} SoundCloud artists, {} events", sp_count, sc_count, ev_count)
         return True
     except Exception as exc:
         logger.warning("Failed to load snapshot data: {}", exc)
@@ -301,26 +315,36 @@ async def get_taste_profile() -> JSONResponse:
 
     # Build from snapshot
     spotify_data = _cache.get("spotify_snapshot", {})
-    artists = spotify_data.get("artists", {})
-    if not artists:
+    soundcloud_data = _cache.get("soundcloud_snapshot", {})
+    sp_artists = spotify_data.get("artists", {})
+    sc_artists = soundcloud_data.get("artists", {})
+
+    if not sp_artists and not sc_artists:
         return JSONResponse(content={"taste_profile": _serialize_taste_profile(None), "last_refresh": None})
 
-    # Aggregate genres
+    # Aggregate genres from Spotify (SoundCloud doesn't have genres)
     genre_count: dict[str, int] = {}
-    for a in artists.values():
+    for a in sp_artists.values():
         for g in a.get("genres", []):
             genre_count[g] = genre_count.get(g, 0) + 1
     top_genres = sorted(genre_count.items(), key=lambda x: -x[1])
 
     # Source breakdown
-    sources = {"spotify": len(artists)}
+    sources = {}
+    if sp_artists:
+        sources["spotify"] = len(sp_artists)
+    if sc_artists:
+        sources["soundcloud"] = len(sc_artists)
+
+    # Count unique combined
+    all_names = set(n.lower().strip() for n in sp_artists) | set(n.lower().strip() for n in sc_artists)
 
     return JSONResponse(
         content={
             "taste_profile": {
                 "top_genres": [{"genre": g, "count": c} for g, c in top_genres[:20]],
                 "avg_features": None,
-                "total_artists": len(artists),
+                "total_artists": len(all_names),
                 "sources": sources,
             },
             "last_refresh": _cache.get("last_refresh"),
