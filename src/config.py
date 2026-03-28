@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     supabase_anon_key: str = ""
     supabase_service_role_key: str = ""
 
+    # App
+    app_secret_key: str = "change-me-in-production"
+    app_host: str = "http://localhost:8000"
+
     # App settings
     city: str = "Madrid"
     country: str = "Spain"

@@ -57,6 +57,14 @@ class SpotifyCollector:
         self.sp = spotipy.Spotify(auth_manager=auth_manager)
         logger.info("SpotifyCollector initialised (cache: {})", TOKEN_CACHE_PATH)
 
+    @classmethod
+    def from_token(cls, access_token: str) -> "SpotifyCollector":
+        """Create a collector using an existing access token (no local cache)."""
+        obj = cls.__new__(cls)
+        obj.sp = spotipy.Spotify(auth=access_token)
+        logger.info("SpotifyCollector initialised from provided token")
+        return obj
+
     # ------------------------------------------------------------------
     # Public async interface
     # ------------------------------------------------------------------

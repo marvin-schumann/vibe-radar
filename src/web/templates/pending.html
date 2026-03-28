@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vibe Radar — On the Waitlist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0815; --card: #14102a; --border: #2a2050;
+      --cyan: #00f0ff; --magenta: #ff00aa; --text: #e8e4f0; --muted: #8b85a0;
+    }
+    body {
+      background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px 40px; max-width: 460px; width: 100%; text-align: center;
+    }
+    .pulse {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(0,240,255,0.1); border: 2px solid var(--cyan);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px; font-size: 28px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,240,255,0.3); }
+      50% { box-shadow: 0 0 0 16px rgba(0,240,255,0); }
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    p { color: var(--muted); line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem; }
+    .email { color: var(--cyan); }
+    .logout {
+      display: inline-block; margin-top: 28px; padding: 10px 24px;
+      border: 1px solid var(--border); border-radius: 8px; color: var(--muted);
+      text-decoration: none; font-size: 0.85rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .logout:hover { border-color: var(--muted); color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="pulse">⏳</div>
+    <h1>You're on the list</h1>
+    <p>
+      <span class="email">{{ email }}</span> is registered and waiting for early access.
+    </p>
+    <p>
+      We're onboarding people manually right now. You'll get an email as soon as
+      your spot opens up — usually within a day or two.
+    </p>
+    <p>In the meantime, tell a friend who might be into this.</p>
+    <a href="/auth/logout" class="logout">Sign out</a>
+  </div>
+</body>
+</html>

@@ -8,13 +8,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, Query, Request
+from fastapi import Depends, FastAPI, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 
+from src.api.auth import router as auth_router
+from src.api.deps import get_session_user
 from src.config import settings
+from src.db.supabase import get_admin_client, is_approved, is_pro
 from src.models import Match, MatchType, TasteProfile
 
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
@@ -25,6 +28,8 @@ DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 app = FastAPI(title="Vibe Radar", version="1.0.0")
 
+app.include_router(auth_router)
+
 app.mount(
     "/static",
     StaticFiles(directory="src/web/static"),
@@ -33,8 +38,25 @@ app.mount(
 
 templates = Jinja2Templates(directory="src/web/templates")
 
+
+# ─────────────────────────────────────────
+# Auth middleware: persist refreshed tokens
+# ─────────────────────────────────────────
+
+
+@app.middleware("http")
+async def persist_refreshed_tokens(request: Request, call_next):
+    request.state.new_tokens = None
+    response = await call_next(request)
+    if getattr(request.state, "new_tokens", None):
+        access, refresh = request.state.new_tokens
+        opts = dict(httponly=True, samesite="lax", secure=False)
+        response.set_cookie("session_token", access, **opts)
+        response.set_cookie("refresh_token", refresh, **opts)
+    return response
+
 # ---------------------------------------------------------------------------
-# In-memory cache
+# In-memory cache (per-user for authenticated runs, shared for snapshots)
 # ---------------------------------------------------------------------------
 
 _cache: dict[str, Any] = {
@@ -44,6 +66,20 @@ _cache: dict[str, Any] = {
     "last_refresh": None,
     "refreshing": False,
 }
+
+# Per-user cache: user_id → same shape as _cache
+_user_caches: dict[str, dict[str, Any]] = {}
+
+
+def _user_cache(user_id: str) -> dict[str, Any]:
+    if user_id not in _user_caches:
+        _user_caches[user_id] = {
+            "taste_profile": None,
+            "matches": [],
+            "last_refresh": None,
+            "refreshing": False,
+        }
+    return _user_caches[user_id]
 
 
 def _load_snapshot_data() -> bool:
@@ -93,8 +129,13 @@ _load_snapshot_data()
 # ---------------------------------------------------------------------------
 
 
-async def _run_pipeline() -> None:
-    """Run the full data collection and matching pipeline, updating the cache."""
+async def _run_pipeline(user_id: str | None = None) -> None:
+    """Run the full data collection and matching pipeline.
+
+    If user_id is provided, uses that user's connected accounts from Supabase
+    and stores results in their per-user cache. Falls back to the shared
+    snapshot-based cache for anonymous / single-user operation.
+    """
     from src.collectors.events.bandsintown import BandsintownCollector
     from src.collectors.events.resident_advisor import ResidentAdvisorCollector
     from src.collectors.events.songkick import SongkickCollector
@@ -103,41 +144,81 @@ async def _run_pipeline() -> None:
     from src.matching.exact import ExactMatcher
     from src.matching.vibe import VibeMatcher, build_taste_profile
 
-    logger.info("Starting Vibe Radar pipeline refresh...")
+    cache = _user_cache(user_id) if user_id else _cache
+
+    if cache.get("refreshing"):
+        logger.info("Pipeline already running for user {}", user_id)
+        return
+
+    cache["refreshing"] = True
+    logger.info("Starting Vibe Radar pipeline (user={})", user_id or "anon")
 
     # -- 1. Collect user artists from music sources --
     all_artists = []
 
-    # Spotify
-    try:
-        spotify = SpotifyCollector()
-        spotify_artists = await spotify.collect_artists()
-        all_artists.extend(spotify_artists)
-        logger.info("Spotify: {} artists collected", len(spotify_artists))
-    except Exception as exc:
-        logger.warning("Spotify collection failed: {}", exc)
+    if user_id:
+        # --- Authenticated: fetch tokens from Supabase ---
+        db = get_admin_client()
+        accounts = (
+            db.table("connected_accounts")
+            .select("platform,access_token,username")
+            .eq("user_id", user_id)
+            .execute()
+        )
+        acct_map = {row["platform"]: row for row in (accounts.data or [])}
 
-    # SoundCloud
-    try:
-        if settings.soundcloud_username:
-            soundcloud = SoundCloudCollector()
-            sc_artists = await soundcloud.collect_artists()
-            all_artists.extend(sc_artists)
-            logger.info("SoundCloud: {} artists collected", len(sc_artists))
-    except Exception as exc:
-        logger.warning("SoundCloud collection failed: {}", exc)
+        # Spotify
+        spotify_acct = acct_map.get("spotify")
+        if spotify_acct and spotify_acct.get("access_token"):
+            try:
+                spotify = SpotifyCollector.from_token(spotify_acct["access_token"])
+                spotify_artists = await spotify.collect_artists()
+                all_artists.extend(spotify_artists)
+                logger.info("Spotify: {} artists for user {}", len(spotify_artists), user_id)
+            except Exception as exc:
+                logger.warning("Spotify collection failed for user {}: {}", user_id, exc)
+
+        # SoundCloud
+        sc_acct = acct_map.get("soundcloud")
+        sc_username = sc_acct.get("username") if sc_acct else None
+        if sc_username:
+            try:
+                soundcloud = SoundCloudCollector(username=sc_username)
+                sc_artists = await soundcloud.collect_artists()
+                all_artists.extend(sc_artists)
+                logger.info("SoundCloud: {} artists for user {}", len(sc_artists), user_id)
+            except Exception as exc:
+                logger.warning("SoundCloud collection failed for user {}: {}", user_id, exc)
+    else:
+        # --- Anonymous / single-user: use local cache / env vars ---
+        try:
+            spotify = SpotifyCollector()
+            spotify_artists = await spotify.collect_artists()
+            all_artists.extend(spotify_artists)
+            logger.info("Spotify: {} artists collected", len(spotify_artists))
+        except Exception as exc:
+            logger.warning("Spotify collection failed: {}", exc)
+
+        try:
+            if settings.soundcloud_username:
+                soundcloud = SoundCloudCollector()
+                sc_artists = await soundcloud.collect_artists()
+                all_artists.extend(sc_artists)
+                logger.info("SoundCloud: {} artists collected", len(sc_artists))
+        except Exception as exc:
+            logger.warning("SoundCloud collection failed: {}", exc)
 
     if not all_artists:
         logger.warning("No artists collected from any source")
-        _cache["taste_profile"] = TasteProfile()
-        _cache["matches"] = []
-        _cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
-        _cache["refreshing"] = False
+        cache["taste_profile"] = TasteProfile()
+        cache["matches"] = []
+        cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
+        cache["refreshing"] = False
         return
 
     # -- 2. Build taste profile --
     taste_profile = build_taste_profile(all_artists)
-    _cache["taste_profile"] = taste_profile
+    cache["taste_profile"] = taste_profile
 
     # -- 3. Collect events from all sources --
     days = settings.days_ahead
@@ -190,9 +271,9 @@ async def _run_pipeline() -> None:
     all_matches = exact_matches + vibe_matches
     all_matches.sort(key=lambda m: m.sort_key)
 
-    _cache["matches"] = all_matches
-    _cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
-    _cache["refreshing"] = False
+    cache["matches"] = all_matches
+    cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
+    cache["refreshing"] = False
 
     logger.info(
         "Pipeline complete: {} total matches ({} exact, {} vibe)",
@@ -283,14 +364,25 @@ def _serialize_match(match: Match) -> dict[str, Any]:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def dashboard(request: Request) -> HTMLResponse:
-    """Render the main dashboard page."""
+async def dashboard(request: Request, user=Depends(get_session_user)) -> HTMLResponse:
+    """Render the main dashboard page (requires auth + approval)."""
+    if not user:
+        return RedirectResponse("/login")
+    if not is_approved(user["id"]):
+        return RedirectResponse("/pending")
+
+    cache = _user_cache(user["id"])
+    # Fall back to shared snapshot data if user has no personal cache yet
+    last_refresh = cache.get("last_refresh") or _cache.get("last_refresh")
+
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
             "city": settings.city,
-            "last_refresh": _cache.get("last_refresh"),
+            "last_refresh": last_refresh,
+            "user": user,
+            "is_pro": is_pro(user["id"]),
         },
     )
 
@@ -301,10 +393,12 @@ async def dashboard(request: Request) -> HTMLResponse:
 
 
 @app.get("/api/taste")
-async def get_taste_profile() -> JSONResponse:
+async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
     """Return the user's taste profile as JSON."""
-    # Try live profile first, fall back to snapshot
-    profile = _cache.get("taste_profile")
+    # Try per-user live profile first, fall back to snapshot
+    profile = _user_cache(user["id"]).get("taste_profile") if user else None
+    if profile is None:
+        profile = _cache.get("taste_profile")
     if profile is not None:
         return JSONResponse(
             content={
@@ -357,6 +451,7 @@ async def get_taste_profile() -> JSONResponse:
 
 @app.get("/api/events")
 async def get_events(
+    user=Depends(get_session_user),
     match_type: str | None = Query(
         default="all",
         description="Filter by match type: 'exact', 'vibe', or 'all'",
@@ -367,8 +462,12 @@ async def get_events(
     ),
 ) -> JSONResponse:
     """Return upcoming matched events as JSON."""
-    # Try live matches first
-    live_matches: list[Match] = _cache.get("matches", [])
+    # Try per-user live matches first, fall back to shared cache
+    live_matches: list[Match] = []
+    if user:
+        live_matches = _user_cache(user["id"]).get("matches", [])
+    if not live_matches:
+        live_matches = _cache.get("matches", [])
     if live_matches:
         filtered = live_matches
         if match_type and match_type != "all":
@@ -476,36 +575,32 @@ async def get_events(
 
 
 @app.get("/api/refresh")
-async def refresh_data() -> JSONResponse:
-    """Trigger a fresh data collection + matching run."""
-    if _cache.get("refreshing"):
+async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
+    """Trigger a fresh data collection + matching run for the current user."""
+    if not user:
+        return JSONResponse({"status": "error", "message": "Not authenticated"}, status_code=401)
+
+    cache = _user_cache(user["id"])
+    if cache.get("refreshing"):
         return JSONResponse(
-            content={
-                "status": "already_running",
-                "message": "A refresh is already in progress.",
-            },
+            content={"status": "already_running", "message": "A refresh is already in progress."},
             status_code=409,
         )
 
-    _cache["refreshing"] = True
-
     try:
-        await _run_pipeline()
+        await _run_pipeline(user_id=user["id"])
         return JSONResponse(
             content={
                 "status": "ok",
                 "message": "Pipeline refresh completed.",
-                "last_refresh": _cache.get("last_refresh"),
+                "last_refresh": cache.get("last_refresh"),
             }
         )
     except Exception as exc:
-        _cache["refreshing"] = False
-        logger.error("Pipeline refresh failed: {}", exc)
+        cache["refreshing"] = False
+        logger.error("Pipeline refresh failed for user {}: {}", user["id"], exc)
         return JSONResponse(
-            content={
-                "status": "error",
-                "message": f"Pipeline refresh failed: {exc}",
-            },
+            content={"status": "error", "message": f"Pipeline refresh failed: {exc}"},
             status_code=500,
         )
 
@@ -825,51 +920,3 @@ async def export_pdf() -> Response:
     )
 
 
-# ---------------------------------------------------------------------------
-# Routes: Spotify OAuth
-# ---------------------------------------------------------------------------
-
-
-@app.get("/auth/spotify")
-async def spotify_auth() -> RedirectResponse:
-    """Redirect the user to Spotify's authorization page."""
-    from spotipy.oauth2 import SpotifyOAuth
-
-    auth_manager = SpotifyOAuth(
-        client_id=settings.spotify_client_id,
-        client_secret=settings.spotify_client_secret,
-        redirect_uri=settings.spotify_redirect_uri,
-        scope=" ".join([
-            "user-top-read",
-            "user-follow-read",
-            "user-read-recently-played",
-            "user-library-read",
-        ]),
-    )
-    auth_url = auth_manager.get_authorize_url()
-    return RedirectResponse(url=auth_url)
-
-
-@app.get("/auth/spotify/callback")
-async def spotify_callback(code: str = Query(...)) -> RedirectResponse:
-    """Handle the Spotify OAuth callback and store the token."""
-    from spotipy.oauth2 import SpotifyOAuth
-
-    from src.collectors.spotify import TOKEN_CACHE_PATH, SCOPES
-
-    auth_manager = SpotifyOAuth(
-        client_id=settings.spotify_client_id,
-        client_secret=settings.spotify_client_secret,
-        redirect_uri=settings.spotify_redirect_uri,
-        scope=SCOPES,
-        cache_path=str(TOKEN_CACHE_PATH),
-    )
-
-    try:
-        auth_manager.get_access_token(code)
-        logger.info("Spotify OAuth token obtained and cached")
-    except Exception as exc:
-        logger.error("Spotify OAuth callback failed: {}", exc)
-        return RedirectResponse(url="/?auth_error=1")
-
-    return RedirectResponse(url="/?auth_success=1")
