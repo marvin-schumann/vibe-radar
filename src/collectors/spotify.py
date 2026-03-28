@@ -54,15 +54,54 @@ class SpotifyCollector:
             scope=SCOPES,
             cache_path=str(TOKEN_CACHE_PATH),
         )
-        self.sp = spotipy.Spotify(auth_manager=auth_manager)
+        self.sp = spotipy.Spotify(auth_manager=auth_manager, retries=0)
         logger.info("SpotifyCollector initialised (cache: {})", TOKEN_CACHE_PATH)
 
     @classmethod
     def from_token(cls, access_token: str) -> "SpotifyCollector":
         """Create a collector using an existing access token (no local cache)."""
         obj = cls.__new__(cls)
-        obj.sp = spotipy.Spotify(auth=access_token)
+        obj.sp = spotipy.Spotify(auth=access_token, retries=0)
         logger.info("SpotifyCollector initialised from provided token")
+        return obj
+
+    @classmethod
+    def from_tokens(
+        cls,
+        access_token: str,
+        refresh_token: str | None,
+        cache_handler: Any | None = None,
+    ) -> "SpotifyCollector":
+        """Create a collector with auto-refresh support via a CacheHandler.
+
+        If a cache_handler is supplied (must implement spotipy CacheHandler),
+        spotipy will auto-refresh the access token when it expires and call
+        cache_handler.save_token_to_cache() with the new token_info.
+        """
+        obj = cls.__new__(cls)
+        if refresh_token and cache_handler:
+            # Seed the cache with an already-expired token_info so spotipy
+            # immediately tries to refresh on the first API call.
+            token_info: dict[str, Any] = {
+                "access_token": access_token,
+                "refresh_token": refresh_token,
+                "token_type": "Bearer",
+                "expires_at": int(time.time()) - 1,
+                "scope": SCOPES,
+            }
+            cache_handler.save_token_to_cache(token_info)
+            auth_manager = SpotifyOAuth(
+                client_id=settings.spotify_client_id,
+                client_secret=settings.spotify_client_secret,
+                redirect_uri=f"{settings.app_host}/auth/spotify/callback",
+                scope=SCOPES,
+                cache_handler=cache_handler,
+            )
+            obj.sp = spotipy.Spotify(auth_manager=auth_manager, retries=0)
+            logger.info("SpotifyCollector initialised with token auto-refresh")
+        else:
+            obj.sp = spotipy.Spotify(auth=access_token, retries=0)
+            logger.info("SpotifyCollector initialised from provided token (no refresh)")
         return obj
 
     # ------------------------------------------------------------------
@@ -418,7 +457,11 @@ class SpotifyCollector:
                 return func(*args, **kwargs)
             except SpotifyException as exc:
                 if exc.http_status == 429:
-                    retry_after = int(exc.headers.get("Retry-After", backoff)) if exc.headers else backoff
+                    raw_retry = int(exc.headers.get("Retry-After", backoff)) if exc.headers else backoff
+                    retry_after = min(raw_retry, 10)  # never sleep more than 10s
+                    if raw_retry > 10:
+                        logger.warning("Rate limited with Retry-After={}s — skipping call", raw_retry)
+                        return None
                     logger.warning(
                         "Rate limited (429). Retry {}/{} in {}s",
                         attempt,

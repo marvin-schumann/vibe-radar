@@ -14,11 +14,37 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from loguru import logger
 
+from spotipy.cache_handler import CacheHandler
+
 from src.api.auth import router as auth_router
 from src.api.deps import get_session_user
 from src.config import settings
-from src.db.supabase import get_admin_client, is_approved, is_pro
+from src.db.supabase import get_admin_client, is_approved, is_pro, upsert_connected_account
 from src.models import Match, MatchType, TasteProfile
+
+
+class _SupabaseCacheHandler(CacheHandler):
+    """Spotipy CacheHandler that persists refreshed tokens back to Supabase."""
+
+    def __init__(self, user_id: str) -> None:
+        self._user_id = user_id
+        self._token_info: dict | None = None
+
+    def get_cached_token(self) -> dict | None:
+        return self._token_info
+
+    def save_token_to_cache(self, token_info: dict) -> None:
+        self._token_info = token_info
+        try:
+            upsert_connected_account(
+                user_id=self._user_id,
+                platform="spotify",
+                access_token=token_info["access_token"],
+                refresh_token=token_info.get("refresh_token"),
+            )
+            logger.info("Spotify token refreshed and saved for user {}", self._user_id)
+        except Exception as exc:
+            logger.warning("Failed to persist refreshed Spotify token: {}", exc)
 
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
@@ -161,7 +187,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         db = get_admin_client()
         accounts = (
             db.table("connected_accounts")
-            .select("platform,access_token,username")
+            .select("platform,access_token,refresh_token,username")
             .eq("user_id", user_id)
             .execute()
         )
@@ -171,7 +197,12 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         spotify_acct = acct_map.get("spotify")
         if spotify_acct and spotify_acct.get("access_token"):
             try:
-                spotify = SpotifyCollector.from_token(spotify_acct["access_token"])
+                cache_handler = _SupabaseCacheHandler(user_id)
+                spotify = SpotifyCollector.from_tokens(
+                    access_token=spotify_acct["access_token"],
+                    refresh_token=spotify_acct.get("refresh_token"),
+                    cache_handler=cache_handler,
+                )
                 spotify_artists = await spotify.collect_artists()
                 all_artists.extend(spotify_artists)
                 logger.info("Spotify: {} artists for user {}", len(spotify_artists), user_id)
@@ -373,7 +404,10 @@ async def dashboard(request: Request, user=Depends(get_session_user)) -> HTMLRes
         return RedirectResponse("/pending")
 
     cache = _user_cache(user["id"])
-    # Fall back to shared snapshot data if user has no personal cache yet
+    # Auto-run pipeline in background if user has no cached data yet
+    if not cache.get("last_refresh") and not cache.get("refreshing"):
+        asyncio.create_task(_run_pipeline(user_id=user["id"]))
+
     last_refresh = cache.get("last_refresh") or _cache.get("last_refresh")
 
     return templates.TemplateResponse(

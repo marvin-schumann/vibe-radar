@@ -1380,7 +1380,26 @@
         // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
             checkAuthParams();
-            Promise.all([loadTasteProfile(), loadEvents()]);
+            Promise.all([loadTasteProfile(), loadEvents()]).then(() => {
+                // If the backend pipeline is still running (no data yet),
+                // poll every 5s until it completes.
+                if (allMatches.length === 0) {
+                    const poll = setInterval(async () => {
+                        const r = await fetch('/api/events?match_type=all&days_ahead=365');
+                        const d = await r.json();
+                        if (d.last_refresh) {
+                            clearInterval(poll);
+                            allMatches = d.matches || [];
+                            updateCounts();
+                            renderEvents(currentFilter);
+                            const total = allMatches.length;
+                            const dt = new Date(d.last_refresh);
+                            updateStatus(`${total} matches found \u00b7 Last refresh: ${dt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
+                            await loadTasteProfile();
+                        }
+                    }, 5000);
+                }
+            });
         });
     </script>
 </body>
