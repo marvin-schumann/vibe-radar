@@ -448,44 +448,22 @@ class SpotifyCollector:
     # ------------------------------------------------------------------
 
     def _api_call(self, func: Any, *args: Any, **kwargs: Any) -> Any:
-        """Call a spotipy method with exponential-backoff retries on rate limits."""
+        """Call a spotipy method, skipping immediately on rate limits.
 
-        backoff = RETRY_BACKOFF
-
-        for attempt in range(1, MAX_RETRIES + 1):
-            try:
-                return func(*args, **kwargs)
-            except SpotifyException as exc:
-                if exc.http_status == 429:
-                    raw_retry = int(exc.headers.get("Retry-After", backoff)) if exc.headers else backoff
-                    retry_after = min(raw_retry, 10)  # never sleep more than 10s
-                    if raw_retry > 10:
-                        logger.warning("Rate limited with Retry-After={}s — skipping call", raw_retry)
-                        return None
-                    logger.warning(
-                        "Rate limited (429). Retry {}/{} in {}s",
-                        attempt,
-                        MAX_RETRIES,
-                        retry_after,
-                    )
-                    time.sleep(retry_after)
-                    backoff *= 2
-                elif exc.http_status in (500, 502, 503):
-                    logger.warning(
-                        "Spotify server error ({}). Retry {}/{} in {:.1f}s",
-                        exc.http_status,
-                        attempt,
-                        MAX_RETRIES,
-                        backoff,
-                    )
-                    time.sleep(backoff)
-                    backoff *= 2
-                else:
-                    logger.error("Spotify API error: {}", exc)
-                    return None
-            except Exception as exc:  # noqa: BLE001
-                logger.error("Unexpected error calling Spotify API: {}", exc)
+        429 errors are not retried — spotipy dev apps hit aggressive rate limits
+        and sleeping would block FastAPI's event loop. We skip the call and move on.
+        """
+        try:
+            return func(*args, **kwargs)
+        except SpotifyException as exc:
+            if exc.http_status == 429:
+                logger.warning("Spotify rate limit (429) — skipping call")
                 return None
-
-        logger.error("Spotify API call failed after {} retries", MAX_RETRIES)
-        return None
+            if exc.http_status == 401:
+                logger.warning("Spotify token expired (401) — skipping call")
+                return None
+            logger.error("Spotify API error {}: {}", exc.http_status, exc)
+            return None
+        except Exception as exc:  # noqa: BLE001
+            logger.error("Unexpected error calling Spotify API: {}", exc)
+            return None

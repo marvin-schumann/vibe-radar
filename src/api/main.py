@@ -104,8 +104,13 @@ def _user_cache(user_id: str) -> dict[str, Any]:
             "matches": [],
             "last_refresh": None,
             "refreshing": False,
+            "pipeline_status": None,  # {"step": str, "detail": str, "progress": int}
         }
     return _user_caches[user_id]
+
+
+def _set_status(cache: dict, step: str, detail: str, progress: int) -> None:
+    cache["pipeline_status"] = {"step": step, "detail": detail, "progress": progress}
 
 
 def _load_snapshot_data() -> bool:
@@ -177,6 +182,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         return
 
     cache["refreshing"] = True
+    cache["pipeline_status"] = None
     logger.info("Starting Vibe Radar pipeline (user={})", user_id or "anon")
 
     # -- 1. Collect user artists from music sources --
@@ -196,6 +202,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         # Spotify
         spotify_acct = acct_map.get("spotify")
         if spotify_acct and spotify_acct.get("access_token"):
+            _set_status(cache, "Connecting to Spotify", "Authenticating...", 5)
             try:
                 cache_handler = _SupabaseCacheHandler(user_id)
                 spotify = SpotifyCollector.from_tokens(
@@ -203,8 +210,10 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                     refresh_token=spotify_acct.get("refresh_token"),
                     cache_handler=cache_handler,
                 )
+                _set_status(cache, "Fetching Spotify artists", "Loading your top artists...", 15)
                 spotify_artists = await spotify.collect_artists()
                 all_artists.extend(spotify_artists)
+                _set_status(cache, "Spotify done", f"{len(spotify_artists):,} artists loaded", 45)
                 logger.info("Spotify: {} artists for user {}", len(spotify_artists), user_id)
             except Exception as exc:
                 logger.warning("Spotify collection failed for user {}: {}", user_id, exc)
@@ -213,28 +222,34 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         sc_acct = acct_map.get("soundcloud")
         sc_username = sc_acct.get("username") if sc_acct else None
         if sc_username:
+            _set_status(cache, "Fetching SoundCloud artists", f"Scanning @{sc_username}...", 50)
             try:
                 soundcloud = SoundCloudCollector(username=sc_username)
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
+                _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists for user {}", len(sc_artists), user_id)
             except Exception as exc:
                 logger.warning("SoundCloud collection failed for user {}: {}", user_id, exc)
     else:
         # --- Anonymous / single-user: use local cache / env vars ---
+        _set_status(cache, "Connecting to Spotify", "Authenticating...", 5)
         try:
             spotify = SpotifyCollector()
             spotify_artists = await spotify.collect_artists()
             all_artists.extend(spotify_artists)
+            _set_status(cache, "Spotify done", f"{len(spotify_artists):,} artists loaded", 45)
             logger.info("Spotify: {} artists collected", len(spotify_artists))
         except Exception as exc:
             logger.warning("Spotify collection failed: {}", exc)
 
         try:
             if settings.soundcloud_username:
+                _set_status(cache, "Fetching SoundCloud artists", "Scanning SoundCloud...", 50)
                 soundcloud = SoundCloudCollector()
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
+                _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists collected", len(sc_artists))
         except Exception as exc:
             logger.warning("SoundCloud collection failed: {}", exc)
@@ -245,13 +260,16 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         cache["matches"] = []
         cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
         cache["refreshing"] = False
+        cache["pipeline_status"] = None
         return
 
     # -- 2. Build taste profile --
+    _set_status(cache, "Building taste profile", f"Analysing {len(all_artists):,} artists...", 65)
     taste_profile = build_taste_profile(all_artists)
     cache["taste_profile"] = taste_profile
 
     # -- 3. Collect events from all sources --
+    _set_status(cache, "Scanning events in Madrid", "Checking Resident Advisor, Songkick...", 70)
     days = settings.days_ahead
     all_events = []
 
@@ -278,6 +296,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
             logger.info("{}: {} events collected", source_name, len(result))
 
     logger.info("Total events collected: {}", len(all_events))
+    _set_status(cache, "Finding your matches", f"{len(all_events)} events — matching against your artists...", 85)
 
     # -- 4. Run exact matching --
     exact_matcher = ExactMatcher()
@@ -305,6 +324,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     cache["matches"] = all_matches
     cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
     cache["refreshing"] = False
+    cache["pipeline_status"] = None
 
     logger.info(
         "Pipeline complete: {} total matches ({} exact, {} vibe)",
@@ -610,6 +630,19 @@ async def get_events(
             "last_refresh": _cache.get("last_refresh"),
         }
     )
+
+
+@app.get("/api/pipeline-status")
+async def pipeline_status(user=Depends(get_session_user)) -> JSONResponse:
+    """Return current pipeline status for the loading overlay."""
+    if not user:
+        return JSONResponse({"running": False, "status": None})
+    cache = _user_cache(user["id"])
+    return JSONResponse({
+        "running": bool(cache.get("refreshing")),
+        "status": cache.get("pipeline_status"),
+        "last_refresh": cache.get("last_refresh"),
+    })
 
 
 @app.get("/api/refresh")

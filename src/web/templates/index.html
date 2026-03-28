@@ -733,6 +733,42 @@
     <div class="grain-overlay"></div>
 
     <!-- ================================================================
+         PIPELINE PROGRESS OVERLAY
+    ================================================================ -->
+    <div id="pipelineOverlay" style="display:none; position:fixed; inset:0; background:rgba(10,8,21,0.92); backdrop-filter:blur(8px); z-index:1000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:2rem;">
+        <div style="text-align:center; max-width:400px; padding:2rem;">
+            <!-- Animated radar -->
+            <div style="position:relative; width:80px; height:80px; margin:0 auto 1.5rem;">
+                <svg viewBox="0 0 80 80" style="width:80px;height:80px;position:absolute;top:0;left:0;">
+                    <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(0,240,255,0.15)" stroke-width="1.5"/>
+                    <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(0,240,255,0.12)" stroke-width="1.5"/>
+                    <circle cx="40" cy="40" r="12" fill="none" stroke="rgba(0,240,255,0.10)" stroke-width="1.5"/>
+                    <line x1="40" y1="40" x2="76" y2="40" stroke="rgba(0,240,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="40" cy="40" r="3" fill="#00f0ff"/>
+                </svg>
+                <svg viewBox="0 0 80 80" style="width:80px;height:80px;position:absolute;top:0;left:0;animation:radar-sweep 2s linear infinite;">
+                    <defs>
+                        <radialGradient id="sweepGrad" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <path d="M40,40 L76,40 A36,36 0 0,0 40,4 Z" fill="url(#sweepGrad)"/>
+                </svg>
+            </div>
+
+            <div id="overlayStep" style="font-size:1.1rem; font-weight:600; color:#fff; margin-bottom:0.5rem; letter-spacing:0.02em;">Connecting...</div>
+            <div id="overlayDetail" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.5rem; min-height:1.2em;"></div>
+
+            <!-- Progress bar -->
+            <div style="background:rgba(255,255,255,0.08); border-radius:8px; height:6px; overflow:hidden; width:100%;">
+                <div id="overlayProgressBar" style="height:100%; border-radius:8px; background:linear-gradient(90deg,var(--cyan),var(--magenta)); transition:width 0.6s ease; width:5%;"></div>
+            </div>
+            <div id="overlayPercent" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.5rem; text-align:right;">5%</div>
+        </div>
+    </div>
+
+    <!-- ================================================================
          HEADER
          ================================================================ -->
     <header>
@@ -1330,22 +1366,17 @@
             if (btn.classList.contains('spinning')) return;
 
             btn.classList.add('spinning');
-            updateStatus('Refreshing data...', true);
-            showToast('Scanning your music taste and matching events...', 'info', 5000);
+            showOverlay('Starting refresh...', 'Connecting to your music sources...', 5);
+            startStatusPolling();
 
             try {
                 const resp = await fetch('/api/refresh');
                 const data = await resp.json();
-
-                if (data.status === 'ok') {
-                    showToast('Data refreshed successfully!', 'success');
-                    await Promise.all([loadTasteProfile(), loadEvents()]);
-                } else if (data.status === 'already_running') {
+                if (data.status === 'already_running') {
                     showToast('A refresh is already in progress...', 'info');
-                } else {
-                    showToast('Refresh failed: ' + (data.message || 'Unknown error'), 'error', 5000);
                 }
             } catch (err) {
+                hideOverlay();
                 showToast('Network error during refresh', 'error');
                 console.error('Refresh failed:', err);
             } finally {
@@ -1378,29 +1409,79 @@
         // ============================================================
         // Initialise
         // ============================================================
-        document.addEventListener('DOMContentLoaded', () => {
+        // ============================================================
+        // Pipeline progress overlay
+        // ============================================================
+        const overlay = document.getElementById('pipelineOverlay');
+        const overlayStep = document.getElementById('overlayStep');
+        const overlayDetail = document.getElementById('overlayDetail');
+        const overlayBar = document.getElementById('overlayProgressBar');
+        const overlayPercent = document.getElementById('overlayPercent');
+
+        function showOverlay(step, detail, progress) {
+            overlay.style.display = 'flex';
+            overlayStep.textContent = step || 'Loading...';
+            overlayDetail.textContent = detail || '';
+            const pct = Math.max(5, progress || 5);
+            overlayBar.style.width = pct + '%';
+            overlayPercent.textContent = pct + '%';
+        }
+
+        function hideOverlay() {
+            overlay.style.display = 'none';
+        }
+
+        let statusPoll = null;
+
+        async function startStatusPolling() {
+            if (statusPoll) return;
+            statusPoll = setInterval(async () => {
+                try {
+                    const r = await fetch('/api/pipeline-status');
+                    const d = await r.json();
+                    if (d.running && d.status) {
+                        showOverlay(d.status.step, d.status.detail, d.status.progress);
+                    } else if (!d.running && d.last_refresh) {
+                        clearInterval(statusPoll);
+                        statusPoll = null;
+                        // Animate to 100% briefly, then hide and reload data
+                        showOverlay('Done!', 'Your matches are ready.', 100);
+                        setTimeout(async () => {
+                            hideOverlay();
+                            await Promise.all([loadTasteProfile(), loadEvents()]);
+                        }, 800);
+                    }
+                } catch (e) { /* ignore */ }
+            }, 1500);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
             checkAuthParams();
-            Promise.all([loadTasteProfile(), loadEvents()]).then(() => {
-                // If the backend pipeline is still running (no data yet),
-                // poll every 5s until it completes.
-                if (allMatches.length === 0) {
-                    const poll = setInterval(async () => {
-                        const r = await fetch('/api/events?match_type=all&days_ahead=365');
-                        const d = await r.json();
-                        if (d.last_refresh) {
-                            clearInterval(poll);
-                            allMatches = d.matches || [];
-                            updateCounts();
-                            renderEvents(currentFilter);
-                            const total = allMatches.length;
-                            const dt = new Date(d.last_refresh);
-                            updateStatus(`${total} matches found \u00b7 Last refresh: ${dt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
-                            await loadTasteProfile();
-                        }
-                    }, 5000);
+
+            // Check if pipeline is already running on page load
+            try {
+                const r = await fetch('/api/pipeline-status');
+                const d = await r.json();
+                if (d.running) {
+                    showOverlay(
+                        d.status ? d.status.step : 'Loading your music data...',
+                        d.status ? d.status.detail : 'This takes about 30 seconds',
+                        d.status ? d.status.progress : 5,
+                    );
+                    startStatusPolling();
+                    return; // Don't load data yet — wait for pipeline to finish
                 }
-            });
+            } catch (e) { /* ignore, just load normally */ }
+
+            await Promise.all([loadTasteProfile(), loadEvents()]);
+
+            // If still no data, pipeline may not have started yet — poll
+            if (allMatches.length === 0) {
+                showOverlay('Loading your music data...', 'This takes about 30 seconds', 5);
+                startStatusPolling();
+            }
         });
+
     </script>
 </body>
 </html>
