@@ -772,7 +772,10 @@
 
                 <!-- Audio Features Radar -->
                 <div class="card">
-                    <div class="card-title">Audio DNA</div>
+                    <div class="card-title" style="display:flex;align-items:baseline;gap:0.5rem;">
+                        Audio DNA
+                        <span id="audioDnaLabel" style="font-size:0.65rem;color:var(--text-muted);font-weight:400;display:none;">(estimated from genres)</span>
+                    </div>
                     <div class="chart-wrapper" id="featuresChartWrapper">
                         <div class="skeleton skeleton-chart"></div>
                     </div>
@@ -905,7 +908,7 @@
                 const data = await resp.json();
                 tasteProfile = data.taste_profile;
                 renderGenreChart(tasteProfile.top_genres);
-                renderFeaturesChart(tasteProfile.avg_features);
+                renderFeaturesChart(tasteProfile.avg_features, data.features_estimated);
                 renderSourceBreakdown(tasteProfile.sources, tasteProfile.total_artists);
             } catch (err) {
                 console.error('Failed to load taste profile:', err);
@@ -1024,12 +1027,14 @@
         // ============================================================
         // Audio Features Radar Chart
         // ============================================================
-        function renderFeaturesChart(features) {
+        function renderFeaturesChart(features, estimated) {
             const wrapper = document.getElementById('featuresChartWrapper');
+            const label = document.getElementById('audioDnaLabel');
             if (!features) {
                 wrapper.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 2rem 0;">No audio features available yet.</p>';
                 return;
             }
+            if (label) label.style.display = estimated ? 'inline' : 'none';
 
             wrapper.innerHTML = '<canvas id="featuresChart"></canvas>';
             const ctx = document.getElementById('featuresChart').getContext('2d');

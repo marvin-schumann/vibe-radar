@@ -110,6 +110,7 @@ class TasteProfile(BaseModel):
 
     top_genres: list[tuple[str, int]] = Field(default_factory=list)  # (genre, count)
     avg_features: AudioFeatures | None = None
+    features_estimated: bool = False  # True when avg_features is derived from genres
     total_artists: int = 0
     sources: dict[str, int] = Field(default_factory=dict)  # source -> artist count
     genre_clusters: list[list[str]] = Field(default_factory=list)

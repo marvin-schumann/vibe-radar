@@ -27,6 +27,62 @@ _FEATURE_FIELDS = [
 _TEMPO_MIN = 60.0
 _TEMPO_MAX = 200.0
 
+# Genre → estimated audio features (energy, danceability, valence, acousticness,
+# instrumentalness, liveness, speechiness, tempo).
+# Used as fallback when Spotify's audio features API is unavailable.
+_GENRE_AUDIO_ESTIMATES: dict[str, dict[str, float]] = {
+    "techno":           dict(energy=0.90, danceability=0.80, valence=0.30, acousticness=0.02, instrumentalness=0.87, liveness=0.15, speechiness=0.05, tempo=135),
+    "hard techno":      dict(energy=0.95, danceability=0.83, valence=0.25, acousticness=0.01, instrumentalness=0.90, liveness=0.15, speechiness=0.04, tempo=145),
+    "trance":           dict(energy=0.86, danceability=0.76, valence=0.65, acousticness=0.03, instrumentalness=0.76, liveness=0.15, speechiness=0.04, tempo=140),
+    "psytrance":        dict(energy=0.91, danceability=0.80, valence=0.55, acousticness=0.02, instrumentalness=0.82, liveness=0.15, speechiness=0.04, tempo=145),
+    "drum and bass":    dict(energy=0.91, danceability=0.84, valence=0.45, acousticness=0.02, instrumentalness=0.80, liveness=0.16, speechiness=0.05, tempo=172),
+    "dnb":              dict(energy=0.91, danceability=0.84, valence=0.45, acousticness=0.02, instrumentalness=0.80, liveness=0.16, speechiness=0.05, tempo=172),
+    "dubstep":          dict(energy=0.88, danceability=0.79, valence=0.40, acousticness=0.02, instrumentalness=0.76, liveness=0.15, speechiness=0.05, tempo=140),
+    "hardstyle":        dict(energy=0.95, danceability=0.85, valence=0.35, acousticness=0.01, instrumentalness=0.85, liveness=0.15, speechiness=0.04, tempo=150),
+    "house":            dict(energy=0.80, danceability=0.86, valence=0.62, acousticness=0.04, instrumentalness=0.70, liveness=0.16, speechiness=0.05, tempo=124),
+    "deep house":       dict(energy=0.70, danceability=0.82, valence=0.58, acousticness=0.05, instrumentalness=0.67, liveness=0.15, speechiness=0.05, tempo=122),
+    "edm":              dict(energy=0.85, danceability=0.80, valence=0.65, acousticness=0.03, instrumentalness=0.70, liveness=0.16, speechiness=0.05, tempo=130),
+    "electronic":       dict(energy=0.76, danceability=0.75, valence=0.52, acousticness=0.05, instrumentalness=0.70, liveness=0.14, speechiness=0.05, tempo=125),
+    "dance & edm":      dict(energy=0.84, danceability=0.82, valence=0.64, acousticness=0.03, instrumentalness=0.65, liveness=0.16, speechiness=0.05, tempo=128),
+    "acid":             dict(energy=0.86, danceability=0.80, valence=0.36, acousticness=0.02, instrumentalness=0.85, liveness=0.15, speechiness=0.04, tempo=135),
+    "minimal":          dict(energy=0.72, danceability=0.78, valence=0.35, acousticness=0.03, instrumentalness=0.88, liveness=0.13, speechiness=0.04, tempo=128),
+    "ambient":          dict(energy=0.20, danceability=0.35, valence=0.45, acousticness=0.55, instrumentalness=0.88, liveness=0.10, speechiness=0.03, tempo=80),
+    "hip hop":          dict(energy=0.65, danceability=0.80, valence=0.55, acousticness=0.10, instrumentalness=0.12, liveness=0.16, speechiness=0.22, tempo=90),
+    "rap":              dict(energy=0.65, danceability=0.80, valence=0.50, acousticness=0.08, instrumentalness=0.08, liveness=0.16, speechiness=0.28, tempo=88),
+    "trap":             dict(energy=0.75, danceability=0.80, valence=0.45, acousticness=0.05, instrumentalness=0.22, liveness=0.14, speechiness=0.20, tempo=140),
+    "phonk":            dict(energy=0.78, danceability=0.79, valence=0.42, acousticness=0.05, instrumentalness=0.35, liveness=0.14, speechiness=0.14, tempo=138),
+    "pop":              dict(energy=0.72, danceability=0.75, valence=0.75, acousticness=0.12, instrumentalness=0.07, liveness=0.14, speechiness=0.07, tempo=120),
+    "indie pop":        dict(energy=0.65, danceability=0.68, valence=0.65, acousticness=0.22, instrumentalness=0.12, liveness=0.14, speechiness=0.05, tempo=115),
+    "rock":             dict(energy=0.76, danceability=0.64, valence=0.55, acousticness=0.10, instrumentalness=0.14, liveness=0.17, speechiness=0.05, tempo=130),
+    "metal":            dict(energy=0.91, danceability=0.58, valence=0.34, acousticness=0.04, instrumentalness=0.28, liveness=0.17, speechiness=0.05, tempo=145),
+    "anime":            dict(energy=0.76, danceability=0.70, valence=0.65, acousticness=0.05, instrumentalness=0.18, liveness=0.14, speechiness=0.07, tempo=130),
+    "soundtrack":       dict(energy=0.50, danceability=0.50, valence=0.50, acousticness=0.32, instrumentalness=0.62, liveness=0.12, speechiness=0.04, tempo=100),
+    "score":            dict(energy=0.40, danceability=0.40, valence=0.45, acousticness=0.40, instrumentalness=0.76, liveness=0.12, speechiness=0.04, tempo=95),
+    "jazz":             dict(energy=0.52, danceability=0.65, valence=0.65, acousticness=0.38, instrumentalness=0.42, liveness=0.18, speechiness=0.05, tempo=105),
+    "classical":        dict(energy=0.25, danceability=0.38, valence=0.50, acousticness=0.86, instrumentalness=0.90, liveness=0.12, speechiness=0.03, tempo=100),
+    "soul":             dict(energy=0.65, danceability=0.70, valence=0.70, acousticness=0.22, instrumentalness=0.12, liveness=0.17, speechiness=0.07, tempo=98),
+    "funk":             dict(energy=0.76, danceability=0.86, valence=0.76, acousticness=0.10, instrumentalness=0.22, liveness=0.17, speechiness=0.07, tempo=110),
+}
+
+
+def _estimate_features_from_genres(genre_counts: Counter[str]) -> AudioFeatures | None:
+    """Estimate AudioFeatures from top genres when the Spotify API is unavailable."""
+    total_weight = 0.0
+    sums: dict[str, float] = {f: 0.0 for f in _FEATURE_FIELDS}
+
+    for genre, count in genre_counts.most_common(20):
+        genre_key = genre.lower().strip()
+        if genre_key in _GENRE_AUDIO_ESTIMATES:
+            w = float(count)
+            total_weight += w
+            for field, val in _GENRE_AUDIO_ESTIMATES[genre_key].items():
+                sums[field] += val * w
+
+    if total_weight == 0.0:
+        return None
+
+    return AudioFeatures(**{f: sums[f] / total_weight for f in _FEATURE_FIELDS})
+
 
 def _jaccard_similarity(set_a: set[str], set_b: set[str]) -> float:
     """Compute Jaccard similarity between two sets."""
@@ -91,12 +147,16 @@ def build_taste_profile(artists: list[Artist]) -> TasteProfile:
             for field in _FEATURE_FIELDS:
                 feature_sums[field] += getattr(artist.audio_features, field)
 
-    # Build averaged audio features
+    # Build averaged audio features; fall back to genre-based estimation
     avg_features: AudioFeatures | None = None
+    features_estimated = False
     if feature_count > 0:
         avg_features = AudioFeatures(
             **{field: feature_sums[field] / feature_count for field in _FEATURE_FIELDS}
         )
+    else:
+        avg_features = _estimate_features_from_genres(genre_counter)
+        features_estimated = avg_features is not None
 
     top_genres = genre_counter.most_common()
 
@@ -110,6 +170,7 @@ def build_taste_profile(artists: list[Artist]) -> TasteProfile:
     return TasteProfile(
         top_genres=top_genres,
         avg_features=avg_features,
+        features_estimated=features_estimated,
         total_artists=len(artists),
         sources=dict(source_counter),
     )

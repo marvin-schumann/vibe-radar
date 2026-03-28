@@ -317,6 +317,7 @@ def _serialize_taste_profile(profile: TasteProfile | None) -> dict[str, Any]:
             for genre, count in profile.top_genres[:20]
         ],
         "avg_features": features_dict,
+        "features_estimated": profile.features_estimated,
         "total_artists": profile.total_artists,
         "sources": profile.sources,
     }
@@ -445,6 +446,7 @@ async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
                 "total_artists": len(all_names),
                 "sources": sources,
             },
+            "features_estimated": avg_features is not None,
             "last_refresh": _cache.get("last_refresh"),
         }
     )
