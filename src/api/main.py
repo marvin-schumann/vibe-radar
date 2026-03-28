@@ -376,9 +376,9 @@ async def dashboard(request: Request, user=Depends(get_session_user)) -> HTMLRes
     last_refresh = cache.get("last_refresh") or _cache.get("last_refresh")
 
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "city": settings.city,
             "last_refresh": last_refresh,
             "user": user,

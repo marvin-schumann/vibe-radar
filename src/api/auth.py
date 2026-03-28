@@ -30,14 +30,14 @@ _COOKIE_OPTS = dict(httponly=True, samesite="lax", secure=False)  # set secure=T
 async def login_page(request: Request, user=Depends(get_session_user)) -> HTMLResponse:
     if user:
         return RedirectResponse("/")
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse(request, "login.html")
 
 
 @router.get("/pending", response_class=HTMLResponse)
 async def pending_page(request: Request, user=Depends(get_session_user)) -> HTMLResponse:
     if not user:
         return RedirectResponse("/login")
-    return templates.TemplateResponse("pending.html", {"request": request, "email": user["email"]})
+    return templates.TemplateResponse(request, "pending.html", {"email": user["email"]})
 
 
 @router.get("/connect", response_class=HTMLResponse)
@@ -54,8 +54,7 @@ async def connect_page(request: Request, user=Depends(get_session_user)) -> HTML
     )
     connected = {row["platform"]: row for row in (accounts.data or [])}
     return templates.TemplateResponse(
-        "connect.html",
-        {"request": request, "user": user, "connected": connected},
+        request, "connect.html", {"user": user, "connected": connected}
     )
 
 
