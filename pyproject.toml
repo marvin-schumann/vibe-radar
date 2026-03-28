@@ -17,6 +17,10 @@ dependencies = [
     "plotly>=5.18.0",
     "loguru>=0.7.0",
     "rich>=13.7.0",
+    "supabase>=2.3.0",
+    "python-jose[cryptography]>=3.3.0",
+    "fpdf2>=2.7.0",
+    "apscheduler>=3.10.0",
 ]
 
 [project.optional-dependencies]

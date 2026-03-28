@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     bandsintown_app_id: str = ""
     songkick_api_key: str = ""
 
+    # Supabase
+    supabase_url: str = ""
+    supabase_anon_key: str = ""
+    supabase_service_role_key: str = ""
+
     # App settings
     city: str = "Madrid"
     country: str = "Spain"
