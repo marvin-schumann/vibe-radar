@@ -400,10 +400,11 @@ async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
     if profile is None:
         profile = _cache.get("taste_profile")
     if profile is not None:
+        last_refresh = (_user_cache(user["id"]).get("last_refresh") if user else None) or _cache.get("last_refresh")
         return JSONResponse(
             content={
                 "taste_profile": _serialize_taste_profile(profile),
-                "last_refresh": _cache.get("last_refresh"),
+                "last_refresh": last_refresh,
             }
         )
 
@@ -476,12 +477,13 @@ async def get_events(
                 filtered = [m for m in filtered if m.match_type == mt]
             except ValueError:
                 pass
+        last_refresh = (_user_cache(user["id"]).get("last_refresh") if user else None) or _cache.get("last_refresh")
         return JSONResponse(
             content={
                 "matches": [_serialize_match(m) for m in filtered],
                 "total": len(filtered),
                 "match_type": match_type or "all",
-                "last_refresh": _cache.get("last_refresh"),
+                "last_refresh": last_refresh,
             }
         )
 

@@ -1207,17 +1207,36 @@
                 return;
             }
 
-            grid.innerHTML = matches.map((match, idx) => {
+            // Group matches by event URL so one event = one card
+            const eventMap = new Map();
+            matches.forEach(match => {
+                const key = match.event.url || (match.event.name + '|' + match.event.date);
+                if (!eventMap.has(key)) {
+                    eventMap.set(key, { ...match, matched_artists: [match.matched_artist] });
+                } else {
+                    const g = eventMap.get(key);
+                    g.matched_artists.push(match.matched_artist);
+                    if (match.confidence > g.confidence) g.confidence = match.confidence;
+                }
+            });
+            const grouped = Array.from(eventMap.values());
+
+            grid.innerHTML = grouped.map((match, idx) => {
                 const e = match.event;
                 const isExact = match.match_type === 'exact';
                 const badgeClass = isExact ? 'exact' : 'vibe';
                 const badgeText = isExact ? 'Exact' : 'Vibe';
                 const confidence = Math.round(match.confidence * 100);
 
-                // Artist avatar (fallback to a gradient circle)
-                const avatarHtml = match.matched_artist.image_url
-                    ? `<img class="artist-avatar" src="${match.matched_artist.image_url}" alt="${match.matched_artist.name}" loading="lazy">`
-                    : `<div class="artist-avatar" style="background: linear-gradient(135deg, var(--cyan), var(--magenta));"></div>`;
+                // Artist avatars — show up to 3, then "+N more"
+                const artists = match.matched_artists;
+                const avatarHtml = artists.slice(0, 3).map(a =>
+                    a.image_url
+                        ? `<img class="artist-avatar" src="${a.image_url}" alt="${a.name}" loading="lazy" title="${a.name}">`
+                        : `<div class="artist-avatar" style="background: linear-gradient(135deg, var(--cyan), var(--magenta));" title="${a.name}"></div>`
+                ).join('');
+                const artistNames = artists.map(a => escapeHtml(a.name)).join(', ');
+                const artistSource = [...new Set(artists.map(a => formatSource(a.source)))].join(' · ');
 
                 // Venue
                 const venueName = e.venue ? e.venue.name : 'Venue TBA';
@@ -1246,8 +1265,8 @@
                         <div class="event-artist-match">
                             ${avatarHtml}
                             <div class="artist-info">
-                                <div class="artist-name">${escapeHtml(match.matched_artist.name)}</div>
-                                <div class="artist-source">${formatSource(match.matched_artist.source)}</div>
+                                <div class="artist-name">${artistNames}</div>
+                                <div class="artist-source">${artistSource}</div>
                             </div>
                         </div>
 
