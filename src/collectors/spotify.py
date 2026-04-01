@@ -113,18 +113,18 @@ class SpotifyCollector:
 
         artists: list[Artist] = []
 
-        # 1. Top artists across all time ranges
+        # 1. Top artists across all time ranges (best signal — what you actually listen to)
         for time_range in TIME_RANGES:
             artists.extend(self._fetch_top_artists(time_range))
 
-        # 2. Followed artists
-        artists.extend(self._fetch_followed_artists())
-
-        # 3. Recently played tracks -> unique artists
+        # 2. Recently played tracks -> unique artists
         artists.extend(self._fetch_recently_played_artists())
 
-        # 4. Saved / liked tracks -> unique artists
-        artists.extend(self._fetch_saved_track_artists())
+        # NOTE: Followed artists and saved/liked tracks intentionally excluded.
+        # Following ≠ listening; liked tracks include one-off plays from years
+        # ago that flood results with artists the user doesn't really know.
+        # Top artists (3 time ranges) + recently played gives the highest-signal
+        # set of artists the user genuinely listens to.
 
         deduplicated = self._deduplicate(artists)
         logger.info(

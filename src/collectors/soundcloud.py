@@ -92,11 +92,12 @@ class SoundCloudCollector:
                 )
                 return await self._fallback_html_scrape(client)
 
-            # Step 3 — collect from each source
+            # Step 3 — collect from liked tracks only.
+            # Followings and reposts excluded: following ≠ listening, and reposts
+            # are often DJ mixes / other people's content rather than artists the
+            # user actively follows. Likes are the strongest signal on SoundCloud.
             for label, coro in [
                 ("likes", self._fetch_liked_artists(client)),
-                ("reposts", self._fetch_repost_artists(client)),
-                ("followings", self._fetch_following_artists(client)),
             ]:
                 try:
                     artists = await coro
@@ -177,10 +178,11 @@ class SoundCloudCollector:
     # ------------------------------------------------------------------
 
     async def _fetch_liked_artists(self, client: httpx.AsyncClient) -> list[Artist]:
-        """Fetch artists from the user's liked tracks."""
+        """Fetch artists from the user's liked tracks (capped at 400 most recent)."""
         items = await self._paginate(
             client,
             f"{_API_V2}/users/{self._user_id}/track_likes",
+            max_pages=2,
         )
         artists: list[Artist] = []
         for item in items:
@@ -191,10 +193,11 @@ class SoundCloudCollector:
         return artists
 
     async def _fetch_repost_artists(self, client: httpx.AsyncClient) -> list[Artist]:
-        """Fetch artists from the user's reposts."""
+        """Fetch artists from the user's reposts (capped at 200 most recent)."""
         items = await self._paginate(
             client,
             f"{_API_V2}/stream/users/{self._user_id}/reposts",
+            max_pages=1,
         )
         artists: list[Artist] = []
         for item in items:
