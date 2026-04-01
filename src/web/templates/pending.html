@@ -38,8 +38,21 @@
     }
     p { color: var(--muted); line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem; }
     .email { color: var(--cyan); }
+    .founding {
+      margin-top: 28px; padding: 20px 24px;
+      border: 1px solid rgba(0,240,255,0.2); border-radius: 12px;
+      background: rgba(0,240,255,0.04);
+    }
+    .founding p { font-size: 0.85rem; margin-bottom: 12px; color: var(--text); }
+    .founding a {
+      display: inline-block; padding: 10px 22px;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      color: #0a0815; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .founding a:hover { opacity: 0.85; }
     .logout {
-      display: inline-block; margin-top: 28px; padding: 10px 24px;
+      display: inline-block; margin-top: 16px; padding: 10px 24px;
       border: 1px solid var(--border); border-radius: 8px; color: var(--muted);
       text-decoration: none; font-size: 0.85rem;
       transition: border-color 0.2s, color 0.2s;
@@ -59,6 +72,10 @@
       your spot opens up — usually within a day or two.
     </p>
     <p>In the meantime, tell a friend who might be into this.</p>
+    <div class="founding">
+      <p>Want guaranteed early access? Become a Founding Member — €20 one-time, lifetime Pro.</p>
+      <a href="#founding-coming-soon" onclick="return false;" title="Payment coming soon">Become a Founding Member</a>
+    </div>
     <a href="/auth/logout" class="logout">Sign out</a>
   </div>
 </body>
