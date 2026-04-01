@@ -8,104 +8,118 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
     <style>
         /* ============================================================
-           CSS RESET & VARIABLES
+           RESET & VARIABLES
            ============================================================ */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121c;
-            --bg-card: #1a1a2e;
-            --bg-card-hover: #222240;
-            --border: #2a2a45;
-            --border-glow: #3a3a60;
-            --text-primary: #e8e8f0;
-            --text-secondary: #8888aa;
-            --text-muted: #555577;
-            --cyan: #00f0ff;
-            --cyan-dim: rgba(0, 240, 255, 0.15);
-            --cyan-glow: rgba(0, 240, 255, 0.4);
-            --magenta: #ff00aa;
-            --magenta-dim: rgba(255, 0, 170, 0.15);
-            --magenta-glow: rgba(255, 0, 170, 0.4);
-            --green: #00ff88;
-            --green-dim: rgba(0, 255, 136, 0.15);
-            --amber: #ffaa00;
-            --amber-dim: rgba(255, 170, 0, 0.15);
-            --font-heading: 'Space Grotesk', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --bg:            #0c0c0c;
+            --bg-card:       #111111;
+            --bg-card-hover: #161616;
+            --border:        #1e1e1e;
+            --border-bright: #2e2e2e;
+            --text:          #ede8dd;
+            --text-dim:      #6a6a6a;
+            --text-faint:    #303030;
+
+            /* Accent colours */
+            --lime:    #c4f135;     /* exact matches, active states, primary CTA */
+            --orange:  #ff5c35;    /* vibe matches */
+            --red:     #ff3535;
+
+            /* Kept for backwards-compat with inline styles and chart colours */
+            --cyan:         #4d9fff;
+            --cyan-dim:     rgba(77,159,255,0.1);
+            --cyan-glow:    rgba(77,159,255,0.25);
+            --magenta:      #ff5c35;
+            --magenta-dim:  rgba(255,92,53,0.1);
+            --magenta-glow: rgba(255,92,53,0.25);
+            --green:        #c4f135;
+            --green-dim:    rgba(196,241,53,0.12);
+            --amber:        #ff5c35;
+            --amber-dim:    rgba(255,92,53,0.12);
+
+            /* Legacy variable aliases */
+            --bg-primary:    #0c0c0c;
+            --bg-secondary:  #0c0c0c;
+            --text-primary:  #ede8dd;
+            --text-secondary:#6a6a6a;
+            --text-muted:    #383838;
+            --border-glow:   #2e2e2e;
+            --shadow:        0 2px 24px rgba(0,0,0,0.7);
+
+            /* Typography */
+            --font-display: 'Bebas Neue', 'Impact', sans-serif;
+            --font-mono:    'Space Mono', 'Courier New', monospace;
+            --font-body:    'DM Sans', 'Helvetica Neue', sans-serif;
+            --font-heading: var(--font-display);
+
+            --radius:    6px;
+            --radius-sm: 4px;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
             font-family: var(--font-body);
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ============================================================
-           BACKGROUND EFFECTS
-           ============================================================ */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                radial-gradient(ellipse at 20% 0%, rgba(0, 240, 255, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 100%, rgba(255, 0, 170, 0.06) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
+        /* Very subtle noise overlay — barely visible */
         .grain-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 0;
-            opacity: 0.5;
         }
 
         /* ============================================================
-           HEADER / HERO
+           HEADER — sticky horizontal masthead
            ============================================================ */
         header {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 3rem 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            padding: 0 2rem;
+            background: rgba(12,12,12,0.96);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
         }
 
         .logo-container {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
+            gap: 0.75rem;
+            margin-bottom: 0;
         }
 
+        /* Radar icon — smaller for horizontal header */
         .radar-icon {
             position: relative;
-            width: 56px;
-            height: 56px;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
         }
 
         .radar-icon .ring {
             position: absolute;
-            border: 2px solid var(--cyan);
+            border: 1.5px solid var(--lime);
             border-radius: 50%;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -113,86 +127,91 @@
             animation: radar-pulse 3s ease-out infinite;
         }
 
-        .radar-icon .ring:nth-child(1) { width: 20px; height: 20px; animation-delay: 0s; }
-        .radar-icon .ring:nth-child(2) { width: 36px; height: 36px; animation-delay: 0.6s; }
-        .radar-icon .ring:nth-child(3) { width: 52px; height: 52px; animation-delay: 1.2s; }
+        .radar-icon .ring:nth-child(1) { width: 12px; height: 12px; animation-delay: 0s; }
+        .radar-icon .ring:nth-child(2) { width: 22px; height: 22px; animation-delay: 0.6s; }
+        .radar-icon .ring:nth-child(3) { width: 33px; height: 33px; animation-delay: 1.2s; }
 
         .radar-icon .dot {
             position: absolute;
-            width: 8px; height: 8px;
-            background: var(--cyan);
+            width: 5px; height: 5px;
+            background: var(--lime);
             border-radius: 50%;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 12px var(--cyan-glow), 0 0 24px var(--cyan-glow);
+            box-shadow: 0 0 8px rgba(196,241,53,0.6);
         }
 
         .radar-icon .sweep {
             position: absolute;
             top: 50%; left: 50%;
-            width: 28px; height: 2px;
-            background: linear-gradient(90deg, var(--cyan), transparent);
+            width: 18px; height: 1.5px;
+            background: linear-gradient(90deg, var(--lime), transparent);
             transform-origin: 0% 50%;
             animation: radar-sweep 3s linear infinite;
         }
 
         @keyframes radar-pulse {
-            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+            0%   { opacity: 0.7; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.2); }
         }
 
         @keyframes radar-sweep {
-            0% { transform: rotate(0deg); }
+            0%   { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         h1 {
-            font-family: var(--font-heading);
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--cyan), var(--magenta));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            letter-spacing: 0.06em;
+            color: var(--text);
+            /* reset gradient from old design */
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: var(--text);
+            background-clip: unset;
         }
 
         .subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            font-weight: 300;
-            margin-top: 0.25rem;
-            letter-spacing: 0.05em;
-        }
-
-        .subtitle span {
-            color: var(--cyan);
-            font-weight: 500;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--lime);
+            font-weight: 400;
+            /* centre-flex child */
+            margin: 0 auto;
         }
 
         .status-bar {
-            margin-top: 1.25rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            gap: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--text-dim);
+            letter-spacing: 0.02em;
+            margin-top: 0;
         }
 
         .status-dot {
-            width: 6px; height: 6px;
+            width: 5px; height: 5px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+            background: var(--lime);
+            box-shadow: 0 0 6px rgba(196,241,53,0.5);
             animation: blink 2s ease-in-out infinite;
+            flex-shrink: 0;
         }
 
-        .status-dot.offline { background: var(--text-muted); box-shadow: none; animation: none; }
+        .status-dot.offline {
+            background: var(--text-faint);
+            box-shadow: none;
+            animation: none;
+        }
 
         @keyframes blink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            50%       { opacity: 0.35; }
         }
 
         /* ============================================================
@@ -201,66 +220,69 @@
         .container {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 1.5rem 4rem;
+            padding: 2.5rem 2rem 5rem;
         }
 
+        /* Section headers using display font */
         .section-title {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: 0.08em;
+            font-weight: 400; /* Bebas Neue is always bold */
+            color: var(--text);
             margin-bottom: 1.5rem;
             display: flex;
-            align-items: center;
+            align-items: baseline;
             gap: 0.5rem;
         }
 
         .section-title .accent {
-            color: var(--cyan);
+            color: var(--lime);
         }
 
         /* ============================================================
            TASTE PROFILE SECTION
            ============================================================ */
         .taste-section {
-            margin-bottom: 3rem;
-            animation: fade-up 0.6s ease-out 0.2s both;
+            margin-bottom: 3.5rem;
+            animation: fade-up 0.5s ease-out 0.1s both;
         }
 
         .taste-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 1.5rem;
+            gap: 1px; /* hairline gap — cards share borders */
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
         }
 
         @media (max-width: 900px) {
             .taste-grid { grid-template-columns: 1fr; }
         }
 
+        /* Cards — flat panels, separated by hairline borders */
         .card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
             padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            border: none;
+            border-right: 1px solid var(--border);
+            transition: background 0.2s;
         }
 
-        .card:hover {
-            border-color: var(--border-glow);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        }
+        .card:last-child { border-right: none; }
+        .card:hover { background: var(--bg-card-hover); }
 
         .card-title {
-            font-family: var(--font-heading);
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
+            letter-spacing: 0.14em;
+            color: var(--text-dim);
+            margin-bottom: 1.25rem;
         }
 
         .chart-wrapper {
@@ -277,146 +299,152 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem 0;
+            padding: 0.65rem 0;
             border-bottom: 1px solid var(--border);
         }
 
         .stat-row:last-child { border-bottom: none; }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            color: var(--text-dim);
         }
 
         .stat-value {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-family: var(--font-mono);
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--cyan);
+            color: var(--lime);
+            letter-spacing: -0.02em;
         }
 
-        .stat-value.magenta { color: var(--magenta); }
+        .stat-value.magenta {
+            color: var(--orange);
+        }
 
         /* ============================================================
            EVENTS SECTION
            ============================================================ */
         .events-section {
-            animation: fade-up 0.6s ease-out 0.4s both;
+            animation: fade-up 0.5s ease-out 0.25s both;
         }
 
         .filter-tabs {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            gap: 0.4rem;
+            margin-bottom: 1.25rem;
             flex-wrap: wrap;
         }
 
         .filter-tab {
-            font-family: var(--font-heading);
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 0.5rem 1.25rem;
-            border-radius: 999px;
-            border: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 1rem;
+            border-radius: 2px;
+            border: 1px solid var(--border-bright);
             background: transparent;
-            color: var(--text-secondary);
+            color: var(--text-dim);
             cursor: pointer;
-            transition: all 0.25s;
-            letter-spacing: 0.02em;
+            transition: all 0.15s;
         }
 
         .filter-tab:hover {
-            border-color: var(--cyan);
-            color: var(--text-primary);
+            border-color: var(--lime);
+            color: var(--text);
         }
 
         .filter-tab.active {
-            background: var(--cyan-dim);
-            border-color: var(--cyan);
-            color: var(--cyan);
-            box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+            background: var(--lime);
+            border-color: var(--lime);
+            color: #0c0c0c;
+            box-shadow: none;
         }
 
         .filter-tab .count {
-            margin-left: 0.4rem;
-            font-size: 0.75rem;
-            opacity: 0.6;
+            margin-left: 0.35rem;
+            opacity: 0.65;
         }
 
-        /* Event cards grid */
+        /* ---- EVENT LIST ---- */
         .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 1rem;
-        }
-
-        @media (max-width: 480px) {
-            .events-grid { grid-template-columns: 1fr; }
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            gap: 0;
         }
 
         .event-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.25rem;
-            transition: all 0.3s;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
-            animation: fade-up 0.4s ease-out both;
+            gap: 0.6rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            border-left: 3px solid transparent;
+            background: transparent;
+            transition: background 0.15s;
+            animation: fade-in 0.3s ease-out both;
         }
 
-        .event-card:hover {
-            border-color: var(--border-glow);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        }
+        .event-card:last-child { border-bottom: none; }
+
+        .event-card:hover { background: rgba(255,255,255,0.022); }
+
+        /* Color-code by match type using :has() */
+        .event-card:has(.match-badge.exact) { border-left-color: var(--lime); }
+        .event-card:has(.match-badge.vibe)  { border-left-color: var(--orange); }
 
         .event-card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         .event-name {
-            font-family: var(--font-heading);
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            line-height: 1.3;
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            letter-spacing: 0.03em;
+            line-height: 1.05;
+            color: var(--text);
             flex: 1;
         }
 
         .match-badge {
             flex-shrink: 0;
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            white-space: nowrap;
+            padding: 0.2rem 0.55rem;
+            border-radius: 2px;
+            margin-top: 0.35rem;
+            border: none;
         }
 
         .match-badge.exact {
-            background: var(--green-dim);
-            color: var(--green);
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            background: var(--lime);
+            color: #0c0c0c;
         }
 
         .match-badge.vibe {
-            background: var(--amber-dim);
-            color: var(--amber);
-            border: 1px solid rgba(255, 170, 0, 0.3);
+            background: var(--orange);
+            color: #fff;
         }
 
         .event-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.75rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+            gap: 0.6rem 1.25rem;
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-dim);
         }
 
         .event-meta-item {
@@ -426,56 +454,60 @@
         }
 
         .event-meta-item svg {
-            width: 14px; height: 14px;
+            width: 13px; height: 13px;
             flex-shrink: 0;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         .event-artist-match {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
         .artist-avatar {
-            width: 28px; height: 28px;
+            width: 24px; height: 24px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-bright);
         }
 
         .artist-info .artist-name {
             font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.8rem;
+            color: var(--text);
+            font-size: 0.78rem;
         }
 
         .artist-info .artist-source {
-            font-size: 0.7rem;
-            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
         }
 
+        /* Confidence bar — slim and minimal */
         .confidence-bar {
             width: 100%;
-            height: 4px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
+            height: 2px;
+            background: var(--text-faint);
+            border-radius: 1px;
             overflow: hidden;
         }
 
         .confidence-fill {
             height: 100%;
-            border-radius: 2px;
+            border-radius: 1px;
             transition: width 0.6s ease-out;
         }
 
-        .confidence-fill.exact { background: linear-gradient(90deg, var(--green), #66ffbb); }
-        .confidence-fill.vibe { background: linear-gradient(90deg, var(--amber), #ffcc44); }
+        .confidence-fill.exact { background: var(--lime); }
+        .confidence-fill.vibe  { background: var(--orange); }
 
         .match-reason {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-dim);
             font-style: italic;
             line-height: 1.4;
         }
@@ -484,17 +516,20 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--cyan);
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--lime);
             text-decoration: none;
-            transition: opacity 0.2s;
+            transition: opacity 0.15s;
         }
 
-        .event-link:hover { opacity: 0.7; }
+        .event-link:hover { opacity: 0.65; }
 
         .event-link svg {
-            width: 12px; height: 12px;
+            width: 11px; height: 11px;
         }
 
         /* ============================================================
@@ -503,59 +538,71 @@
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
-            color: var(--text-secondary);
+            color: var(--text-dim);
         }
 
         .empty-state svg {
-            width: 64px; height: 64px;
+            width: 56px; height: 56px;
             margin-bottom: 1rem;
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
         .empty-state h3 {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            letter-spacing: 0.06em;
+            font-weight: 400;
             margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            color: var(--text);
         }
 
         .empty-state p {
-            max-width: 400px;
+            max-width: 380px;
             margin: 0 auto;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* ============================================================
-           REFRESH BUTTON
+           FLOATING ACTION BUTTONS
            ============================================================ */
+        .fab-group {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .fab-group .refresh-fab { position: static; }
+
         .refresh-fab {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             z-index: 100;
-            width: 56px;
-            height: 56px;
+            width: 48px; height: 48px;
             border-radius: 50%;
-            border: 1px solid var(--cyan);
+            border: 1px solid var(--lime);
             background: var(--bg-card);
-            color: var(--cyan);
+            color: var(--lime);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 24px rgba(0, 240, 255, 0.2);
-            transition: all 0.3s;
+            box-shadow: 0 2px 16px rgba(196,241,53,0.15);
+            transition: all 0.2s;
         }
 
         .refresh-fab:hover {
-            background: var(--cyan-dim);
-            transform: scale(1.1);
-            box-shadow: 0 8px 32px rgba(0, 240, 255, 0.35);
+            background: rgba(196,241,53,0.1);
+            transform: scale(1.08);
         }
 
         .refresh-fab svg {
-            width: 24px; height: 24px;
+            width: 20px; height: 20px;
             transition: transform 0.3s;
         }
 
@@ -564,168 +611,134 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
+            0%   { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .refresh-fab .tooltip {
-            position: absolute;
-            bottom: calc(100% + 0.5rem);
-            right: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 0.4rem 0.75rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-        }
-
-        .refresh-fab:hover .tooltip { opacity: 1; }
-
-        .fab-group {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .fab-group .refresh-fab {
-            position: static;
-        }
-
-        .pdf-fab {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            border: 1px solid var(--magenta);
-            background: var(--bg-card);
-            color: var(--magenta);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 24px rgba(255, 0, 170, 0.2);
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .pdf-fab:hover {
-            background: rgba(255, 0, 170, 0.1);
-            transform: scale(1.1);
-            box-shadow: 0 8px 32px rgba(255, 0, 170, 0.35);
-        }
-
-        .pdf-fab svg {
-            width: 22px; height: 22px;
-        }
-
+        .refresh-fab .tooltip,
         .pdf-fab .tooltip {
             position: absolute;
             bottom: calc(100% + 0.5rem);
             right: 0;
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-bright);
             border-radius: var(--radius-sm);
-            padding: 0.4rem 0.75rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+            padding: 0.35rem 0.65rem;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-dim);
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s;
+            transition: opacity 0.15s;
         }
 
+        .refresh-fab:hover .tooltip,
         .pdf-fab:hover .tooltip { opacity: 1; }
 
+        .pdf-fab {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--orange);
+            background: var(--bg-card);
+            color: var(--orange);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 16px rgba(255,92,53,0.12);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .pdf-fab:hover {
+            background: rgba(255,92,53,0.1);
+            transform: scale(1.08);
+        }
+
+        .pdf-fab svg { width: 20px; height: 20px; }
+
         /* ============================================================
-           LOADING SKELETON
+           SKELETON LOADING
            ============================================================ */
         .skeleton {
-            background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+            background: linear-gradient(
+                90deg,
+                var(--bg-card) 25%,
+                var(--bg-card-hover) 50%,
+                var(--bg-card) 75%
+            );
             background-size: 200% 100%;
-            animation: shimmer 1.5s ease-in-out infinite;
+            animation: shimmer 1.8s ease-in-out infinite;
             border-radius: var(--radius-sm);
         }
 
         @keyframes shimmer {
-            0% { background-position: 200% 0; }
+            0%   { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
 
-        .skeleton-card {
-            height: 200px;
-            border-radius: var(--radius);
-        }
-
-        .skeleton-chart {
-            height: 250px;
-            border-radius: var(--radius);
-        }
+        .skeleton-card  { height: 160px; border-radius: var(--radius); }
+        .skeleton-chart { height: 230px; border-radius: var(--radius); }
 
         /* ============================================================
-           TOAST / NOTIFICATION
+           TOAST NOTIFICATIONS
            ============================================================ */
         .toast {
             position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
+            top: 1.25rem;
+            right: 1.25rem;
             z-index: 200;
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-bright);
             border-radius: var(--radius-sm);
-            padding: 0.75rem 1.25rem;
-            font-size: 0.85rem;
-            color: var(--text-primary);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            padding: 0.65rem 1.1rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            box-shadow: var(--shadow);
             transform: translateX(120%);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .toast.show { transform: translateX(0); }
-        .toast.success { border-left: 3px solid var(--green); }
-        .toast.error { border-left: 3px solid var(--magenta); }
-        .toast.info { border-left: 3px solid var(--cyan); }
+        .toast.show    { transform: translateX(0); }
+        .toast.success { border-left: 3px solid var(--lime); }
+        .toast.error   { border-left: 3px solid var(--orange); }
+        .toast.info    { border-left: 3px solid var(--cyan); }
 
         /* ============================================================
            ANIMATIONS
            ============================================================ */
         @keyframes fade-up {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
 
         /* ============================================================
            SCROLLBAR
            ============================================================ */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 640px) {
+            header { padding: 0 1rem; }
+            .subtitle { display: none; }
+            .container { padding: 1.5rem 1rem 4rem; }
+            .event-card { padding: 1rem; }
+            .event-name { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -735,15 +748,15 @@
     <!-- ================================================================
          NPS MODAL
     ================================================================ -->
-    <div id="npsModal" style="display:none; position:fixed; inset:0; background:rgba(10,8,21,0.85); backdrop-filter:blur(6px); z-index:999; align-items:center; justify-content:center;">
-        <div style="background:#14102a; border:1px solid #2a2050; border-radius:16px; padding:2rem 2.5rem; max-width:420px; width:90%; position:relative;">
-            <button onclick="document.getElementById('npsModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#8b85a0;font-size:1.2rem;cursor:pointer;line-height:1;">✕</button>
-            <p style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#00f0ff;margin-bottom:1rem;">Quick question</p>
-            <p style="font-size:1rem;font-weight:600;color:#e8e4f0;margin-bottom:1.5rem;line-height:1.5;">How would you feel if you could no longer use Vibe Radar?</p>
-            <div style="display:flex;flex-direction:column;gap:0.6rem;" id="npsButtons">
-                <button onclick="submitNps('very_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Very disappointed</button>
-                <button onclick="submitNps('somewhat_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Somewhat disappointed</button>
-                <button onclick="submitNps('not_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Not disappointed</button>
+    <div id="npsModal" style="display:none; position:fixed; inset:0; background:rgba(12,12,12,0.92); backdrop-filter:blur(8px); z-index:999; align-items:center; justify-content:center;">
+        <div style="background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:2rem 2.5rem; max-width:420px; width:90%; position:relative;">
+            <button onclick="document.getElementById('npsModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#666;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
+            <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:#c4f135;margin-bottom:1rem;">Quick question</p>
+            <p style="font-size:0.95rem;font-weight:500;color:#ede8dd;margin-bottom:1.5rem;line-height:1.5;">How would you feel if you could no longer use Vibe Radar?</p>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;" id="npsButtons">
+                <button onclick="submitNps('very_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Very disappointed</button>
+                <button onclick="submitNps('somewhat_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Somewhat disappointed</button>
+                <button onclick="submitNps('not_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Not disappointed</button>
             </div>
         </div>
     </div>
@@ -751,42 +764,42 @@
     <!-- ================================================================
          PIPELINE PROGRESS OVERLAY
     ================================================================ -->
-    <div id="pipelineOverlay" style="display:none; position:fixed; inset:0; background:rgba(10,8,21,0.92); backdrop-filter:blur(8px); z-index:1000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:2rem;">
-        <div style="text-align:center; max-width:400px; padding:2rem;">
+    <div id="pipelineOverlay" style="display:none; position:fixed; inset:0; background:rgba(12,12,12,0.95); backdrop-filter:blur(10px); z-index:1000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:2rem;">
+        <div style="text-align:center; max-width:360px; padding:2rem;">
             <!-- Animated radar -->
-            <div style="position:relative; width:80px; height:80px; margin:0 auto 1.5rem;">
-                <svg viewBox="0 0 80 80" style="width:80px;height:80px;position:absolute;top:0;left:0;">
-                    <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(0,240,255,0.15)" stroke-width="1.5"/>
-                    <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(0,240,255,0.12)" stroke-width="1.5"/>
-                    <circle cx="40" cy="40" r="12" fill="none" stroke="rgba(0,240,255,0.10)" stroke-width="1.5"/>
-                    <line x1="40" y1="40" x2="76" y2="40" stroke="rgba(0,240,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
-                    <circle cx="40" cy="40" r="3" fill="#00f0ff"/>
+            <div style="position:relative; width:72px; height:72px; margin:0 auto 1.5rem;">
+                <svg viewBox="0 0 80 80" style="width:72px;height:72px;position:absolute;top:0;left:0;">
+                    <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(196,241,53,0.12)" stroke-width="1.5"/>
+                    <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(196,241,53,0.10)" stroke-width="1.5"/>
+                    <circle cx="40" cy="40" r="12" fill="none" stroke="rgba(196,241,53,0.08)" stroke-width="1.5"/>
+                    <line x1="40" y1="40" x2="76" y2="40" stroke="rgba(196,241,53,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="40" cy="40" r="3" fill="#c4f135"/>
                 </svg>
-                <svg viewBox="0 0 80 80" style="width:80px;height:80px;position:absolute;top:0;left:0;animation:radar-sweep 2s linear infinite;">
+                <svg viewBox="0 0 80 80" style="width:72px;height:72px;position:absolute;top:0;left:0;animation:radar-sweep 2s linear infinite;">
                     <defs>
                         <radialGradient id="sweepGrad" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.4"/>
-                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+                            <stop offset="0%" stop-color="#c4f135" stop-opacity="0.35"/>
+                            <stop offset="100%" stop-color="#c4f135" stop-opacity="0"/>
                         </radialGradient>
                     </defs>
                     <path d="M40,40 L76,40 A36,36 0 0,0 40,4 Z" fill="url(#sweepGrad)"/>
                 </svg>
             </div>
 
-            <div id="overlayStep" style="font-size:1.1rem; font-weight:600; color:#fff; margin-bottom:0.5rem; letter-spacing:0.02em;">Connecting...</div>
-            <div id="overlayDetail" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1.5rem; min-height:1.2em;"></div>
+            <div id="overlayStep" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.06em;color:#ede8dd; margin-bottom:0.4rem;">Connecting...</div>
+            <div id="overlayDetail" style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.04em;color:#6a6a6a; margin-bottom:1.5rem; min-height:1.2em;"></div>
 
             <!-- Progress bar -->
-            <div style="background:rgba(255,255,255,0.08); border-radius:8px; height:6px; overflow:hidden; width:100%;">
-                <div id="overlayProgressBar" style="height:100%; border-radius:8px; background:linear-gradient(90deg,var(--cyan),var(--magenta)); transition:width 0.6s ease; width:5%;"></div>
+            <div style="background:rgba(255,255,255,0.06); border-radius:2px; height:3px; overflow:hidden; width:100%;">
+                <div id="overlayProgressBar" style="height:100%; border-radius:2px; background:#c4f135; transition:width 0.6s ease; width:5%;"></div>
             </div>
-            <div id="overlayPercent" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.5rem; text-align:right;">5%</div>
+            <div id="overlayPercent" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:#3a3a3a; margin-top:0.4rem; text-align:right;">5%</div>
         </div>
     </div>
 
     <!-- ================================================================
          HEADER
-         ================================================================ -->
+    ================================================================ -->
     <header>
         <div class="logo-container">
             <div class="radar-icon">
@@ -812,7 +825,7 @@
 
         <!-- Taste Profile Section -->
         <section class="taste-section">
-            <h2 class="section-title"><span class="accent">//</span> Your Taste Profile</h2>
+            <h2 class="section-title"><span class="accent">//</span> Taste Profile</h2>
             <div class="taste-grid">
                 <!-- Genre Distribution -->
                 <div class="card">
@@ -826,22 +839,20 @@
                 <div class="card">
                     <div class="card-title" style="display:flex;align-items:baseline;gap:0.5rem;">
                         Audio DNA
-                        <span id="audioDnaLabel" style="font-size:0.65rem;color:var(--text-muted);font-weight:400;display:none;">(estimated from genres)</span>
+                        <span id="audioDnaLabel" style="font-size:0.6rem;color:var(--text-dim);font-weight:400;display:none;">(est. from genres)</span>
                     </div>
                     <div class="chart-wrapper" id="featuresChartWrapper">
                         <div class="skeleton skeleton-chart"></div>
                     </div>
                 </div>
 
-                <!-- Source Breakdown & Stats -->
+                <!-- Source Breakdown -->
                 <div class="card">
                     <div class="card-title">Sources</div>
-                    <div id="sourceSection">
-                        <div class="chart-wrapper" style="max-width: 200px; margin: 0 auto 1rem;">
-                            <canvas id="sourceChart"></canvas>
-                        </div>
-                        <div id="statsContainer"></div>
+                    <div class="chart-wrapper" style="max-width: 190px; margin: 0 auto 1rem;">
+                        <canvas id="sourceChart"></canvas>
                     </div>
+                    <div id="statsContainer"></div>
                 </div>
             </div>
         </section>
@@ -852,8 +863,8 @@
 
             <div class="filter-tabs" id="filterTabs">
                 <button class="filter-tab active" data-filter="all">All <span class="count" id="countAll">0</span></button>
-                <button class="filter-tab" data-filter="exact">Exact Matches <span class="count" id="countExact">0</span></button>
-                <button class="filter-tab" data-filter="vibe">Vibe Matches <span class="count" id="countVibe">0</span></button>
+                <button class="filter-tab" data-filter="exact">Exact <span class="count" id="countExact">0</span></button>
+                <button class="filter-tab" data-filter="vibe">Vibe <span class="count" id="countVibe">0</span></button>
             </div>
 
             <div class="events-grid" id="eventsGrid">
@@ -870,7 +881,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
             </svg>
-            <span class="tooltip">Export PDF report</span>
+            <span class="tooltip">Export PDF</span>
         </button>
         <button class="refresh-fab" id="refreshBtn" aria-label="Refresh data">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -1299,7 +1310,7 @@
                 const venueName = e.venue ? e.venue.name : 'Venue TBA';
 
                 return `
-                    <div class="event-card" style="animation-delay: ${idx * 0.05}s;">
+                    <div class="event-card" style="animation-delay: ${idx * 0.04}s;">
                         <div class="event-card-header">
                             <div class="event-name">${escapeHtml(e.name)}</div>
                             <span class="match-badge ${badgeClass}">${badgeText}</span>
@@ -1329,8 +1340,8 @@
 
                         <div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <span style="font-size: 0.7rem; color: var(--text-muted);">Confidence</span>
-                                <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">${confidence}%</span>
+                                <span style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;color: var(--text-muted);">Confidence</span>
+                                <span style="font-family:'Space Mono',monospace;font-size:0.6rem;color: var(--text-dim); font-weight: 700;">${confidence}%</span>
                             </div>
                             <div class="confidence-bar">
                                 <div class="confidence-fill ${badgeClass}" style="width: ${confidence}%;"></div>
