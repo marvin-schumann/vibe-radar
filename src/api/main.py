@@ -1,4 +1,4 @@
-"""FastAPI web application for Vibe Radar."""
+"""FastAPI web application for Frequenz."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ DATA_DIR = Path(__file__).parent.parent.parent / "data"
 # App setup
 # ---------------------------------------------------------------------------
 
-app = FastAPI(title="Vibe Radar", version="1.0.0")
+app = FastAPI(title="Frequenz", version="1.0.0")
 
 app.include_router(auth_router)
 
@@ -183,7 +183,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
 
     cache["refreshing"] = True
     cache["pipeline_status"] = None
-    logger.info("Starting Vibe Radar pipeline (user={})", user_id or "anon")
+    logger.info("Starting Frequenz pipeline (user={})", user_id or "anon")
 
     # -- 1. Collect user artists from music sources --
     all_artists = []
@@ -788,7 +788,7 @@ async def export_pdf() -> Response:
     # Title
     pdf.set_text_color(*CYAN)
     pdf.set_font("Helvetica", "B", 32)
-    pdf.cell(0, 20, "VIBE RADAR", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 20, "FREQUENZ", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_text_color(*MUTED)
     pdf.set_font("Helvetica", "", 12)
@@ -1021,7 +1021,7 @@ async def export_pdf() -> Response:
     pdf.ln(10)
     pdf.set_text_color(80, 80, 100)
     pdf.set_font("Helvetica", "I", 8)
-    pdf.cell(0, 5, f"Vibe Radar  |  {total_artists} artists  |  {len(all_events)} events scanned  |  Generated {generated}", align="C")
+    pdf.cell(0, 5, f"Frequenz  |  {total_artists} artists  |  {len(all_events)} events scanned  |  Generated {generated}", align="C")
 
     # Output
     pdf_bytes = pdf.output()

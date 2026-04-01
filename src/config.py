@@ -1,4 +1,4 @@
-"""Configuration management for Vibe Radar."""
+"""Configuration management for Frequenz."""
 
 from pathlib import Path
 

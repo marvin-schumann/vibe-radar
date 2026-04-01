@@ -1,4 +1,4 @@
-"""Supabase client and database helpers for Vibe Radar."""
+"""Supabase client and database helpers for Frequenz."""
 
 from __future__ import annotations
 

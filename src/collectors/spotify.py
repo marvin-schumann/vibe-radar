@@ -168,33 +168,25 @@ class SpotifyCollector:
     # ------------------------------------------------------------------
 
     def _fetch_top_artists(self, time_range: str) -> list[Artist]:
-        """Fetch the user's top artists for the given time range."""
+        """Fetch the user's top 50 artists for the given time range (single page).
 
-        artists: list[Artist] = []
-        offset = 0
-        limit = 50
+        We intentionally skip pagination — the first 50 returned by Spotify are
+        ranked by listening frequency and are the highest-signal artists. Pages
+        2+ include artists with very low play counts that flood match results.
+        """
+        data = self._api_call(
+            self.sp.current_user_top_artists,
+            limit=50,
+            offset=0,
+            time_range=time_range,
+        )
+        if data is None:
+            return []
 
-        while True:
-            data = self._api_call(
-                self.sp.current_user_top_artists,
-                limit=limit,
-                offset=offset,
-                time_range=time_range,
-            )
-            if data is None:
-                break
-
-            items: list[dict[str, Any]] = data.get("items", [])
-            if not items:
-                break
-
-            for item in items:
-                artists.append(self._artist_from_spotify(item))
-
-            if data.get("next") is None:
-                break
-            offset += limit
-
+        artists = [
+            self._artist_from_spotify(item)
+            for item in data.get("items", [])
+        ]
         logger.debug("Top artists ({}): {} found", time_range, len(artists))
         return artists
 
