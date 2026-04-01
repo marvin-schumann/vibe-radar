@@ -733,6 +733,22 @@
     <div class="grain-overlay"></div>
 
     <!-- ================================================================
+         NPS MODAL
+    ================================================================ -->
+    <div id="npsModal" style="display:none; position:fixed; inset:0; background:rgba(10,8,21,0.85); backdrop-filter:blur(6px); z-index:999; align-items:center; justify-content:center;">
+        <div style="background:#14102a; border:1px solid #2a2050; border-radius:16px; padding:2rem 2.5rem; max-width:420px; width:90%; position:relative;">
+            <button onclick="document.getElementById('npsModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#8b85a0;font-size:1.2rem;cursor:pointer;line-height:1;">✕</button>
+            <p style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#00f0ff;margin-bottom:1rem;">Quick question</p>
+            <p style="font-size:1rem;font-weight:600;color:#e8e4f0;margin-bottom:1.5rem;line-height:1.5;">How would you feel if you could no longer use Vibe Radar?</p>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;" id="npsButtons">
+                <button onclick="submitNps('very_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Very disappointed</button>
+                <button onclick="submitNps('somewhat_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Somewhat disappointed</button>
+                <button onclick="submitNps('not_disappointed')" style="padding:0.75rem 1rem;background:rgba(0,240,255,0.07);border:1px solid rgba(0,240,255,0.2);border-radius:10px;color:#e8e4f0;font-size:0.9rem;cursor:pointer;text-align:left;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,240,255,0.12)'" onmouseout="this.style.background='rgba(0,240,255,0.07)'">Not disappointed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================
          PIPELINE PROGRESS OVERLAY
     ================================================================ -->
     <div id="pipelineOverlay" style="display:none; position:fixed; inset:0; background:rgba(10,8,21,0.92); backdrop-filter:blur(8px); z-index:1000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:2rem;">
@@ -1455,6 +1471,25 @@
             }, 1500);
         }
 
+        async function submitNps(score) {
+            document.getElementById('npsModal').style.display = 'none';
+            try {
+                await fetch('/api/nps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score }),
+                });
+            } catch (e) { /* ignore */ }
+        }
+
+        async function checkNps() {
+            try {
+                const r = await fetch('/api/nps-status');
+                const d = await r.json();
+                if (d.show) document.getElementById('npsModal').style.display = 'flex';
+            } catch (e) { /* ignore */ }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             checkAuthParams();
 
@@ -1474,6 +1509,7 @@
             } catch (e) { /* ignore, just load normally */ }
 
             await Promise.all([loadTasteProfile(), loadEvents()]);
+            checkNps();
 
             // If still no data, pipeline may not have started yet — poll
             if (allMatches.length === 0) {

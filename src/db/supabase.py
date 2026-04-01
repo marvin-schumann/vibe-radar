@@ -73,6 +73,19 @@ def set_lemon_squeezy_customer(user_id: str, customer_id: str) -> None:
     db.table("profiles").update({"lemon_squeezy_customer_id": customer_id}).eq("id", user_id).execute()
 
 
+def set_first_match_at(user_id: str) -> None:
+    """Record the timestamp of the user's first pipeline match (once only)."""
+    db = get_admin_client()
+    db.table("profiles").update({"first_match_at": datetime.utcnow().isoformat()}).eq("id", user_id).is_("first_match_at", "null").execute()
+
+
+def submit_nps(user_id: str, score: str) -> None:
+    """Store the user's NPS response and mark as submitted."""
+    db = get_admin_client()
+    db.table("profiles").update({"nps_score": score, "nps_submitted": True}).eq("id", user_id).execute()
+    logger.info("NPS response '{}' saved for user {}", score, user_id)
+
+
 # ─────────────────────────────────────────
 # Connected accounts (OAuth tokens)
 # ─────────────────────────────────────────

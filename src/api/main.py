@@ -19,7 +19,7 @@ from spotipy.cache_handler import CacheHandler
 from src.api.auth import router as auth_router
 from src.api.deps import get_session_user
 from src.config import settings
-from src.db.supabase import get_admin_client, is_approved, is_pro, upsert_connected_account
+from src.db.supabase import get_admin_client, is_approved, is_pro, set_first_match_at, submit_nps, upsert_connected_account
 from src.models import Match, MatchType, TasteProfile
 
 
@@ -325,6 +325,13 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     cache["last_refresh"] = datetime.now(tz=timezone.utc).isoformat()
     cache["refreshing"] = False
     cache["pipeline_status"] = None
+
+    # Record first match timestamp for NPS prompt (no-op if already set)
+    if user_id and all_matches:
+        try:
+            set_first_match_at(user_id)
+        except Exception as exc:
+            logger.warning("Could not set first_match_at for user {}: {}", user_id, exc)
 
     logger.info(
         "Pipeline complete: {} total matches ({} exact, {} vibe)",
@@ -643,6 +650,42 @@ async def pipeline_status(user=Depends(get_session_user)) -> JSONResponse:
         "status": cache.get("pipeline_status"),
         "last_refresh": cache.get("last_refresh"),
     })
+
+
+@app.post("/api/nps")
+async def submit_nps_response(request: Request, user=Depends(get_session_user)) -> JSONResponse:
+    """Store user's NPS response (PMF survey)."""
+    if not user:
+        return JSONResponse({"status": "error"}, status_code=401)
+    body = await request.json()
+    score = body.get("score", "")
+    if score not in ("very_disappointed", "somewhat_disappointed", "not_disappointed"):
+        return JSONResponse({"status": "error", "message": "Invalid score"}, status_code=400)
+    try:
+        submit_nps(user["id"], score)
+    except Exception as exc:
+        logger.error("Failed to save NPS for user {}: {}", user["id"], exc)
+        return JSONResponse({"status": "error"}, status_code=500)
+    return JSONResponse({"status": "ok"})
+
+
+@app.get("/api/nps-status")
+async def nps_status(user=Depends(get_session_user)) -> JSONResponse:
+    """Return whether the NPS modal should be shown."""
+    if not user:
+        return JSONResponse({"show": False})
+    from src.db.supabase import get_profile
+    from datetime import timezone as tz
+    profile = get_profile(user["id"])
+    if not profile or profile.get("nps_submitted"):
+        return JSONResponse({"show": False})
+    first_match_at = profile.get("first_match_at")
+    if not first_match_at:
+        return JSONResponse({"show": False})
+    from datetime import datetime
+    matched = datetime.fromisoformat(first_match_at.replace("Z", "+00:00"))
+    hours_since = (datetime.now(tz.utc) - matched).total_seconds() / 3600
+    return JSONResponse({"show": hours_since >= 24})
 
 
 @app.get("/api/refresh")
