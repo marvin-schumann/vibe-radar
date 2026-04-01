@@ -14,7 +14,11 @@ class Settings(BaseSettings):
     # Spotify
     spotify_client_id: str = ""
     spotify_client_secret: str = ""
-    spotify_redirect_uri: str = "http://localhost:8888/callback"
+    spotify_redirect_uri: str = ""  # set via env; falls back to {app_host}/auth/spotify/callback
+
+    @property
+    def effective_spotify_redirect_uri(self) -> str:
+        return self.spotify_redirect_uri or f"{self.app_host}/auth/spotify/callback"
 
     # SoundCloud
     soundcloud_username: str = ""

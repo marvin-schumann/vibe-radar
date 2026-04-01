@@ -124,7 +124,7 @@ def _spotify_oauth() -> SpotifyOAuth:
     return SpotifyOAuth(
         client_id=settings.spotify_client_id,
         client_secret=settings.spotify_client_secret,
-        redirect_uri=f"{settings.app_host}/auth/spotify/callback",
+        redirect_uri=settings.effective_spotify_redirect_uri,
         scope=SCOPES,
     )
 
