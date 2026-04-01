@@ -117,14 +117,14 @@ class SpotifyCollector:
         for time_range in TIME_RANGES:
             artists.extend(self._fetch_top_artists(time_range))
 
-        # 2. Recently played tracks -> unique artists
+        # 2. Recently played tracks -> unique artists (no extra API calls)
         artists.extend(self._fetch_recently_played_artists())
 
-        # NOTE: Followed artists and saved/liked tracks intentionally excluded.
-        # Following ≠ listening; liked tracks include one-off plays from years
-        # ago that flood results with artists the user doesn't really know.
-        # Top artists (3 time ranges) + recently played gives the highest-signal
-        # set of artists the user genuinely listens to.
+        # 3. Liked tracks -> unique artists (capped at 100 tracks, no extra API calls)
+        # These artists won't have genres but are included for name-based matching.
+        artists.extend(self._fetch_saved_track_artists())
+
+        # NOTE: Followed artists excluded — following ≠ listening.
 
         deduplicated = self._deduplicate(artists)
         logger.info(
@@ -229,8 +229,11 @@ class SpotifyCollector:
     # ------------------------------------------------------------------
 
     def _fetch_recently_played_artists(self) -> list[Artist]:
-        """Extract unique artists from recently played tracks."""
+        """Extract unique artists from recently played tracks.
 
+        Uses brief artist data from the track object — no extra per-artist API
+        calls, so this never triggers rate limits.
+        """
         data = self._api_call(
             self.sp.current_user_recently_played, limit=RECENTLY_PLAYED_LIMIT
         )
@@ -246,9 +249,7 @@ class SpotifyCollector:
                 artist_id = artist_brief.get("id")
                 if artist_id and artist_id not in seen_ids:
                     seen_ids.add(artist_id)
-                    full = self._fetch_full_artist(artist_id)
-                    if full is not None:
-                        artists.append(full)
+                    artists.append(self._artist_from_brief(artist_brief))
 
         logger.debug("Recently played artists: {} unique", len(artists))
         return artists
@@ -258,15 +259,19 @@ class SpotifyCollector:
     # ------------------------------------------------------------------
 
     def _fetch_saved_track_artists(self) -> list[Artist]:
-        """Extract unique artists from the user's saved (liked) tracks."""
+        """Extract unique artists from the user's saved (liked) tracks.
 
+        Capped at 100 tracks (2 pages × 50). Uses brief artist data from each
+        track — no per-artist API calls, so no rate limit risk. Artists won't
+        have genre data but are included for name-based event matching.
+        """
         seen_ids: set[str] = set()
         artists: list[Artist] = []
         offset = 0
         limit = 50
-        fetched = 0
+        max_tracks = 100
 
-        while fetched < SAVED_TRACKS_LIMIT:
+        while offset < max_tracks:
             data = self._api_call(
                 self.sp.current_user_saved_tracks, limit=limit, offset=offset
             )
@@ -283,11 +288,8 @@ class SpotifyCollector:
                     artist_id = artist_brief.get("id")
                     if artist_id and artist_id not in seen_ids:
                         seen_ids.add(artist_id)
-                        full = self._fetch_full_artist(artist_id)
-                        if full is not None:
-                            artists.append(full)
+                        artists.append(self._artist_from_brief(artist_brief))
 
-            fetched += len(items)
             if data.get("next") is None:
                 break
             offset += limit
@@ -385,6 +387,21 @@ class SpotifyCollector:
         if data is None:
             return None
         return self._artist_from_spotify(data)
+
+    @staticmethod
+    def _artist_from_brief(brief: dict[str, Any]) -> Artist:
+        """Build a minimal Artist from a track's brief artist object.
+
+        Track responses only include id/name/href — no genres or popularity.
+        This is enough for name-based matching without any extra API calls.
+        """
+        external_urls = brief.get("external_urls", {})
+        return Artist(
+            name=brief.get("name", "Unknown"),
+            genres=[],
+            source=MusicSource.SPOTIFY,
+            source_url=external_urls.get("spotify"),
+        )
 
     @staticmethod
     def _artist_from_spotify(data: dict[str, Any]) -> Artist:
