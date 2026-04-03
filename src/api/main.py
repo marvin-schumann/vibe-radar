@@ -263,10 +263,42 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         cache["pipeline_status"] = None
         return
 
+    # -- 1b. Filter junk artist names --
+    # Remove accounts/labels masquerading as artists: names dominated by
+    # symbols/emoji/unicode, known non-artist channels, and very short names.
+    import unicodedata
+
+    _KNOWN_NON_ARTISTS = {
+        "boiler room", "crucast", "gomboc records", "onyx records",
+        "milli records", "polyamor records", "hot meal records",
+        "hardstyle", "hypertechno", "trancestrudel", "sachsentrance",
+    }
+
+    def _is_real_artist(name: str) -> bool:
+        if not name or not name.strip():
+            return False
+        stripped = name.strip()
+        if stripped.lower() in _KNOWN_NON_ARTISTS:
+            return False
+        # Count printable ASCII letters/digits vs everything else
+        ascii_alnum = sum(1 for c in stripped if c.isascii() and (c.isalpha() or c.isdigit()))
+        total = len(stripped.replace(" ", ""))
+        if total == 0:
+            return False
+        # Reject if fewer than half the characters are normal ASCII letters/digits
+        if ascii_alnum / total < 0.5:
+            return False
+        return True
+
+    before = len(all_artists)
+    all_artists = [a for a in all_artists if _is_real_artist(a.name)]
+    logger.info("Artist filter: {} → {} (removed {} junk entries)", before, len(all_artists), before - len(all_artists))
+
     # -- 2. Build taste profile --
     _set_status(cache, "Building taste profile", f"Analysing {len(all_artists):,} artists...", 65)
     taste_profile = build_taste_profile(all_artists)
     cache["taste_profile"] = taste_profile
+    cache["artist_names"] = sorted(set(a.name for a in all_artists), key=str.lower)
 
     # -- 3. Collect events from all sources --
     _set_status(cache, "Scanning events in Madrid", "Checking Resident Advisor, Songkick...", 70)
@@ -431,9 +463,7 @@ async def dashboard(request: Request, user=Depends(get_session_user)) -> HTMLRes
         return RedirectResponse("/pending")
 
     cache = _user_cache(user["id"])
-    # Auto-run pipeline in background if user has no cached data yet
-    if not cache.get("last_refresh") and not cache.get("refreshing"):
-        asyncio.create_task(_run_pipeline(user_id=user["id"]))
+    # Do NOT auto-run — user hits Refresh explicitly when they want fresh data.
 
     last_refresh = cache.get("last_refresh") or _cache.get("last_refresh")
 
@@ -511,6 +541,16 @@ async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
             "last_refresh": _cache.get("last_refresh"),
         }
     )
+
+
+@app.get("/api/artists")
+async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
+    """Debug: return the collected artist list from the last pipeline run."""
+    cache = _user_cache(user["id"]) if user else _cache
+    names = cache.get("artist_names")
+    if names is None:
+        return JSONResponse(content={"artists": [], "total": 0, "message": "No data yet — hit refresh first"})
+    return JSONResponse(content={"artists": names, "total": len(names)})
 
 
 @app.get("/api/events")

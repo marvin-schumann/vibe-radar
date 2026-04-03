@@ -52,10 +52,15 @@ class ExactMatcher:
         matches: list[Match] = []
 
         # Pre-compute normalized names for user artists
+        # Skip artists whose normalized name is fewer than 3 characters —
+        # single-letter or two-letter names produce too many false positives
+        # with fuzzy matching (e.g. "AG" matches half the alphabet).
         artist_lookup: list[tuple[Artist, str, str]] = []
         for artist in artists:
-            raw = artist.name.lower().strip()
             normalized = _normalize_artist_name(artist.name)
+            if len(normalized) < 3:
+                continue
+            raw = artist.name.lower().strip()
             artist_lookup.append((artist, raw, normalized))
 
         for event in events:
@@ -66,18 +71,18 @@ class ExactMatcher:
                 best_match: tuple[Artist, int, str] | None = None
 
                 for artist, artist_raw, artist_normalized in artist_lookup:
-                    # Try raw name comparison first
-                    ratio = fuzz.ratio(artist_raw, event_raw)
-                    partial = fuzz.partial_ratio(artist_raw, event_raw)
-                    score_raw = max(ratio, partial)
-
-                    # Also try normalized (without DJ/MC prefixes etc.)
-                    ratio_norm = fuzz.ratio(artist_normalized, event_normalized)
-                    partial_norm = fuzz.partial_ratio(
-                        artist_normalized, event_normalized
+                    # Use ratio + token_sort_ratio only — NOT partial_ratio.
+                    # partial_ratio("juli", "julio machicado") = 100 because
+                    # it finds "juli" as a substring, causing massive false
+                    # positives with short names. ratio() compares full strings.
+                    score_raw = max(
+                        fuzz.ratio(artist_raw, event_raw),
+                        fuzz.token_sort_ratio(artist_raw, event_raw),
                     )
-                    score_norm = max(ratio_norm, partial_norm)
-
+                    score_norm = max(
+                        fuzz.ratio(artist_normalized, event_normalized),
+                        fuzz.token_sort_ratio(artist_normalized, event_normalized),
+                    )
                     score = max(score_raw, score_norm)
 
                     if score >= self.threshold:
