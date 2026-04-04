@@ -117,14 +117,16 @@ class SpotifyCollector:
         for time_range in TIME_RANGES:
             artists.extend(self._fetch_top_artists(time_range))
 
-        # 2. Recently played tracks -> unique artists (no extra API calls)
+        # 2. Followed artists — these are artists the user explicitly chose to
+        # follow. With strict matching (no partial_ratio), having a large pool
+        # is fine — only true name matches get through.
+        artists.extend(self._fetch_followed_artists())
+
+        # 3. Recently played tracks -> unique artists (no extra API calls)
         artists.extend(self._fetch_recently_played_artists())
 
-        # 3. Liked tracks -> unique artists (capped at 100 tracks, no extra API calls)
-        # These artists won't have genres but are included for name-based matching.
+        # 4. Liked tracks -> unique artists (capped at 100 tracks, no extra API calls)
         artists.extend(self._fetch_saved_track_artists())
-
-        # NOTE: Followed artists excluded — following ≠ listening.
 
         deduplicated = self._deduplicate(artists)
         logger.info(
