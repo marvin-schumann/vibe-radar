@@ -35,8 +35,56 @@ TIME_RANGES = ("short_term", "medium_term", "long_term")
 # Retry / pagination
 MAX_RETRIES = 3
 RETRY_BACKOFF = 1.0  # seconds, doubled each retry
-SAVED_TRACKS_LIMIT = 200  # cap how many saved tracks we scan
+SAVED_TRACKS_LIMIT = 100  # cap how many saved tracks we scan
 RECENTLY_PLAYED_LIMIT = 50  # Spotify max for this endpoint
+
+# Genres that indicate electronic / club music. An artist with at least
+# one of these genres is kept for event matching; all others are filtered.
+_ELECTRONIC_GENRES = frozenset({
+    # Core electronic
+    "electronic", "electronica", "electro", "electro house",
+    # Techno family
+    "techno", "minimal techno", "hard techno", "peak time techno",
+    "detroit techno", "dub techno", "acid techno", "industrial techno",
+    "melodic techno", "deep techno", "german techno", "rawstyle",
+    # House family
+    "house", "deep house", "tech house", "progressive house",
+    "afro house", "acid house", "disco house", "funky house",
+    "tribal house", "micro house", "organic house", "melodic house",
+    "slap house", "bass house", "electro house", "future house",
+    "big room", "latin house",
+    # Trance family
+    "trance", "progressive trance", "psytrance", "uplifting trance",
+    "vocal trance", "goa trance", "hard trance",
+    # Bass / DnB family
+    "drum and bass", "dnb", "liquid funk", "neurofunk", "jungle",
+    "breakbeat", "breaks", "uk garage", "speed garage",
+    "dubstep", "brostep", "riddim", "future bass",
+    # Hardcore family
+    "hardcore", "hardstyle", "hard dance", "gabber", "frenchcore",
+    "speedcore", "happy hardcore", "uk hardcore",
+    # Ambient / downtempo
+    "ambient", "dark ambient", "downtempo", "chillout", "trip hop",
+    "idm", "intelligent dance music",
+    # Other dance / club
+    "dance", "edm", "dance pop", "eurodance", "italo disco",
+    "synthwave", "retrowave", "synthpop", "ebm",
+    "industrial", "noise", "experimental electronic",
+    "uk bass", "grime", "bassline", "future garage",
+    "leftfield", "microhouse", "glitch",
+    # DJ / producer meta-genres Spotify uses
+    "german dance", "german techno", "dutch edm", "swedish edm",
+    "belgian edm", "french electronic", "australian dance",
+    "melbourne bounce", "russian edm",
+    "fitness", "workout",  # Spotify tags many DJ/producers with these
+})
+
+
+def _has_electronic_genre(artist: "Artist") -> bool:
+    """Return True if the artist has at least one electronic-adjacent genre."""
+    if not artist.genres:
+        return False  # No genre data = can't verify, exclude
+    return any(g.lower() in _ELECTRONIC_GENRES for g in artist.genres)
 
 
 class SpotifyCollector:
@@ -109,24 +157,16 @@ class SpotifyCollector:
     # ------------------------------------------------------------------
 
     async def collect_artists(self) -> list[Artist]:
-        """Gather artists from every available Spotify endpoint and deduplicate."""
+        """Gather artists from Spotify top artists + followed."""
 
         artists: list[Artist] = []
 
-        # 1. Top artists across all time ranges (best signal — what you actually listen to)
+        # 1. Top artists (1 page per time range = ~150 total)
         for time_range in TIME_RANGES:
             artists.extend(self._fetch_top_artists(time_range))
 
-        # 2. Followed artists — these are artists the user explicitly chose to
-        # follow. With strict matching (no partial_ratio), having a large pool
-        # is fine — only true name matches get through.
+        # 2. Followed artists
         artists.extend(self._fetch_followed_artists())
-
-        # 3. Recently played tracks -> unique artists (no extra API calls)
-        artists.extend(self._fetch_recently_played_artists())
-
-        # 4. Liked tracks -> unique artists (capped at 100 tracks, no extra API calls)
-        artists.extend(self._fetch_saved_track_artists())
 
         deduplicated = self._deduplicate(artists)
         logger.info(
@@ -169,12 +209,10 @@ class SpotifyCollector:
     # Private: top artists
     # ------------------------------------------------------------------
 
-    def _fetch_top_artists(self, time_range: str, max_pages: int = 5) -> list[Artist]:
-        """Fetch the user's top artists for the given time range.
+    def _fetch_top_artists(self, time_range: str, max_pages: int = 1) -> list[Artist]:
+        """Fetch the user's top 50 artists for the given time range.
 
-        Paginates up to max_pages (default 5 × 50 = 250 per time range).
-        All results are artists Spotify knows you actually listen to, ranked
-        by play frequency — even page 5 is signal, not noise.
+        1 page = top 50 per time range, ~150 total across all three.
         """
         artists: list[Artist] = []
         offset = 0

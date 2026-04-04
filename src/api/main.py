@@ -218,19 +218,9 @@ async def _run_pipeline(user_id: str | None = None) -> None:
             except Exception as exc:
                 logger.warning("Spotify collection failed for user {}: {}", user_id, exc)
 
-        # SoundCloud
-        sc_acct = acct_map.get("soundcloud")
-        sc_username = sc_acct.get("username") if sc_acct else None
-        if sc_username:
-            _set_status(cache, "Fetching SoundCloud artists", f"Scanning @{sc_username}...", 50)
-            try:
-                soundcloud = SoundCloudCollector(username=sc_username)
-                sc_artists = await soundcloud.collect_artists()
-                all_artists.extend(sc_artists)
-                _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
-                logger.info("SoundCloud: {} artists for user {}", len(sc_artists), user_id)
-            except Exception as exc:
-                logger.warning("SoundCloud collection failed for user {}: {}", user_id, exc)
+        # SoundCloud — disabled: SC liked tracks return uploader usernames,
+        # not artist names, and have no genre data for filtering.
+        _set_status(cache, "Processing artists", "Filtering to electronic genres...", 55)
     else:
         # --- Anonymous / single-user: use local cache / env vars ---
         _set_status(cache, "Connecting to Spotify", "Authenticating...", 5)
