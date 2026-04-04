@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import datetime, timedelta, timezone
 
 import httpx
@@ -9,6 +10,38 @@ from loguru import logger
 
 from src.config import settings
 from src.models import Event, EventSource, Venue
+
+
+def _parse_artists_from_title(title: str) -> list[str]:
+    """Extract artist names from an RA event title.
+
+    Only parses when the title has a colon — the clearest signal that
+    the format is "EVENT NAME: Artist1, Artist2, Artist3". Without a
+    colon, the title is ambiguous and we rely on the API's artists field.
+    """
+    if ":" not in title:
+        return []
+
+    lineup_part = title.split(":", 1)[1].strip()
+
+    # Remove annotations
+    lineup_part = re.sub(r"\([^)]*FREE TICKETS[^)]*\)", "", lineup_part, flags=re.IGNORECASE)
+    lineup_part = re.sub(r"\([^)]*ONLY IN RA[^)]*\)", "", lineup_part, flags=re.IGNORECASE)
+    lineup_part = re.sub(r"\([^)]*\d+H SET[^)]*\)", "", lineup_part, flags=re.IGNORECASE)
+
+    # Split on comma, slash, " + " (with spaces)
+    parts = re.split(r"[,/]|\s\+\s", lineup_part)
+
+    # Further split B2B pairs into individual artists
+    artists = []
+    for part in parts:
+        b2b_parts = re.split(r"\s+[Bb]2[Bb]\s+", part.strip())
+        for bp in b2b_parts:
+            name = bp.strip()
+            if name and len(name) >= 2 and not re.match(r"^(feat\.?|w/|presents?|invites?)$", name, re.IGNORECASE):
+                artists.append(name)
+
+    return artists
 
 GRAPHQL_URL = "https://ra.co/graphql"
 
@@ -129,13 +162,23 @@ class ResidentAdvisorCollector:
                         url=None,
                     )
 
-                # Extract artist names
+                # Extract artist names from the API response
                 artists_data = event_data.get("artists") or []
                 artist_names = [
                     a["name"]
                     for a in artists_data
                     if a.get("name")
                 ]
+
+                # RA often only lists a subset of the lineup in the API.
+                # Parse additional names from the event title as fallback.
+                # Titles like "TORMENTA: Taranco, Nelson Fernandez, Dj Chris"
+                # contain the full lineup after the colon.
+                title_artists = _parse_artists_from_title(title)
+                api_names_lower = {n.lower().strip() for n in artist_names}
+                for ta in title_artists:
+                    if ta.lower().strip() not in api_names_lower:
+                        artist_names.append(ta)
 
                 # Build event URL
                 content_url = event_data.get("contentUrl", "")

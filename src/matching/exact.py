@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 
 from loguru import logger
 from thefuzz import fuzz
@@ -18,10 +19,14 @@ _STRIP_TOKENS = {"dj", "mc", "the", "djs", "live", "b2b"}
 def _normalize_artist_name(name: str) -> str:
     """Normalize an artist name for comparison.
 
-    Lowercase, strip whitespace, remove common prefixes like 'DJ'/'MC',
+    Lowercase, strip accents to ASCII, remove common prefixes like 'DJ'/'MC',
     and remove special characters.
     """
     name = name.lower().strip()
+
+    # Normalize accents to ASCII (é→e, ü→u, ñ→n, etc.)
+    name = unicodedata.normalize("NFKD", name)
+    name = "".join(c for c in name if not unicodedata.combining(c))
 
     # Remove special characters (keep alphanumeric and spaces)
     name = re.sub(r"[^a-z0-9\s]", "", name)

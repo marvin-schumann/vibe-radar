@@ -543,6 +543,32 @@ async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
     )
 
 
+@app.get("/api/debug-events")
+async def debug_events(user=Depends(get_session_user)) -> JSONResponse:
+    """Debug: show all events with their parsed artist lists."""
+    cache = _user_cache(user["id"]) if user else _cache
+    matches = cache.get("matches", [])
+    # Get all events from the last pipeline run — stored on matches
+    # Also show which user artists exist
+    names = cache.get("artist_names", [])
+    events_summary = []
+    seen = set()
+    for m in matches:
+        key = m.event.url or m.event.name
+        if key not in seen:
+            seen.add(key)
+            events_summary.append({
+                "name": m.event.name,
+                "artists_on_event": m.event.artists,
+                "matched_artist": m.matched_artist.name,
+            })
+    return JSONResponse(content={
+        "total_user_artists": len(names),
+        "matched_events": events_summary,
+        "sample_user_artists": names[:50],
+    })
+
+
 @app.get("/api/artists")
 async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
     """Debug: return the collected artist list from the last pipeline run."""
