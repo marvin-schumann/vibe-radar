@@ -209,10 +209,12 @@ class SpotifyCollector:
     # Private: top artists
     # ------------------------------------------------------------------
 
-    def _fetch_top_artists(self, time_range: str, max_pages: int = 1) -> list[Artist]:
-        """Fetch the user's top 50 artists for the given time range.
+    def _fetch_top_artists(self, time_range: str, max_pages: int = 5) -> list[Artist]:
+        """Fetch the user's top artists for the given time range.
 
-        1 page = top 50 per time range, ~150 total across all three.
+        Up to 5 pages (250 per time range). All returned artists are ones
+        Spotify knows you listen to — safe to include with length-gated
+        partial_ratio matching that prevents short-name false positives.
         """
         artists: list[Artist] = []
         offset = 0
