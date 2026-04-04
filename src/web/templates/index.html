@@ -1008,10 +1008,18 @@
         // ============================================================
         // Update tab counts
         // ============================================================
+        function countUniqueEvents(matches) {
+            const seen = new Set();
+            matches.forEach(m => {
+                seen.add(m.event.url || (m.event.name + '|' + m.event.date));
+            });
+            return seen.size;
+        }
+
         function updateCounts() {
-            document.getElementById('countAll').textContent = allMatches.length;
-            document.getElementById('countExact').textContent = allMatches.filter(m => m.match_type === 'exact').length;
-            document.getElementById('countVibe').textContent = allMatches.filter(m => m.match_type === 'vibe').length;
+            document.getElementById('countAll').textContent = countUniqueEvents(allMatches);
+            document.getElementById('countExact').textContent = countUniqueEvents(allMatches.filter(m => m.match_type === 'exact'));
+            document.getElementById('countVibe').textContent = countUniqueEvents(allMatches.filter(m => m.match_type === 'vibe'));
         }
 
         // ============================================================
@@ -1271,15 +1279,21 @@
                 return;
             }
 
-            // Group matches by event URL so one event = one card
+            // Group matches by event URL so one event = one card,
+            // deduplicating matched artists by name (same artist from
+            // both Spotify and SoundCloud should appear only once).
             const eventMap = new Map();
             matches.forEach(match => {
                 const key = match.event.url || (match.event.name + '|' + match.event.date);
                 if (!eventMap.has(key)) {
-                    eventMap.set(key, { ...match, matched_artists: [match.matched_artist] });
+                    eventMap.set(key, { ...match, matched_artists: [match.matched_artist], _seen_names: new Set([match.matched_artist.name.toLowerCase()]) });
                 } else {
                     const g = eventMap.get(key);
-                    g.matched_artists.push(match.matched_artist);
+                    const lname = match.matched_artist.name.toLowerCase();
+                    if (!g._seen_names.has(lname)) {
+                        g._seen_names.add(lname);
+                        g.matched_artists.push(match.matched_artist);
+                    }
                     if (match.confidence > g.confidence) g.confidence = match.confidence;
                 }
             });
@@ -1465,14 +1479,19 @@
                     if (d.running && d.status) {
                         showOverlay(d.status.step, d.status.detail, d.status.progress);
                     } else if (!d.running && d.last_refresh) {
+                        // Pipeline finished — load fresh data
                         clearInterval(statusPoll);
                         statusPoll = null;
-                        // Animate to 100% briefly, then hide and reload data
                         showOverlay('Done!', 'Your matches are ready.', 100);
                         setTimeout(async () => {
                             hideOverlay();
                             await Promise.all([loadTasteProfile(), loadEvents()]);
                         }, 800);
+                    } else if (!d.running && !d.last_refresh) {
+                        // Nothing running and no data — stop polling, show empty state
+                        clearInterval(statusPoll);
+                        statusPoll = null;
+                        hideOverlay();
                     }
                 } catch (e) { /* ignore */ }
             }, 1500);
@@ -1517,12 +1536,6 @@
 
             await Promise.all([loadTasteProfile(), loadEvents()]);
             checkNps();
-
-            // If still no data, pipeline may not have started yet — poll
-            if (allMatches.length === 0) {
-                showOverlay('Loading your music data...', 'This takes about 30 seconds', 5);
-                startStatusPolling();
-            }
         });
 
     </script>
