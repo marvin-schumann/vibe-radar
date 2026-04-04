@@ -169,26 +169,38 @@ class SpotifyCollector:
     # Private: top artists
     # ------------------------------------------------------------------
 
-    def _fetch_top_artists(self, time_range: str) -> list[Artist]:
-        """Fetch the user's top 50 artists for the given time range (single page).
+    def _fetch_top_artists(self, time_range: str, max_pages: int = 5) -> list[Artist]:
+        """Fetch the user's top artists for the given time range.
 
-        We intentionally skip pagination — the first 50 returned by Spotify are
-        ranked by listening frequency and are the highest-signal artists. Pages
-        2+ include artists with very low play counts that flood match results.
+        Paginates up to max_pages (default 5 × 50 = 250 per time range).
+        All results are artists Spotify knows you actually listen to, ranked
+        by play frequency — even page 5 is signal, not noise.
         """
-        data = self._api_call(
-            self.sp.current_user_top_artists,
-            limit=50,
-            offset=0,
-            time_range=time_range,
-        )
-        if data is None:
-            return []
+        artists: list[Artist] = []
+        offset = 0
+        limit = 50
 
-        artists = [
-            self._artist_from_spotify(item)
-            for item in data.get("items", [])
-        ]
+        for _ in range(max_pages):
+            data = self._api_call(
+                self.sp.current_user_top_artists,
+                limit=limit,
+                offset=offset,
+                time_range=time_range,
+            )
+            if data is None:
+                break
+
+            items: list[dict[str, Any]] = data.get("items", [])
+            if not items:
+                break
+
+            for item in items:
+                artists.append(self._artist_from_spotify(item))
+
+            if data.get("next") is None:
+                break
+            offset += limit
+
         logger.debug("Top artists ({}): {} found", time_range, len(artists))
         return artists
 
