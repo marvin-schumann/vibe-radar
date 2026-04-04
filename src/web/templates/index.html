@@ -731,6 +731,38 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
         /* ============================================================
+           GLOBAL PLATFORM TOGGLE (header)
+           ============================================================ */
+        .global-platform {
+            display: flex;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 3px;
+            padding: 1px;
+        }
+
+        .gp-btn {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.55rem;
+            border: none;
+            border-radius: 2px;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .gp-btn:hover { color: var(--text); }
+        .gp-btn.active { background: var(--lime); color: #0c0c0c; }
+
+        #toggleArtistsBtn { background: transparent; border: 1px solid var(--border-bright); border-radius: 3px; }
+        #toggleArtistsBtn.active { background: var(--lime); color: #0c0c0c; border-color: var(--lime); }
+
+        /* ============================================================
            ARTISTS GRID
            ============================================================ */
         .artists-grid {
@@ -885,7 +917,17 @@
             </div>
             <h1>Frequenz</h1>
         </div>
-        <p class="subtitle">Your taste. Tonight.</p>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+            <!-- Global platform filter -->
+            <div class="global-platform" id="globalPlatform">
+                <button class="gp-btn active" data-gp="all">All</button>
+                <button class="gp-btn" data-gp="spotify">Spotify</button>
+                <button class="gp-btn" data-gp="soundcloud">SC</button>
+            </div>
+            <span style="color:var(--border-bright);margin:0 0.3rem;">|</span>
+            <!-- Artists toggle -->
+            <button class="gp-btn" id="toggleArtistsBtn" onclick="toggleArtistsSection()">Artists</button>
+        </div>
         <div class="status-bar">
             <div class="status-dot" id="statusDot"></div>
             <span id="statusText">Loading...</span>
@@ -931,19 +973,10 @@
             </div>
         </section>
 
-        <!-- Artists Section -->
-        <section class="artists-section" style="margin-bottom:3rem; animation: fade-up 0.5s ease-out 0.2s both;">
+        <!-- Artists Section (hidden by default, toggled via header button) -->
+        <section class="artists-section" id="artistsSection" style="display:none; margin-bottom:3rem; animation: fade-up 0.3s ease-out both;">
             <h2 class="section-title"><span class="accent">//</span> Your Artists <span id="artistTotal" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);margin-left:0.5rem;letter-spacing:0.06em;"></span></h2>
-            <div class="filter-tabs" id="artistPlatformTabs">
-                <button class="filter-tab active" data-platform="all">All</button>
-                <button class="filter-tab" data-platform="spotify">Spotify</button>
-                <button class="filter-tab" data-platform="soundcloud">SoundCloud</button>
-            </div>
-            <div class="artists-grid" id="artistsGrid">
-                <div class="skeleton" style="height:60px;"></div>
-                <div class="skeleton" style="height:60px;"></div>
-                <div class="skeleton" style="height:60px;"></div>
-            </div>
+            <div class="artists-grid" id="artistsGrid"></div>
         </section>
 
         <!-- Events Section -->
@@ -954,10 +987,6 @@
                 <button class="filter-tab active" data-filter="all">All <span class="count" id="countAll">0</span></button>
                 <button class="filter-tab" data-filter="exact">Exact <span class="count" id="countExact">0</span></button>
                 <button class="filter-tab" data-filter="vibe">Vibe <span class="count" id="countVibe">0</span></button>
-                <span style="margin-left:auto;"></span>
-                <button class="filter-tab" data-platform-filter="all" style="font-size:0.55rem;padding:0.3rem 0.7rem;">All Sources</button>
-                <button class="filter-tab" data-platform-filter="spotify" style="font-size:0.55rem;padding:0.3rem 0.7rem;">Spotify</button>
-                <button class="filter-tab" data-platform-filter="soundcloud" style="font-size:0.55rem;padding:0.3rem 0.7rem;">SoundCloud</button>
             </div>
 
             <div class="events-grid" id="eventsGrid">
@@ -1157,14 +1186,26 @@
             }).join('');
         }
 
-        // Artist platform tabs
-        document.getElementById('artistPlatformTabs').addEventListener('click', (e) => {
-            const tab = e.target.closest('.filter-tab');
-            if (!tab) return;
-            document.querySelectorAll('#artistPlatformTabs .filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentArtistPlatform = tab.dataset.platform;
+        // Toggle artists section visibility
+        function toggleArtistsSection() {
+            const section = document.getElementById('artistsSection');
+            const btn = document.getElementById('toggleArtistsBtn');
+            const visible = section.style.display !== 'none';
+            section.style.display = visible ? 'none' : 'block';
+            btn.classList.toggle('active', !visible);
+        }
+
+        // Global platform filter (header)
+        document.getElementById('globalPlatform').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gp-btn');
+            if (!btn) return;
+            document.querySelectorAll('#globalPlatform .gp-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentPlatformFilter = btn.dataset.gp;
+            currentArtistPlatform = btn.dataset.gp;
             renderArtists(currentArtistPlatform);
+            renderEvents(currentFilter);
+            updateCounts();
         });
 
         function updateCounts() {
@@ -1542,21 +1583,11 @@
         // ============================================================
         document.getElementById('filterTabs').addEventListener('click', (e) => {
             const tab = e.target.closest('.filter-tab');
-            if (!tab) return;
+            if (!tab || !tab.dataset.filter) return;
 
-            // Match type filter (all/exact/vibe)
-            if (tab.dataset.filter) {
-                document.querySelectorAll('#filterTabs [data-filter]').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentFilter = tab.dataset.filter;
-            }
-            // Platform filter (all/spotify/soundcloud)
-            if (tab.dataset.platformFilter) {
-                document.querySelectorAll('#filterTabs [data-platform-filter]').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentPlatformFilter = tab.dataset.platformFilter;
-            }
-
+            document.querySelectorAll('#filterTabs .filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentFilter = tab.dataset.filter;
             renderEvents(currentFilter);
         });
 
