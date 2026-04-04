@@ -66,17 +66,18 @@ class ExactMatcher:
                 best_match: tuple[Artist, int, str] | None = None
 
                 for artist, artist_raw, artist_normalized in artist_lookup:
-                    # Try raw name comparison first
-                    ratio = fuzz.ratio(artist_raw, event_raw)
-                    partial = fuzz.partial_ratio(artist_raw, event_raw)
-                    score_raw = max(ratio, partial)
+                    # Only use partial_ratio when BOTH names are 8+ chars.
+                    # Short names like "Juli", "GREG", "AG" cause massive
+                    # false positives via substring matching.
+                    use_partial = len(artist_normalized) >= 8 and len(event_normalized) >= 8
 
-                    # Also try normalized (without DJ/MC prefixes etc.)
-                    ratio_norm = fuzz.ratio(artist_normalized, event_normalized)
-                    partial_norm = fuzz.partial_ratio(
-                        artist_normalized, event_normalized
-                    )
-                    score_norm = max(ratio_norm, partial_norm)
+                    score_raw = fuzz.ratio(artist_raw, event_raw)
+                    if use_partial:
+                        score_raw = max(score_raw, fuzz.partial_ratio(artist_raw, event_raw))
+
+                    score_norm = fuzz.ratio(artist_normalized, event_normalized)
+                    if use_partial:
+                        score_norm = max(score_norm, fuzz.partial_ratio(artist_normalized, event_normalized))
 
                     score = max(score_raw, score_norm)
 
