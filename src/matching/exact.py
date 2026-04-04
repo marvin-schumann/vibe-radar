@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-import unicodedata
 
 from loguru import logger
 from thefuzz import fuzz
@@ -19,14 +18,10 @@ _STRIP_TOKENS = {"dj", "mc", "the", "djs", "live", "b2b"}
 def _normalize_artist_name(name: str) -> str:
     """Normalize an artist name for comparison.
 
-    Lowercase, strip accents to ASCII, remove common prefixes like 'DJ'/'MC',
+    Lowercase, strip whitespace, remove common prefixes like 'DJ'/'MC',
     and remove special characters.
     """
     name = name.lower().strip()
-
-    # Normalize accents to ASCII (é→e, ü→u, ñ→n, etc.)
-    name = unicodedata.normalize("NFKD", name)
-    name = "".join(c for c in name if not unicodedata.combining(c))
 
     # Remove special characters (keep alphanumeric and spaces)
     name = re.sub(r"[^a-z0-9\s]", "", name)
@@ -57,15 +52,10 @@ class ExactMatcher:
         matches: list[Match] = []
 
         # Pre-compute normalized names for user artists
-        # Skip artists whose normalized name is fewer than 3 characters —
-        # single-letter or two-letter names produce too many false positives
-        # with fuzzy matching (e.g. "AG" matches half the alphabet).
         artist_lookup: list[tuple[Artist, str, str]] = []
         for artist in artists:
-            normalized = _normalize_artist_name(artist.name)
-            if len(normalized) < 3:
-                continue
             raw = artist.name.lower().strip()
+            normalized = _normalize_artist_name(artist.name)
             artist_lookup.append((artist, raw, normalized))
 
         for event in events:
@@ -76,18 +66,18 @@ class ExactMatcher:
                 best_match: tuple[Artist, int, str] | None = None
 
                 for artist, artist_raw, artist_normalized in artist_lookup:
-                    # Use ratio + token_sort_ratio only — NOT partial_ratio.
-                    # partial_ratio("juli", "julio machicado") = 100 because
-                    # it finds "juli" as a substring, causing massive false
-                    # positives with short names. ratio() compares full strings.
-                    score_raw = max(
-                        fuzz.ratio(artist_raw, event_raw),
-                        fuzz.token_sort_ratio(artist_raw, event_raw),
+                    # Try raw name comparison first
+                    ratio = fuzz.ratio(artist_raw, event_raw)
+                    partial = fuzz.partial_ratio(artist_raw, event_raw)
+                    score_raw = max(ratio, partial)
+
+                    # Also try normalized (without DJ/MC prefixes etc.)
+                    ratio_norm = fuzz.ratio(artist_normalized, event_normalized)
+                    partial_norm = fuzz.partial_ratio(
+                        artist_normalized, event_normalized
                     )
-                    score_norm = max(
-                        fuzz.ratio(artist_normalized, event_normalized),
-                        fuzz.token_sort_ratio(artist_normalized, event_normalized),
-                    )
+                    score_norm = max(ratio_norm, partial_norm)
+
                     score = max(score_raw, score_norm)
 
                     if score >= self.threshold:

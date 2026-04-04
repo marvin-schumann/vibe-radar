@@ -263,37 +263,6 @@ async def _run_pipeline(user_id: str | None = None) -> None:
         cache["pipeline_status"] = None
         return
 
-    # -- 1b. Filter junk artist names --
-    # Remove accounts/labels masquerading as artists: names dominated by
-    # symbols/emoji/unicode, known non-artist channels, and very short names.
-    import unicodedata
-
-    _KNOWN_NON_ARTISTS = {
-        "boiler room", "crucast", "gomboc records", "onyx records",
-        "milli records", "polyamor records", "hot meal records",
-        "hardstyle", "hypertechno", "trancestrudel", "sachsentrance",
-    }
-
-    def _is_real_artist(name: str) -> bool:
-        if not name or not name.strip():
-            return False
-        stripped = name.strip()
-        if stripped.lower() in _KNOWN_NON_ARTISTS:
-            return False
-        # Count printable ASCII letters/digits vs everything else
-        ascii_alnum = sum(1 for c in stripped if c.isascii() and (c.isalpha() or c.isdigit()))
-        total = len(stripped.replace(" ", ""))
-        if total == 0:
-            return False
-        # Reject if fewer than half the characters are normal ASCII letters/digits
-        if ascii_alnum / total < 0.5:
-            return False
-        return True
-
-    before = len(all_artists)
-    all_artists = [a for a in all_artists if _is_real_artist(a.name)]
-    logger.info("Artist filter: {} → {} (removed {} junk entries)", before, len(all_artists), before - len(all_artists))
-
     # -- 2. Build taste profile --
     _set_status(cache, "Building taste profile", f"Analysing {len(all_artists):,} artists...", 65)
     taste_profile = build_taste_profile(all_artists)
