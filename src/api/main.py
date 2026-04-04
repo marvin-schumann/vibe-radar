@@ -258,6 +258,19 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     taste_profile = build_taste_profile(all_artists)
     cache["taste_profile"] = taste_profile
     cache["artist_names"] = sorted(set(a.name for a in all_artists), key=str.lower)
+    # Full artist objects for the Artists tab (deduplicated by normalized name)
+    seen_artists: dict[str, dict[str, Any]] = {}
+    for a in all_artists:
+        key = a.normalized_name
+        if key not in seen_artists:
+            seen_artists[key] = {
+                "name": a.name,
+                "source": a.source.value,
+                "image_url": a.image_url,
+                "genres": a.genres,
+                "popularity": a.popularity,
+            }
+    cache["artist_objects"] = sorted(seen_artists.values(), key=lambda x: x["name"].lower())
 
     # -- 3. Collect events from all sources --
     _set_status(cache, "Scanning events in Madrid", "Checking Resident Advisor, Songkick...", 70)
@@ -530,12 +543,19 @@ async def debug_events(user=Depends(get_session_user)) -> JSONResponse:
 
 @app.get("/api/artists")
 async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
-    """Debug: return the collected artist list from the last pipeline run."""
+    """Return the collected artist list with full metadata from the last pipeline run."""
     cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects")
+    if artists is not None:
+        return JSONResponse(content={"artists": artists, "total": len(artists)})
+    # Backwards compat: fall back to name-only list from older pipeline runs
     names = cache.get("artist_names")
     if names is None:
         return JSONResponse(content={"artists": [], "total": 0, "message": "No data yet — hit refresh first"})
-    return JSONResponse(content={"artists": names, "total": len(names)})
+    return JSONResponse(content={
+        "artists": [{"name": n, "source": None, "image_url": None, "genres": [], "popularity": None} for n in names],
+        "total": len(names),
+    })
 
 
 @app.get("/api/events")

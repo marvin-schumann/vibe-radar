@@ -731,6 +731,80 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
         /* ============================================================
+           ARTISTS GRID
+           ============================================================ */
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .artist-card {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.6rem 0.85rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .artist-card:hover { background: var(--bg-card-hover); }
+
+        .artist-card img {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .artist-card .placeholder-img {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.65rem; color: var(--text-dim);
+        }
+
+        .artist-card-info { min-width: 0; }
+
+        .artist-card-name {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .artist-card-meta {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .artist-card-meta .platform-dot {
+            display: inline-block;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            margin-right: 0.3rem;
+            vertical-align: middle;
+        }
+
+        .platform-dot.spotify { background: var(--lime); }
+        .platform-dot.soundcloud { background: var(--orange); }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 640px) {
@@ -857,6 +931,21 @@
             </div>
         </section>
 
+        <!-- Artists Section -->
+        <section class="artists-section" style="margin-bottom:3rem; animation: fade-up 0.5s ease-out 0.2s both;">
+            <h2 class="section-title"><span class="accent">//</span> Your Artists <span id="artistTotal" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);margin-left:0.5rem;letter-spacing:0.06em;"></span></h2>
+            <div class="filter-tabs" id="artistPlatformTabs">
+                <button class="filter-tab active" data-platform="all">All</button>
+                <button class="filter-tab" data-platform="spotify">Spotify</button>
+                <button class="filter-tab" data-platform="soundcloud">SoundCloud</button>
+            </div>
+            <div class="artists-grid" id="artistsGrid">
+                <div class="skeleton" style="height:60px;"></div>
+                <div class="skeleton" style="height:60px;"></div>
+                <div class="skeleton" style="height:60px;"></div>
+            </div>
+        </section>
+
         <!-- Events Section -->
         <section class="events-section">
             <h2 class="section-title"><span class="accent">//</span> Matched Events</h2>
@@ -865,6 +954,10 @@
                 <button class="filter-tab active" data-filter="all">All <span class="count" id="countAll">0</span></button>
                 <button class="filter-tab" data-filter="exact">Exact <span class="count" id="countExact">0</span></button>
                 <button class="filter-tab" data-filter="vibe">Vibe <span class="count" id="countVibe">0</span></button>
+                <span style="margin-left:auto;"></span>
+                <button class="filter-tab" data-platform-filter="all" style="font-size:0.55rem;padding:0.3rem 0.7rem;">All Sources</button>
+                <button class="filter-tab" data-platform-filter="spotify" style="font-size:0.55rem;padding:0.3rem 0.7rem;">Spotify</button>
+                <button class="filter-tab" data-platform-filter="soundcloud" style="font-size:0.55rem;padding:0.3rem 0.7rem;">SoundCloud</button>
             </div>
 
             <div class="events-grid" id="eventsGrid">
@@ -902,11 +995,14 @@
         // State
         // ============================================================
         let allMatches = [];
+        let allArtists = [];
         let tasteProfile = null;
         let genreChart = null;
         let featuresChart = null;
         let sourceChart = null;
         let currentFilter = 'all';
+        let currentPlatformFilter = 'all';
+        let currentArtistPlatform = 'all';
 
         // ============================================================
         // Chart.js global defaults
@@ -1015,6 +1111,61 @@
             });
             return seen.size;
         }
+
+        // ============================================================
+        // Fetch and render artists
+        // ============================================================
+        async function loadArtists() {
+            try {
+                const resp = await fetch('/api/artists');
+                const data = await resp.json();
+                allArtists = data.artists || [];
+                document.getElementById('artistTotal').textContent = allArtists.length ? `${allArtists.length} artists` : '';
+                renderArtists(currentArtistPlatform);
+            } catch (err) {
+                console.error('Failed to load artists:', err);
+            }
+        }
+
+        function renderArtists(platformFilter) {
+            const grid = document.getElementById('artistsGrid');
+            let artists = allArtists;
+            if (platformFilter && platformFilter !== 'all') {
+                artists = allArtists.filter(a => a.source === platformFilter);
+            }
+
+            if (artists.length === 0) {
+                grid.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-dim);font-size:0.85rem;grid-column:1/-1;">No artists yet. Hit refresh to sync your music.</div>';
+                return;
+            }
+
+            grid.innerHTML = artists.map(a => {
+                const imgHtml = a.image_url
+                    ? `<img src="${escapeHtml(a.image_url)}" alt="${escapeHtml(a.name)}" loading="lazy">`
+                    : `<div class="placeholder-img">${escapeHtml(a.name.charAt(0).toUpperCase())}</div>`;
+                const platform = a.source || 'unknown';
+                const platformLabel = platform === 'spotify' ? 'Spotify' : platform === 'soundcloud' ? 'SoundCloud' : platform;
+                return `
+                    <div class="artist-card">
+                        ${imgHtml}
+                        <div class="artist-card-info">
+                            <div class="artist-card-name">${escapeHtml(a.name)}</div>
+                            <div class="artist-card-meta"><span class="platform-dot ${platform}"></span>${platformLabel}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Artist platform tabs
+        document.getElementById('artistPlatformTabs').addEventListener('click', (e) => {
+            const tab = e.target.closest('.filter-tab');
+            if (!tab) return;
+            document.querySelectorAll('#artistPlatformTabs .filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentArtistPlatform = tab.dataset.platform;
+            renderArtists(currentArtistPlatform);
+        });
 
         function updateCounts() {
             document.getElementById('countAll').textContent = countUniqueEvents(allMatches);
@@ -1266,6 +1417,11 @@
                 matches = allMatches.filter(m => m.match_type === 'vibe');
             }
 
+            // Platform filter
+            if (currentPlatformFilter && currentPlatformFilter !== 'all') {
+                matches = matches.filter(m => m.matched_artist.source === currentPlatformFilter);
+            }
+
             if (matches.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
@@ -1388,10 +1544,19 @@
             const tab = e.target.closest('.filter-tab');
             if (!tab) return;
 
-            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+            // Match type filter (all/exact/vibe)
+            if (tab.dataset.filter) {
+                document.querySelectorAll('#filterTabs [data-filter]').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.filter;
+            }
+            // Platform filter (all/spotify/soundcloud)
+            if (tab.dataset.platformFilter) {
+                document.querySelectorAll('#filterTabs [data-platform-filter]').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPlatformFilter = tab.dataset.platformFilter;
+            }
 
-            currentFilter = tab.dataset.filter;
             renderEvents(currentFilter);
         });
 
@@ -1485,7 +1650,7 @@
                         showOverlay('Done!', 'Your matches are ready.', 100);
                         setTimeout(async () => {
                             hideOverlay();
-                            await Promise.all([loadTasteProfile(), loadEvents()]);
+                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists()]);
                         }, 800);
                     } else if (!d.running && !d.last_refresh) {
                         // Nothing running and no data — stop polling, show empty state
@@ -1534,7 +1699,7 @@
                 }
             } catch (e) { /* ignore, just load normally */ }
 
-            await Promise.all([loadTasteProfile(), loadEvents()]);
+            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists()]);
             checkNps();
         });
 
