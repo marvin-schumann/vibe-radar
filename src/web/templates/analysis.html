@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequenz — SoundCloud Analysis</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:            #0c0c0c;
+            --bg-card:       #111111;
+            --bg-card-hover: #161616;
+            --border:        #1e1e1e;
+            --border-bright: #2e2e2e;
+            --text:          #ede8dd;
+            --text-dim:      #6a6a6a;
+            --text-faint:    #303030;
+            --lime:          #c4f135;
+            --orange:        #ff5c35;
+            --font-display:  'Bebas Neue', 'Impact', sans-serif;
+            --font-mono:     'Space Mono', 'Courier New', monospace;
+            --font-body:     'DM Sans', 'Helvetica Neue', sans-serif;
+            --radius:        6px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header — matches dashboard */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            padding: 0 2rem;
+            background: rgba(12,12,12,0.96);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-container a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .radar-icon {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .radar-icon .ring {
+            position: absolute;
+            border: 1.5px solid var(--lime);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: radar-pulse 3s ease-out infinite;
+        }
+
+        .radar-icon .ring:nth-child(1) { width: 12px; height: 12px; animation-delay: 0s; }
+        .radar-icon .ring:nth-child(2) { width: 22px; height: 22px; animation-delay: 0.6s; }
+        .radar-icon .ring:nth-child(3) { width: 33px; height: 33px; animation-delay: 1.2s; }
+
+        .radar-icon .dot {
+            position: absolute;
+            width: 5px; height: 5px;
+            background: var(--lime);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px rgba(196,241,53,0.6);
+        }
+
+        .radar-icon .sweep {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 18px; height: 1.5px;
+            background: linear-gradient(90deg, var(--lime), transparent);
+            transform-origin: 0% 50%;
+            animation: radar-sweep 3s linear infinite;
+        }
+
+        @keyframes radar-pulse {
+            0%   { opacity: 0.7; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @keyframes radar-sweep {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            letter-spacing: 0.06em;
+            color: var(--text);
+        }
+
+        .gp-btn {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.55rem;
+            border: 1px solid var(--border-bright);
+            border-radius: 2px;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .gp-btn:hover { color: var(--text); border-color: var(--lime); }
+        .gp-btn.active { background: var(--lime); color: #0c0c0c; border-color: var(--lime); }
+
+        /* Layout */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem 5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: 0.08em;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .section-title .accent { color: var(--lime); }
+
+        /* Stats row */
+        .stats-bar {
+            display: flex;
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: var(--bg-card);
+            padding: 1.25rem 1.5rem;
+            border-right: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .stat-card:last-child { border-right: none; }
+        .stat-card:hover { background: var(--bg-card-hover); }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-dim);
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            line-height: 1;
+            color: var(--lime);
+            letter-spacing: 0.02em;
+        }
+
+        .stat-number.orange { color: var(--orange); }
+
+        /* Chart grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .chart-card:hover { background: var(--bg-card-hover); }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+            border-right: none;
+        }
+
+        .chart-card:nth-child(2) { border-right: none; }
+
+        .card-title {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-dim);
+            margin-bottom: 1.25rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-wrapper canvas { width: 100% !important; }
+
+        .empty-msg {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        /* Animations */
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fade-up 0.5s ease-out both; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header { padding: 0 1rem; }
+            .container { padding: 1.5rem 1rem 3rem; }
+            .stats-bar { flex-direction: column; }
+            .stat-card { border-right: none; border-bottom: 1px solid var(--border); }
+            .stat-card:last-child { border-bottom: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <a href="/">
+                <div class="radar-icon">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="dot"></div>
+                    <div class="sweep"></div>
+                </div>
+                <h1>Frequenz</h1>
+            </a>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+            <a href="/" class="gp-btn">Dashboard</a>
+            <span class="gp-btn active">Analysis</span>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <div class="container">
+        <h2 class="section-title fade-in"><span class="accent">//</span> SoundCloud Analysis</h2>
+
+        <!-- Summary stats -->
+        <div class="stats-bar fade-in" style="animation-delay: 0.1s;">
+            <div class="stat-card">
+                <div class="stat-label">SC Artists</div>
+                <div class="stat-number" id="statArtists">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Liked Tracks</div>
+                <div class="stat-number orange" id="statTracks">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Genres</div>
+                <div class="stat-number" id="statGenres">--</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid fade-in" style="animation-delay: 0.2s;">
+            <!-- Chart 1: Top artists by liked tracks -->
+            <div class="chart-card">
+                <div class="card-title">Top Artists by Liked Tracks</div>
+                <div class="chart-wrapper" id="trackChartWrapper">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Genre distribution -->
+            <div class="chart-card">
+                <div class="card-title">Genre Distribution</div>
+                <div class="chart-wrapper" id="genreChartWrapper" style="max-width: 320px; margin: 0 auto;">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Chart 3: Most-played artists (playback count) -->
+            <div class="chart-card full-width">
+                <div class="card-title">Most-Played Artists (SoundCloud Playback Count)</div>
+                <div class="chart-wrapper" id="playChartWrapper">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        function capitalise(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function formatPlayCount(n) {
+            if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+            if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+            return n.toString();
+        }
+
+        // Shared Chart.js tooltip style
+        const tooltipStyle = {
+            backgroundColor: '#111',
+            titleColor: '#ede8dd',
+            bodyColor: '#6a6a6a',
+            borderColor: '#2e2e2e',
+            borderWidth: 1,
+            cornerRadius: 4,
+            padding: 10,
+        };
+
+        async function loadAnalysis() {
+            try {
+                const resp = await fetch('/api/analysis/soundcloud');
+                const data = await resp.json();
+                renderStats(data);
+                renderTrackChart(data.top_artists_by_tracks);
+                renderGenreChart(data.genre_distribution);
+                renderPlayChart(data.top_artists_by_play_count);
+            } catch (err) {
+                console.error('Failed to load analysis:', err);
+                document.querySelectorAll('.empty-msg').forEach(el => {
+                    el.textContent = 'No data available. Run a refresh on the dashboard first.';
+                });
+            }
+        }
+
+        function renderStats(data) {
+            document.getElementById('statArtists').textContent = data.total_sc_artists || 0;
+            document.getElementById('statTracks').textContent = data.total_liked_tracks || 0;
+            document.getElementById('statGenres').textContent = data.total_genres || 0;
+        }
+
+        // Chart 1: Top artists by liked track count (horizontal bar)
+        function renderTrackChart(artists) {
+            const wrapper = document.getElementById('trackChartWrapper');
+            if (!artists || artists.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No track data yet. Connect SoundCloud and refresh.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="trackChart"></canvas>';
+            const ctx = document.getElementById('trackChart').getContext('2d');
+
+            // Set canvas height based on bar count
+            const canvasEl = document.getElementById('trackChart');
+            canvasEl.parentElement.style.height = Math.max(200, artists.length * 28) + 'px';
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: artists.map(a => a.name),
+                    datasets: [{
+                        data: artists.map(a => a.count),
+                        backgroundColor: artists.map((_, i) => {
+                            const ratio = i / Math.max(artists.length - 1, 1);
+                            const r = Math.round(196 + ratio * (255 - 196));
+                            const g = Math.round(241 - ratio * (241 - 92));
+                            const b = 53;
+                            return `rgba(${r}, ${g}, ${b}, 0.8)`;
+                        }),
+                        borderColor: 'transparent',
+                        borderRadius: 3,
+                        barThickness: 16,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: { label: ctx => `${ctx.raw} liked tracks` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 2: Genre distribution (doughnut)
+        function renderGenreChart(genres) {
+            const wrapper = document.getElementById('genreChartWrapper');
+            if (!genres || genres.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No genre data available.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="genreChart"></canvas>';
+            const ctx = document.getElementById('genreChart').getContext('2d');
+
+            // Generate colors: cycle through lime, orange, muted tones
+            const palette = [
+                '#c4f135', '#ff5c35', '#4d9fff', '#ede8dd', '#ff9f43',
+                '#a29bfe', '#00cec9', '#fd79a8', '#6c5ce7', '#ffeaa7',
+                '#55efc4', '#dfe6e9',
+            ];
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: genres.map(g => capitalise(g.genre)),
+                    datasets: [{
+                        data: genres.map(g => g.count),
+                        backgroundColor: genres.map((_, i) => palette[i % palette.length] + '33'),
+                        borderColor: genres.map((_, i) => palette[i % palette.length]),
+                        borderWidth: 2,
+                        hoverOffset: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 10,
+                                usePointStyle: true,
+                                pointStyleWidth: 8,
+                                font: { size: 10, family: "'Space Mono', monospace" },
+                                color: '#6a6a6a',
+                            }
+                        },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} artists` }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 3: Most-played artists by playback count (horizontal bar)
+        function renderPlayChart(artists) {
+            const wrapper = document.getElementById('playChartWrapper');
+            if (!artists || artists.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No playback data available.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="playChart"></canvas>';
+            const ctx = document.getElementById('playChart').getContext('2d');
+
+            const canvasEl = document.getElementById('playChart');
+            canvasEl.parentElement.style.height = Math.max(200, artists.length * 28) + 'px';
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: artists.map(a => a.name),
+                    datasets: [{
+                        data: artists.map(a => a.play_count),
+                        backgroundColor: artists.map((_, i) => {
+                            const ratio = i / Math.max(artists.length - 1, 1);
+                            const r = Math.round(255 - ratio * (255 - 77));
+                            const g = Math.round(92 + ratio * (159 - 92));
+                            const b = Math.round(53 + ratio * (255 - 53));
+                            return `rgba(${r}, ${g}, ${b}, 0.7)`;
+                        }),
+                        borderColor: 'transparent',
+                        borderRadius: 3,
+                        barThickness: 16,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: {
+                                label: ctx => `${formatPlayCount(ctx.raw)} plays`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: {
+                                font: { size: 11 },
+                                color: '#6a6a6a',
+                                callback: function(val) { return formatPlayCount(val); }
+                            }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Boot
+        loadAnalysis();
+    </script>
+</body>
+</html>

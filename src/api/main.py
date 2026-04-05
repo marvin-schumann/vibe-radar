@@ -227,6 +227,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                 soundcloud = SoundCloudCollector(username=sc_username)
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
+                cache["sc_track_counts"] = soundcloud.track_counts
                 _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists for user {}", len(sc_artists), user_id)
             except Exception as exc:
@@ -249,6 +250,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                 soundcloud = SoundCloudCollector()
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
+                cache["sc_track_counts"] = soundcloud.track_counts
                 _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists collected", len(sc_artists))
         except Exception as exc:
@@ -279,6 +281,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                 "image_url": a.image_url,
                 "genres": a.genres,
                 "popularity": a.popularity,
+                "play_count": a.play_count,
             }
     cache["artist_objects"] = sorted(seen_artists.values(), key=lambda x: x["name"].lower())
 
@@ -824,6 +827,39 @@ async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
             content={"status": "error", "message": f"Pipeline refresh failed: {exc}"},
             status_code=500,
         )
+
+
+# ---------------------------------------------------------------------------
+# Routes: Analysis
+# ---------------------------------------------------------------------------
+
+
+@app.get("/analysis", response_class=HTMLResponse)
+async def analysis_page(request: Request, user=Depends(get_session_user)) -> HTMLResponse:
+    """Render the SoundCloud analysis page."""
+    if not user:
+        return RedirectResponse("/login")
+    if not is_approved(user["id"]):
+        return RedirectResponse("/pending")
+
+    return templates.TemplateResponse(
+        request,
+        "analysis.html",
+        {"user": user},
+    )
+
+
+@app.get("/api/analysis/soundcloud")
+async def get_soundcloud_analysis(user=Depends(get_session_user)) -> JSONResponse:
+    """Return aggregated SoundCloud analytics data."""
+    from src.analytics.soundcloud import aggregate_soundcloud_data
+
+    cache = _user_cache(user["id"]) if user else _cache
+    artist_objects = cache.get("artist_objects", [])
+    sc_track_counts = cache.get("sc_track_counts", {})
+
+    data = aggregate_soundcloud_data(artist_objects, sc_track_counts)
+    return JSONResponse(content=data)
 
 
 # ---------------------------------------------------------------------------

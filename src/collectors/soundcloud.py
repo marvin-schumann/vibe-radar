@@ -57,6 +57,7 @@ class SoundCloudCollector:
             )
         self._client_id: str | None = None
         self._user_id: int | None = None
+        self.track_counts: dict[str, int] = {}  # normalized_name → liked track count
 
     # ------------------------------------------------------------------
     # Public API
@@ -103,8 +104,10 @@ class SoundCloudCollector:
                     artists = await coro
                     for artist in artists:
                         key = artist.normalized_name
-                        if key and key not in seen:
-                            seen[key] = artist
+                        if key:
+                            self.track_counts[key] = self.track_counts.get(key, 0) + 1
+                            if key not in seen:
+                                seen[key] = artist
                     logger.info(
                         "SoundCloud {}: found {} artists ({} new)",
                         label,
