@@ -1,4 +1,4 @@
-"""FastAPI web application for Vibe Radar."""
+"""FastAPI web application for Frequenz."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ DATA_DIR = Path(__file__).parent.parent.parent / "data"
 # App setup
 # ---------------------------------------------------------------------------
 
-app = FastAPI(title="Vibe Radar", version="1.0.0")
+app = FastAPI(title="Frequenz", version="1.0.0")
 
 app.include_router(auth_router)
 
@@ -183,7 +183,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
 
     cache["refreshing"] = True
     cache["pipeline_status"] = None
-    logger.info("Starting Vibe Radar pipeline (user={})", user_id or "anon")
+    logger.info("Starting Frequenz pipeline (user={})", user_id or "anon")
 
     # -- 1. Collect user artists from music sources --
     all_artists = []
@@ -267,6 +267,20 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     _set_status(cache, "Building taste profile", f"Analysing {len(all_artists):,} artists...", 65)
     taste_profile = build_taste_profile(all_artists)
     cache["taste_profile"] = taste_profile
+    cache["artist_names"] = sorted(set(a.name for a in all_artists), key=str.lower)
+    # Full artist objects for the Artists tab (deduplicated by normalized name)
+    seen_artists: dict[str, dict[str, Any]] = {}
+    for a in all_artists:
+        key = a.normalized_name
+        if key not in seen_artists:
+            seen_artists[key] = {
+                "name": a.name,
+                "source": a.source.value,
+                "image_url": a.image_url,
+                "genres": a.genres,
+                "popularity": a.popularity,
+            }
+    cache["artist_objects"] = sorted(seen_artists.values(), key=lambda x: x["name"].lower())
 
     # -- 3. Collect events from all sources --
     _set_status(cache, "Scanning events in Madrid", "Checking Resident Advisor, Songkick...", 70)
@@ -431,9 +445,7 @@ async def dashboard(request: Request, user=Depends(get_session_user)) -> HTMLRes
         return RedirectResponse("/pending")
 
     cache = _user_cache(user["id"])
-    # Auto-run pipeline in background if user has no cached data yet
-    if not cache.get("last_refresh") and not cache.get("refreshing"):
-        asyncio.create_task(_run_pipeline(user_id=user["id"]))
+    # Do NOT auto-run — user hits Refresh explicitly when they want fresh data.
 
     last_refresh = cache.get("last_refresh") or _cache.get("last_refresh")
 
@@ -511,6 +523,101 @@ async def get_taste_profile(user=Depends(get_session_user)) -> JSONResponse:
             "last_refresh": _cache.get("last_refresh"),
         }
     )
+
+
+@app.get("/api/debug-events")
+async def debug_events(user=Depends(get_session_user)) -> JSONResponse:
+    """Debug: show all events with their parsed artist lists."""
+    cache = _user_cache(user["id"]) if user else _cache
+    matches = cache.get("matches", [])
+    # Get all events from the last pipeline run — stored on matches
+    # Also show which user artists exist
+    names = cache.get("artist_names", [])
+    events_summary = []
+    seen = set()
+    for m in matches:
+        key = m.event.url or m.event.name
+        if key not in seen:
+            seen.add(key)
+            events_summary.append({
+                "name": m.event.name,
+                "artists_on_event": m.event.artists,
+                "matched_artist": m.matched_artist.name,
+            })
+    return JSONResponse(content={
+        "total_user_artists": len(names),
+        "matched_events": events_summary,
+        "sample_user_artists": names[:50],
+    })
+
+
+@app.get("/api/depth-score")
+async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
+    """Compute the Underground Depth Score from artist popularity data.
+
+    Formula: 100 - avg(popularity). Lower Spotify popularity = more
+    underground = higher depth score.
+    """
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    pops = [a["popularity"] for a in artists if a.get("popularity") is not None]
+    if not pops:
+        return JSONResponse(content={"score": None, "sample_size": 0})
+
+    avg_pop = sum(pops) / len(pops)
+    score = round(100 - avg_pop)
+
+    # Descriptive label
+    if score >= 80:
+        label = "Deep underground"
+        blurb = "Your taste lives in the shadows. Most people have never heard your artists."
+    elif score >= 65:
+        label = "Underground"
+        blurb = "You're ahead of the curve. Your taste is credible but not obscure."
+    elif score >= 50:
+        label = "Emerging"
+        blurb = "You mix underground with familiar. Good balance."
+    elif score >= 35:
+        label = "Mainstream-leaning"
+        blurb = "You know the hits but keep an eye on what's next."
+    else:
+        label = "Mainstream"
+        blurb = "Your taste is right in the cultural center."
+
+    # Top 5 most underground artists
+    underground_artists = sorted(
+        [a for a in artists if a.get("popularity") is not None],
+        key=lambda a: a["popularity"],
+    )[:5]
+
+    return JSONResponse(content={
+        "score": score,
+        "label": label,
+        "blurb": blurb,
+        "avg_popularity": round(avg_pop, 1),
+        "sample_size": len(pops),
+        "deepest_artists": [
+            {"name": a["name"], "popularity": a["popularity"], "image_url": a.get("image_url")}
+            for a in underground_artists
+        ],
+    })
+
+
+@app.get("/api/artists")
+async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
+    """Return the collected artist list with full metadata from the last pipeline run."""
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects")
+    if artists is not None:
+        return JSONResponse(content={"artists": artists, "total": len(artists)})
+    # Backwards compat: fall back to name-only list from older pipeline runs
+    names = cache.get("artist_names")
+    if names is None:
+        return JSONResponse(content={"artists": [], "total": 0, "message": "No data yet — hit refresh first"})
+    return JSONResponse(content={
+        "artists": [{"name": n, "source": None, "image_url": None, "genres": [], "popularity": None} for n in names],
+        "total": len(names),
+    })
 
 
 @app.get("/api/events")
@@ -788,7 +895,7 @@ async def export_pdf() -> Response:
     # Title
     pdf.set_text_color(*CYAN)
     pdf.set_font("Helvetica", "B", 32)
-    pdf.cell(0, 20, "VIBE RADAR", align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 20, "FREQUENZ", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_text_color(*MUTED)
     pdf.set_font("Helvetica", "", 12)
@@ -1021,7 +1128,7 @@ async def export_pdf() -> Response:
     pdf.ln(10)
     pdf.set_text_color(80, 80, 100)
     pdf.set_font("Helvetica", "I", 8)
-    pdf.cell(0, 5, f"Vibe Radar  |  {total_artists} artists  |  {len(all_events)} events scanned  |  Generated {generated}", align="C")
+    pdf.cell(0, 5, f"Frequenz  |  {total_artists} artists  |  {len(all_events)} events scanned  |  Generated {generated}", align="C")
 
     # Output
     pdf_bytes = pdf.output()

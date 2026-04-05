@@ -1,4 +1,4 @@
-"""Shared data models for Vibe Radar."""
+"""Shared data models for Frequenz."""
 
 from __future__ import annotations
 

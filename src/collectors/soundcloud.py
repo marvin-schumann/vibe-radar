@@ -92,11 +92,12 @@ class SoundCloudCollector:
                 )
                 return await self._fallback_html_scrape(client)
 
-            # Step 3 — collect from each source
+            # Step 3 — collect from liked tracks only.
+            # Followings and reposts excluded: following ≠ listening, and reposts
+            # are often DJ mixes / other people's content rather than artists the
+            # user actively follows. Likes are the strongest signal on SoundCloud.
             for label, coro in [
                 ("likes", self._fetch_liked_artists(client)),
-                ("reposts", self._fetch_repost_artists(client)),
-                ("followings", self._fetch_following_artists(client)),
             ]:
                 try:
                     artists = await coro
@@ -177,10 +178,11 @@ class SoundCloudCollector:
     # ------------------------------------------------------------------
 
     async def _fetch_liked_artists(self, client: httpx.AsyncClient) -> list[Artist]:
-        """Fetch artists from the user's liked tracks."""
+        """Fetch artists from the user's liked tracks (capped at 400 most recent)."""
         items = await self._paginate(
             client,
             f"{_API_V2}/users/{self._user_id}/track_likes",
+            max_pages=2,
         )
         artists: list[Artist] = []
         for item in items:
@@ -191,10 +193,11 @@ class SoundCloudCollector:
         return artists
 
     async def _fetch_repost_artists(self, client: httpx.AsyncClient) -> list[Artist]:
-        """Fetch artists from the user's reposts."""
+        """Fetch artists from the user's reposts (capped at 200 most recent)."""
         items = await self._paginate(
             client,
             f"{_API_V2}/stream/users/{self._user_id}/reposts",
+            max_pages=1,
         )
         artists: list[Artist] = []
         for item in items:
@@ -265,18 +268,39 @@ class SoundCloudCollector:
 
     @staticmethod
     def _artist_from_track(track: dict[str, Any]) -> Artist | None:
-        """Build an Artist from a SoundCloud track JSON object."""
-        user = track.get("user")
-        if not user:
-            return None
-        name = user.get("username") or user.get("full_name")
+        """Build an Artist from a SoundCloud track JSON object.
+
+        Priority: publisher_metadata.artist > uploader username.
+        publisher_metadata.artist is the official credited artist when
+        available. Falls back to the uploader username, which for
+        electronic music is usually the DJ/producer themselves.
+        """
+        user = track.get("user") or {}
+        pm = track.get("publisher_metadata") or {}
+
+        # Prefer the official publisher artist name
+        name = pm.get("artist")
+        image_url = user.get("avatar_url")
+        source_url = user.get("permalink_url")
+
+        if not name:
+            # Fall back to uploader — in electronic music, uploaders
+            # are usually the actual artist (DJs self-publish on SC)
+            name = user.get("username") or user.get("full_name")
+
         if not name:
             return None
+
+        # If publisher_metadata.artist has multiple artists (comma-separated),
+        # take the first one as primary
+        if "," in name:
+            name = name.split(",")[0].strip()
+
         return Artist(
             name=name,
             source=MusicSource.SOUNDCLOUD,
-            source_url=user.get("permalink_url"),
-            image_url=user.get("avatar_url"),
+            source_url=source_url,
+            image_url=image_url,
             genres=[track["genre"]] if track.get("genre") else [],
             play_count=track.get("playback_count"),
         )
