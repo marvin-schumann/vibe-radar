@@ -5,9 +5,19 @@
 
 ## Pending
 
-(empty)
+(none)
 
 ## Done
+
+### 2026-04-05 — Replace boring Over Time charts with cooler ones
+Completed 2026-04-05.
+- Replaced 3 boring "Over Time" charts with visually cooler alternatives:
+  1. **Bump chart** — top 10 artists' rank over time (monthly, inverted y-axis, top 3 get thicker lines)
+  2. **GitHub-style calendar heatmap** — daily listening activity using `chartjs-chart-matrix` plugin
+  3. **Stacked area by genre** — cumulative likes broken down by top 6 genres over time
+- Built artist→genre join in backend using SC artist `genres[0]` field
+- Kept original 3 charts (top artists, genre doughnut, top by plays) untouched
+- Empty-data fallback preserved across all 3 new charts
 
 ### 2026-04-05 — Add time-based SoundCloud charts to /analysis
 Completed 2026-04-05.

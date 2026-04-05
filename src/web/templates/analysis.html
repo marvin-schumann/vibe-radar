@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 
-    <!-- Chart.js -->
+    <!-- Chart.js + matrix plugin for calendar heatmap -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js"></script>
 
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -373,26 +374,26 @@
         </div>
 
         <div id="timeChartsGrid" class="charts-grid fade-in" style="animation-delay: 0.3s;">
-            <!-- Chart 4: Cumulative liked tracks over time -->
+            <!-- Chart 4: Bump chart — top 10 artists rank over time -->
             <div class="chart-card full-width">
-                <div class="card-title">Cumulative Liked Tracks Over Time</div>
-                <div class="chart-wrapper" id="cumulativeChartWrapper" style="height: 300px;">
+                <div class="card-title">Top 10 Artists — Rank Over Time</div>
+                <div class="chart-wrapper" id="bumpChartWrapper" style="height: 380px;">
                     <div class="empty-msg">Loading...</div>
                 </div>
             </div>
 
-            <!-- Chart 5: Artist discovery timeline -->
-            <div class="chart-card">
-                <div class="card-title">New Artists Discovered per Month</div>
-                <div class="chart-wrapper" id="discoveryChartWrapper" style="height: 280px;">
+            <!-- Chart 5: Calendar heatmap (GitHub-style) -->
+            <div class="chart-card full-width">
+                <div class="card-title">Listening Activity — Calendar Heatmap</div>
+                <div class="chart-wrapper" id="calendarChartWrapper" style="height: 200px;">
                     <div class="empty-msg">Loading...</div>
                 </div>
             </div>
 
-            <!-- Chart 6: Activity heatmap (likes per day) -->
-            <div class="chart-card">
-                <div class="card-title">Listening Activity (Likes per Day)</div>
-                <div class="chart-wrapper" id="activityChartWrapper" style="height: 280px;">
+            <!-- Chart 6: Stacked area by genre over time -->
+            <div class="chart-card full-width">
+                <div class="card-title">Taste Evolution — Cumulative Likes by Genre</div>
+                <div class="chart-wrapper" id="genreAreaChartWrapper" style="height: 340px;">
                     <div class="empty-msg">Loading...</div>
                 </div>
             </div>
@@ -456,148 +457,163 @@
 
             noDataEl.style.display = 'none';
             gridEl.style.display = '';
-            renderCumulativeChart(data.cumulative_likes);
-            renderDiscoveryChart(data.discovery_timeline);
-            renderActivityChart(data.activity_heatmap);
+            renderBumpChart(data.bump_chart);
+            renderCalendarHeatmap(data.calendar_heatmap);
+            renderGenreAreaChart(data.genre_area);
         }
 
-        // Chart 4: Cumulative liked tracks (line chart)
-        function renderCumulativeChart(points) {
-            const wrapper = document.getElementById('cumulativeChartWrapper');
-            if (!points || points.length === 0) {
+        // Bump chart color palette — top 3 get brighter, thicker lines
+        const bumpPalette = [
+            '#c4f135', '#ff5c35', '#4d9fff', '#ff9f43', '#a29bfe',
+            '#00cec9', '#fd79a8', '#ffeaa7', '#55efc4', '#dfe6e9',
+        ];
+
+        // Chart 4: Bump chart — top 10 artists' rank over time
+        function renderBumpChart(bumpData) {
+            const wrapper = document.getElementById('bumpChartWrapper');
+            if (!bumpData || !bumpData.months || bumpData.months.length === 0) {
                 wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
                 return;
             }
 
-            wrapper.innerHTML = '<canvas id="cumulativeChart"></canvas>';
-            const ctx = document.getElementById('cumulativeChart').getContext('2d');
+            wrapper.innerHTML = '<canvas id="bumpChart"></canvas>';
+            const ctx = document.getElementById('bumpChart').getContext('2d');
+
+            const datasets = bumpData.artists.map((artist, i) => ({
+                label: artist.name,
+                data: artist.ranks,
+                borderColor: bumpPalette[i % bumpPalette.length],
+                backgroundColor: bumpPalette[i % bumpPalette.length],
+                borderWidth: i < 3 ? 3 : 1.5,
+                pointRadius: i < 3 ? 4 : 2,
+                pointHoverRadius: 6,
+                pointBackgroundColor: bumpPalette[i % bumpPalette.length],
+                tension: 0.35,
+                fill: false,
+            }));
 
             new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: points.map(p => p.date),
-                    datasets: [{
-                        label: 'Total Likes',
-                        data: points.map(p => p.total),
-                        borderColor: '#c4f135',
-                        backgroundColor: 'rgba(196, 241, 53, 0.08)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: points.length > 60 ? 0 : 2,
-                        pointHoverRadius: 4,
-                        pointBackgroundColor: '#c4f135',
-                    }]
-                },
+                data: { labels: bumpData.months, datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
-                        legend: { display: false },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyleWidth: 10,
+                                font: { size: 10, family: "'Space Mono', monospace" },
+                                color: '#6a6a6a',
+                            }
+                        },
                         tooltip: {
                             ...tooltipStyle,
-                            callbacks: { label: ctx => `${ctx.raw} total likes` }
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: #${ctx.raw}`
+                            }
                         }
                     },
                     scales: {
                         x: {
                             grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-                            ticks: {
-                                font: { size: 10 }, color: '#6a6a6a',
-                                maxTicksLimit: 12,
-                                maxRotation: 45,
-                            }
+                            ticks: { font: { size: 10 }, color: '#6a6a6a', maxRotation: 45 }
                         },
                         y: {
-                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-                            ticks: { font: { size: 11 }, color: '#6a6a6a' },
-                            beginAtZero: true,
+                            reverse: true,
+                            min: 1,
+                            max: 10,
+                            grid: { color: 'rgba(255,255,255,0.06)', drawBorder: false },
+                            ticks: {
+                                font: { size: 11 }, color: '#6a6a6a',
+                                stepSize: 1,
+                                callback: val => `#${val}`
+                            },
+                            title: {
+                                display: true,
+                                text: 'RANK',
+                                color: '#6a6a6a',
+                                font: { size: 10, family: "'Space Mono', monospace", weight: '700' },
+                                padding: { bottom: 4 },
+                            }
                         }
                     }
                 }
             });
         }
 
-        // Chart 5: Discovery timeline (bar chart — new artists per month)
-        function renderDiscoveryChart(months) {
-            const wrapper = document.getElementById('discoveryChartWrapper');
-            if (!months || months.length === 0) {
-                wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
-                return;
-            }
-
-            wrapper.innerHTML = '<canvas id="discoveryChart"></canvas>';
-            const ctx = document.getElementById('discoveryChart').getContext('2d');
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months.map(m => m.month),
-                    datasets: [{
-                        label: 'New Artists',
-                        data: months.map(m => m.count),
-                        backgroundColor: 'rgba(255, 92, 53, 0.6)',
-                        borderColor: '#ff5c35',
-                        borderWidth: 1,
-                        borderRadius: 3,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            ...tooltipStyle,
-                            callbacks: { label: ctx => `${ctx.raw} new artist${ctx.raw !== 1 ? 's' : ''}` }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                font: { size: 10 }, color: '#6a6a6a',
-                                maxRotation: 45,
-                            }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-                            ticks: { font: { size: 11 }, color: '#6a6a6a', stepSize: 1 },
-                            beginAtZero: true,
-                        }
-                    }
-                }
-            });
-        }
-
-        // Chart 6: Activity heatmap as bar chart (likes per day)
-        function renderActivityChart(days) {
-            const wrapper = document.getElementById('activityChartWrapper');
+        // Chart 5: GitHub-style calendar heatmap
+        function renderCalendarHeatmap(days) {
+            const wrapper = document.getElementById('calendarChartWrapper');
             if (!days || days.length === 0) {
                 wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
                 return;
             }
 
-            wrapper.innerHTML = '<canvas id="activityChart"></canvas>';
-            const ctx = document.getElementById('activityChart').getContext('2d');
+            wrapper.innerHTML = '<canvas id="calendarChart"></canvas>';
+            const ctx = document.getElementById('calendarChart').getContext('2d');
 
-            // Color intensity based on count
-            const maxCount = Math.max(...days.map(d => d.count));
+            // Build lookup: date string → count
+            const countMap = {};
+            let maxCount = 0;
+            days.forEach(d => {
+                countMap[d.date] = d.count;
+                if (d.count > maxCount) maxCount = d.count;
+            });
+
+            // Determine date range: from first day's Monday to last day's Sunday
+            const firstDate = new Date(days[0].date + 'T00:00:00');
+            const lastDate = new Date(days[days.length - 1].date + 'T00:00:00');
+
+            // Walk back to Monday of first week
+            const startDate = new Date(firstDate);
+            startDate.setDate(startDate.getDate() - ((startDate.getDay() + 6) % 7));
+
+            // Walk forward to Sunday of last week
+            const endDate = new Date(lastDate);
+            const daysToSunday = (7 - endDate.getDay()) % 7;
+            endDate.setDate(endDate.getDate() + daysToSunday);
+
+            // Build data points: {x: week_index, y: day_of_week (0=Mon), v: count}
+            const matrixData = [];
+            const cursor = new Date(startDate);
+            const weekStart = new Date(startDate);
+
+            while (cursor <= endDate) {
+                const dateStr = cursor.toISOString().slice(0, 10);
+                const weekIdx = Math.floor((cursor - weekStart) / (7 * 86400000));
+                const dayOfWeek = (cursor.getDay() + 6) % 7; // Mon=0, Sun=6
+
+                matrixData.push({
+                    x: weekIdx,
+                    y: dayOfWeek,
+                    v: countMap[dateStr] || 0,
+                    d: dateStr,
+                });
+                cursor.setDate(cursor.getDate() + 1);
+            }
+
+            const totalWeeks = Math.ceil((endDate - weekStart) / (7 * 86400000)) + 1;
 
             new Chart(ctx, {
-                type: 'bar',
+                type: 'matrix',
                 data: {
-                    labels: days.map(d => d.date),
                     datasets: [{
-                        label: 'Likes',
-                        data: days.map(d => d.count),
-                        backgroundColor: days.map(d => {
-                            const intensity = d.count / Math.max(maxCount, 1);
-                            const alpha = 0.2 + intensity * 0.7;
+                        data: matrixData,
+                        backgroundColor: ctx => {
+                            const v = ctx.raw ? ctx.raw.v : 0;
+                            if (v === 0) return 'rgba(255,255,255,0.03)';
+                            const intensity = v / Math.max(maxCount, 1);
+                            const alpha = 0.2 + intensity * 0.8;
                             return `rgba(196, 241, 53, ${alpha})`;
-                        }),
-                        borderColor: 'transparent',
-                        borderRadius: 2,
+                        },
+                        borderColor: 'rgba(0,0,0,0.4)',
+                        borderWidth: 1,
+                        width: ({chart}) => (chart.chartArea || {width: 600}).width / totalWeeks - 1,
+                        height: ({chart}) => (chart.chartArea || {height: 140}).height / 7 - 1,
                     }]
                 },
                 options: {
@@ -607,22 +623,123 @@
                         legend: { display: false },
                         tooltip: {
                             ...tooltipStyle,
-                            callbacks: { label: ctx => `${ctx.raw} like${ctx.raw !== 1 ? 's' : ''}` }
+                            callbacks: {
+                                title: ctx => ctx[0].raw.d,
+                                label: ctx => `${ctx.raw.v} like${ctx.raw.v !== 1 ? 's' : ''}`
+                            }
                         }
                     },
                     scales: {
                         x: {
+                            type: 'linear',
+                            position: 'top',
+                            display: true,
+                            offset: true,
+                            min: -0.5,
+                            max: totalWeeks - 0.5,
                             grid: { display: false },
                             ticks: {
-                                font: { size: 10 }, color: '#6a6a6a',
-                                maxTicksLimit: 15,
-                                maxRotation: 45,
+                                font: { size: 9 }, color: '#6a6a6a',
+                                stepSize: 4,
+                                callback: function(val) {
+                                    // Show month label at week boundaries
+                                    const d = new Date(startDate);
+                                    d.setDate(d.getDate() + val * 7);
+                                    return d.toLocaleString('en', { month: 'short' });
+                                }
                             }
                         },
                         y: {
+                            type: 'linear',
+                            offset: true,
+                            reverse: false,
+                            min: -0.5,
+                            max: 6.5,
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 9 }, color: '#6a6a6a',
+                                stepSize: 1,
+                                callback: val => ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][val] || ''
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Genre area chart palette
+        const genreAreaPalette = [
+            '#c4f135', '#ff5c35', '#4d9fff', '#ff9f43', '#a29bfe', '#00cec9', '#fd79a8',
+        ];
+
+        // Chart 6: Stacked area — cumulative likes by genre
+        function renderGenreAreaChart(genreData) {
+            const wrapper = document.getElementById('genreAreaChartWrapper');
+            if (!genreData || !genreData.months || genreData.months.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="genreAreaChart"></canvas>';
+            const ctx = document.getElementById('genreAreaChart').getContext('2d');
+
+            const datasets = genreData.genres.map((g, i) => {
+                const baseColor = genreAreaPalette[i % genreAreaPalette.length];
+                return {
+                    label: capitalise(g.genre),
+                    data: g.data,
+                    borderColor: baseColor,
+                    backgroundColor: baseColor + '30',
+                    borderWidth: 1.5,
+                    fill: 'stack',
+                    tension: 0.3,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                };
+            });
+
+            new Chart(ctx, {
+                type: 'line',
+                data: { labels: genreData.months, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyleWidth: 10,
+                                font: { size: 10, family: "'Space Mono', monospace" },
+                                color: '#6a6a6a',
+                            }
+                        },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.raw} likes`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
                             grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-                            ticks: { font: { size: 11 }, color: '#6a6a6a', stepSize: 1 },
+                            ticks: { font: { size: 10 }, color: '#6a6a6a', maxRotation: 45 }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a' },
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'CUMULATIVE LIKES',
+                                color: '#6a6a6a',
+                                font: { size: 10, family: "'Space Mono', monospace", weight: '700' },
+                                padding: { bottom: 4 },
+                            }
                         }
                     }
                 }
