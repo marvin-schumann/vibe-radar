@@ -971,6 +971,25 @@
                     <div id="statsContainer"></div>
                 </div>
             </div>
+
+            <!-- Underground Depth Score card -->
+            <div class="depth-card" id="depthCard" style="display:none; margin-top:1px; border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem 2rem; background:var(--bg-card);">
+                <div style="display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+                    <div>
+                        <div class="card-title" style="margin-bottom:0.5rem;">Underground Depth</div>
+                        <div style="display:flex; align-items:baseline; gap:0.75rem;">
+                            <span id="depthScore" style="font-family:var(--font-display);font-size:4rem;line-height:1;color:var(--lime);letter-spacing:0.02em;">—</span>
+                            <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);letter-spacing:0.08em;">/ 100</span>
+                        </div>
+                        <div id="depthLabel" style="font-family:var(--font-display);font-size:1.2rem;letter-spacing:0.08em;color:var(--text);margin-top:0.4rem;"></div>
+                        <div id="depthBlurb" style="font-family:var(--font-body);font-size:0.78rem;color:var(--text-dim);margin-top:0.3rem;max-width:380px;line-height:1.5;"></div>
+                    </div>
+                    <div style="flex:1; min-width:280px;">
+                        <div class="card-title" style="margin-bottom:0.75rem;">Your Deepest Cuts</div>
+                        <div id="deepestArtists" style="display:flex; flex-direction:column; gap:0.4rem;"></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Artists Section (hidden by default, toggled via header button) -->
@@ -1139,6 +1158,38 @@
                 seen.add(m.event.url || (m.event.name + '|' + m.event.date));
             });
             return seen.size;
+        }
+
+        // ============================================================
+        // Underground Depth Score
+        // ============================================================
+        async function loadDepthScore() {
+            try {
+                const r = await fetch('/api/depth-score');
+                const d = await r.json();
+                if (d.score === null || d.score === undefined) {
+                    document.getElementById('depthCard').style.display = 'none';
+                    return;
+                }
+                document.getElementById('depthCard').style.display = 'block';
+                document.getElementById('depthScore').textContent = d.score;
+                document.getElementById('depthLabel').textContent = d.label;
+                document.getElementById('depthBlurb').textContent = d.blurb;
+
+                const deepest = document.getElementById('deepestArtists');
+                deepest.innerHTML = (d.deepest_artists || []).map(a => {
+                    const img = a.image_url
+                        ? `<img src="${escapeHtml(a.image_url)}" alt="" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid var(--border-bright);flex-shrink:0;">`
+                        : `<div style="width:24px;height:24px;border-radius:50%;background:var(--border);flex-shrink:0;"></div>`;
+                    return `
+                        <div style="display:flex;align-items:center;gap:0.6rem;">
+                            ${img}
+                            <div style="font-family:var(--font-body);font-size:0.78rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(a.name)}</div>
+                            <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.04em;">pop ${a.popularity}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (e) { /* ignore */ }
         }
 
         // ============================================================
@@ -1681,7 +1732,7 @@
                         showOverlay('Done!', 'Your matches are ready.', 100);
                         setTimeout(async () => {
                             hideOverlay();
-                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists()]);
+                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore()]);
                         }, 800);
                     } else if (!d.running && !d.last_refresh) {
                         // Nothing running and no data — stop polling, show empty state
@@ -1730,7 +1781,7 @@
                 }
             } catch (e) { /* ignore, just load normally */ }
 
-            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists()]);
+            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore()]);
             checkNps();
         });
 

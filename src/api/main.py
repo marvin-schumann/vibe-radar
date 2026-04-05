@@ -551,6 +551,58 @@ async def debug_events(user=Depends(get_session_user)) -> JSONResponse:
     })
 
 
+@app.get("/api/depth-score")
+async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
+    """Compute the Underground Depth Score from artist popularity data.
+
+    Formula: 100 - avg(popularity). Lower Spotify popularity = more
+    underground = higher depth score.
+    """
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    pops = [a["popularity"] for a in artists if a.get("popularity") is not None]
+    if not pops:
+        return JSONResponse(content={"score": None, "sample_size": 0})
+
+    avg_pop = sum(pops) / len(pops)
+    score = round(100 - avg_pop)
+
+    # Descriptive label
+    if score >= 80:
+        label = "Deep underground"
+        blurb = "Your taste lives in the shadows. Most people have never heard your artists."
+    elif score >= 65:
+        label = "Underground"
+        blurb = "You're ahead of the curve. Your taste is credible but not obscure."
+    elif score >= 50:
+        label = "Emerging"
+        blurb = "You mix underground with familiar. Good balance."
+    elif score >= 35:
+        label = "Mainstream-leaning"
+        blurb = "You know the hits but keep an eye on what's next."
+    else:
+        label = "Mainstream"
+        blurb = "Your taste is right in the cultural center."
+
+    # Top 5 most underground artists
+    underground_artists = sorted(
+        [a for a in artists if a.get("popularity") is not None],
+        key=lambda a: a["popularity"],
+    )[:5]
+
+    return JSONResponse(content={
+        "score": score,
+        "label": label,
+        "blurb": blurb,
+        "avg_popularity": round(avg_pop, 1),
+        "sample_size": len(pops),
+        "deepest_artists": [
+            {"name": a["name"], "popularity": a["popularity"], "image_url": a.get("image_url")}
+            for a in underground_artists
+        ],
+    })
+
+
 @app.get("/api/artists")
 async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
     """Return the collected artist list with full metadata from the last pipeline run."""
