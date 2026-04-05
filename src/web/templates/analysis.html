@@ -268,6 +268,17 @@
             padding: 3rem 1rem;
         }
 
+        .time-no-data {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border: 1px dashed var(--border-bright);
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+        }
+
         /* Animations */
         @keyframes fade-up {
             from { opacity: 0; transform: translateY(12px); }
@@ -353,6 +364,39 @@
                 </div>
             </div>
         </div>
+
+        <!-- Over Time section -->
+        <h2 class="section-title fade-in" style="margin-top: 1rem;"><span class="accent">//</span> Over Time</h2>
+
+        <div id="timeNoData" class="time-no-data fade-in" style="display:none;">
+            No historical data yet — refresh your SoundCloud data to populate these charts.
+        </div>
+
+        <div id="timeChartsGrid" class="charts-grid fade-in" style="animation-delay: 0.3s;">
+            <!-- Chart 4: Cumulative liked tracks over time -->
+            <div class="chart-card full-width">
+                <div class="card-title">Cumulative Liked Tracks Over Time</div>
+                <div class="chart-wrapper" id="cumulativeChartWrapper" style="height: 300px;">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Chart 5: Artist discovery timeline -->
+            <div class="chart-card">
+                <div class="card-title">New Artists Discovered per Month</div>
+                <div class="chart-wrapper" id="discoveryChartWrapper" style="height: 280px;">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Chart 6: Activity heatmap (likes per day) -->
+            <div class="chart-card">
+                <div class="card-title">Listening Activity (Likes per Day)</div>
+                <div class="chart-wrapper" id="activityChartWrapper" style="height: 280px;">
+                    <div class="empty-msg">Loading...</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -391,12 +435,198 @@
                 renderTrackChart(data.top_artists_by_tracks);
                 renderGenreChart(data.genre_distribution);
                 renderPlayChart(data.top_artists_by_play_count);
+                renderTimeCharts(data);
             } catch (err) {
                 console.error('Failed to load analysis:', err);
                 document.querySelectorAll('.empty-msg').forEach(el => {
                     el.textContent = 'No data available. Run a refresh on the dashboard first.';
                 });
             }
+        }
+
+        function renderTimeCharts(data) {
+            const noDataEl = document.getElementById('timeNoData');
+            const gridEl = document.getElementById('timeChartsGrid');
+
+            if (!data.has_time_data) {
+                noDataEl.style.display = 'block';
+                gridEl.style.display = 'none';
+                return;
+            }
+
+            noDataEl.style.display = 'none';
+            gridEl.style.display = '';
+            renderCumulativeChart(data.cumulative_likes);
+            renderDiscoveryChart(data.discovery_timeline);
+            renderActivityChart(data.activity_heatmap);
+        }
+
+        // Chart 4: Cumulative liked tracks (line chart)
+        function renderCumulativeChart(points) {
+            const wrapper = document.getElementById('cumulativeChartWrapper');
+            if (!points || points.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="cumulativeChart"></canvas>';
+            const ctx = document.getElementById('cumulativeChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: points.map(p => p.date),
+                    datasets: [{
+                        label: 'Total Likes',
+                        data: points.map(p => p.total),
+                        borderColor: '#c4f135',
+                        backgroundColor: 'rgba(196, 241, 53, 0.08)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: points.length > 60 ? 0 : 2,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: '#c4f135',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: { label: ctx => `${ctx.raw} total likes` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: {
+                                font: { size: 10 }, color: '#6a6a6a',
+                                maxTicksLimit: 12,
+                                maxRotation: 45,
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a' },
+                            beginAtZero: true,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 5: Discovery timeline (bar chart — new artists per month)
+        function renderDiscoveryChart(months) {
+            const wrapper = document.getElementById('discoveryChartWrapper');
+            if (!months || months.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="discoveryChart"></canvas>';
+            const ctx = document.getElementById('discoveryChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months.map(m => m.month),
+                    datasets: [{
+                        label: 'New Artists',
+                        data: months.map(m => m.count),
+                        backgroundColor: 'rgba(255, 92, 53, 0.6)',
+                        borderColor: '#ff5c35',
+                        borderWidth: 1,
+                        borderRadius: 3,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: { label: ctx => `${ctx.raw} new artist${ctx.raw !== 1 ? 's' : ''}` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 10 }, color: '#6a6a6a',
+                                maxRotation: 45,
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a', stepSize: 1 },
+                            beginAtZero: true,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 6: Activity heatmap as bar chart (likes per day)
+        function renderActivityChart(days) {
+            const wrapper = document.getElementById('activityChartWrapper');
+            if (!days || days.length === 0) {
+                wrapper.innerHTML = '<div class="empty-msg">No data.</div>';
+                return;
+            }
+
+            wrapper.innerHTML = '<canvas id="activityChart"></canvas>';
+            const ctx = document.getElementById('activityChart').getContext('2d');
+
+            // Color intensity based on count
+            const maxCount = Math.max(...days.map(d => d.count));
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: days.map(d => d.date),
+                    datasets: [{
+                        label: 'Likes',
+                        data: days.map(d => d.count),
+                        backgroundColor: days.map(d => {
+                            const intensity = d.count / Math.max(maxCount, 1);
+                            const alpha = 0.2 + intensity * 0.7;
+                            return `rgba(196, 241, 53, ${alpha})`;
+                        }),
+                        borderColor: 'transparent',
+                        borderRadius: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            ...tooltipStyle,
+                            callbacks: { label: ctx => `${ctx.raw} like${ctx.raw !== 1 ? 's' : ''}` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 10 }, color: '#6a6a6a',
+                                maxTicksLimit: 15,
+                                maxRotation: 45,
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                            ticks: { font: { size: 11 }, color: '#6a6a6a', stepSize: 1 },
+                            beginAtZero: true,
+                        }
+                    }
+                }
+            });
         }
 
         function renderStats(data) {

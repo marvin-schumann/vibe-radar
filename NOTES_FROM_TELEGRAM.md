@@ -9,6 +9,14 @@
 
 ## Done
 
+### 2026-04-05 — Add time-based SoundCloud charts to /analysis
+Completed 2026-04-05.
+- Fixed SoundCloud collector to capture `created_at` timestamp from liked-track items (was being discarded)
+- Added `liked_events` list of `(normalized_name, created_at)` tuples to collector, persisted in cache
+- Added 3 "Over Time" charts below existing 3: cumulative likes (line), artist discovery timeline (bar), activity heatmap (bar with intensity)
+- Graceful empty-data handling: shows "refresh your SoundCloud data" message when no timestamp data available
+- All analytics in `src/analytics/soundcloud.py`, no new modules
+
 ### 2026-04-05 — UI coherence cleanup (header/nav across tabs + matches counter)
 Completed 2026-04-05.
 - Unified header layout: both pages now 2-column (logo left, nav right), logo always links to /

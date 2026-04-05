@@ -58,6 +58,7 @@ class SoundCloudCollector:
         self._client_id: str | None = None
         self._user_id: int | None = None
         self.track_counts: dict[str, int] = {}  # normalized_name → liked track count
+        self.liked_events: list[tuple[str, str]] = []  # (normalized_name, created_at ISO string)
 
     # ------------------------------------------------------------------
     # Public API
@@ -193,6 +194,10 @@ class SoundCloudCollector:
             artist = self._artist_from_track(track)
             if artist:
                 artists.append(artist)
+                # Capture the liked-at timestamp from the outer item
+                created_at = item.get("created_at")
+                if created_at and artist.normalized_name:
+                    self.liked_events.append((artist.normalized_name, created_at))
         return artists
 
     async def _fetch_repost_artists(self, client: httpx.AsyncClient) -> list[Artist]:

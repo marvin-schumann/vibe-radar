@@ -228,6 +228,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
                 cache["sc_track_counts"] = soundcloud.track_counts
+                cache["sc_liked_events"] = soundcloud.liked_events
                 _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists for user {}", len(sc_artists), user_id)
             except Exception as exc:
@@ -251,6 +252,7 @@ async def _run_pipeline(user_id: str | None = None) -> None:
                 sc_artists = await soundcloud.collect_artists()
                 all_artists.extend(sc_artists)
                 cache["sc_track_counts"] = soundcloud.track_counts
+                cache["sc_liked_events"] = soundcloud.liked_events
                 _set_status(cache, "SoundCloud done", f"{len(sc_artists):,} artists loaded", 60)
                 logger.info("SoundCloud: {} artists collected", len(sc_artists))
         except Exception as exc:
@@ -857,8 +859,9 @@ async def get_soundcloud_analysis(user=Depends(get_session_user)) -> JSONRespons
     cache = _user_cache(user["id"]) if user else _cache
     artist_objects = cache.get("artist_objects", [])
     sc_track_counts = cache.get("sc_track_counts", {})
+    sc_liked_events = cache.get("sc_liked_events", [])
 
-    data = aggregate_soundcloud_data(artist_objects, sc_track_counts)
+    data = aggregate_soundcloud_data(artist_objects, sc_track_counts, sc_liked_events)
     return JSONResponse(content=data)
 
 
