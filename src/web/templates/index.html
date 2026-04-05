@@ -109,6 +109,13 @@
             margin-bottom: 0;
         }
 
+        .logo-container a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
         /* Radar icon — smaller for horizontal header */
         .radar-icon {
             position: relative;
@@ -748,18 +755,18 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             padding: 0.25rem 0.55rem;
-            border: none;
+            border: 1px solid var(--border-bright);
             border-radius: 2px;
             background: transparent;
             color: var(--text-dim);
             cursor: pointer;
             transition: all 0.15s;
+            text-decoration: none;
         }
 
-        .gp-btn:hover { color: var(--text); }
-        .gp-btn.active { background: var(--lime); color: #0c0c0c; }
+        .gp-btn:hover { color: var(--text); border-color: var(--lime); }
+        .gp-btn.active { background: var(--lime); color: #0c0c0c; border-color: var(--lime); }
 
-        #toggleArtistsBtn { background: transparent; border: 1px solid var(--border-bright); border-radius: 3px; }
         #toggleArtistsBtn.active { background: var(--lime); color: #0c0c0c; border-color: var(--lime); }
 
         /* ============================================================
@@ -908,14 +915,16 @@
     ================================================================ -->
     <header>
         <div class="logo-container">
-            <div class="radar-icon">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="dot"></div>
-                <div class="sweep"></div>
-            </div>
-            <h1>Frequenz</h1>
+            <a href="/">
+                <div class="radar-icon">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="dot"></div>
+                    <div class="sweep"></div>
+                </div>
+                <h1>Frequenz</h1>
+            </a>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
             <!-- Global platform filter -->
@@ -927,11 +936,8 @@
             <span style="color:var(--border-bright);margin:0 0.3rem;">|</span>
             <!-- Artists toggle -->
             <button class="gp-btn" id="toggleArtistsBtn" onclick="toggleArtistsSection()">Artists</button>
-            <a href="/analysis" class="gp-btn" style="text-decoration:none;">Analysis</a>
-        </div>
-        <div class="status-bar">
-            <div class="status-dot" id="statusDot"></div>
-            <span id="statusText">Loading...</span>
+            <span class="gp-btn active">Dashboard</span>
+            <a href="/analysis" class="gp-btn">Analysis</a>
         </div>
     </header>
 
@@ -939,6 +945,12 @@
          MAIN CONTENT
          ================================================================ -->
     <div class="container">
+
+        <!-- Status bar -->
+        <div class="status-bar" style="margin-bottom: 1.5rem;">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Loading...</span>
+        </div>
 
         <!-- Taste Profile Section -->
         <section class="taste-section">
@@ -1134,13 +1146,11 @@
                 updateCounts();
                 renderEvents(currentFilter);
 
-                const total = allMatches.length;
-                const exact = allMatches.filter(m => m.match_type === 'exact').length;
-                const vibe = allMatches.filter(m => m.match_type === 'vibe').length;
+                const total = countUniqueEvents(allMatches);
 
                 if (data.last_refresh) {
                     const d = new Date(data.last_refresh);
-                    updateStatus(`${total} matches found \u00b7 Last refresh: ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
+                    updateStatus(`${total} matched event${total !== 1 ? 's' : ''} found \u00b7 Last refresh: ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
                 } else {
                     updateStatus('No data yet \u2014 hit refresh to start', false);
                 }

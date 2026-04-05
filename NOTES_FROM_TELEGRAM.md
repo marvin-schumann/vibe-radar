@@ -5,9 +5,17 @@
 
 ## Pending
 
-_(empty)_
+(empty)
 
 ## Done
+
+### 2026-04-05 — UI coherence cleanup (header/nav across tabs + matches counter)
+Completed 2026-04-05.
+- Unified header layout: both pages now 2-column (logo left, nav right), logo always links to /
+- Moved status bar out of header into content area, eliminating the "half button" layout
+- Matched `.gp-btn` styling (borders, hover, active states) between both pages
+- Fixed matches counter: status bar now uses `countUniqueEvents()` (unique events, not per-artist match entries)
+- Added "Dashboard" active indicator to dashboard nav for symmetry with analysis page
 
 ### 2026-04-05 — Add SoundCloud Analysis tab (3 charts)
 Completed autonomously via Telegram on 2026-04-05.
