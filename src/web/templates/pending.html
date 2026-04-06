@@ -4,65 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frequenz — On the Waitlist</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0815; --card: #14102a; --border: #2a2050;
-      --cyan: #00f0ff; --magenta: #ff00aa; --text: #e8e4f0; --muted: #8b85a0;
+      --bg: #0c0c0c; --card: #111111; --border: #1e1e1e; --border-bright: #2e2e2e;
+      --lime: #c4f135; --orange: #ff5c35;
+      --text: #ede8dd; --text-dim: #6a6a6a;
+      --font-display: 'Bebas Neue', 'Impact', sans-serif;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+      --radius: 6px;
     }
     body {
-      background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text); font-family: var(--font-body);
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
     }
     .card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 48px 40px; max-width: 460px; width: 100%; text-align: center;
+      border-radius: var(--radius); padding: 48px 40px; max-width: 460px; width: 100%; text-align: center;
     }
     .pulse {
       width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(0,240,255,0.1); border: 2px solid var(--cyan);
+      background: rgba(196,241,53,0.08); border: 2px solid var(--lime);
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 28px; font-size: 28px;
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0,240,255,0.3); }
-      50% { box-shadow: 0 0 0 16px rgba(0,240,255,0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,241,53,0.25); }
+      50% { box-shadow: 0 0 0 16px rgba(196,241,53,0); }
     }
     h1 {
-      font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700;
-      background: linear-gradient(90deg, var(--cyan), var(--magenta));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-family: var(--font-display); font-size: 2rem; font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--lime);
       margin-bottom: 12px;
     }
-    p { color: var(--muted); line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem; }
-    .email { color: var(--cyan); }
+    p { color: var(--text-dim); line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem; }
+    .email { color: var(--lime); }
     .founding {
       margin-top: 28px; padding: 20px 24px;
-      border: 1px solid rgba(0,240,255,0.2); border-radius: 12px;
-      background: rgba(0,240,255,0.04);
+      border: 1px solid rgba(196,241,53,0.15); border-radius: var(--radius);
+      background: rgba(196,241,53,0.04);
     }
     .founding p { font-size: 0.85rem; margin-bottom: 12px; color: var(--text); }
     .founding a {
       display: inline-block; padding: 10px 22px;
-      background: linear-gradient(90deg, var(--cyan), var(--magenta));
-      color: #0a0815; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      background: var(--lime);
+      color: var(--bg); border-radius: var(--radius);
+      font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
       text-decoration: none; transition: opacity 0.2s;
     }
     .founding a:hover { opacity: 0.85; }
     .logout {
       display: inline-block; margin-top: 16px; padding: 10px 24px;
-      border: 1px solid var(--border); border-radius: 8px; color: var(--muted);
-      text-decoration: none; font-size: 0.85rem;
+      border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-dim);
+      text-decoration: none; font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
       transition: border-color 0.2s, color 0.2s;
     }
-    .logout:hover { border-color: var(--muted); color: var(--text); }
+    .logout:hover { border-color: var(--border-bright); color: var(--text); }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="pulse">⏳</div>
+    <div class="pulse">&#9203;</div>
     <h1>You're on the list</h1>
     <p>
       <span class="email">{{ email }}</span> is registered and waiting for early access.

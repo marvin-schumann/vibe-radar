@@ -1,4 +1,4 @@
-"""CLI runner for Vibe Radar -- find your artists playing in Madrid.
+"""CLI runner for Frequenz -- find your artists playing in Madrid.
 
 Usage:
     python -m scripts.run_match
@@ -273,12 +273,12 @@ def _check_config() -> bool:
 
 
 async def main() -> None:
-    """Run the full Vibe Radar pipeline."""
+    """Run the full Frequenz pipeline."""
 
     console.print(
         Panel(
             "[bold]Scanning your music taste and Madrid events...[/bold]",
-            title="[bold cyan]VIBE RADAR[/bold cyan]",
+            title="[bold cyan]FREQUENZ[/bold cyan]",
             subtitle=f"[dim]{settings.city}, next {settings.days_ahead} days[/dim]",
             border_style="cyan",
         )

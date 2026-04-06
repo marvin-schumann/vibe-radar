@@ -1,4 +1,4 @@
-# Vibe Radar — Project Status
+# Frequenz — Project Status
 
 > Last updated: 2026-03-24
 

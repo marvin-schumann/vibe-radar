@@ -1203,7 +1203,7 @@ async def export_pdf() -> Response:
     # Output
     pdf_bytes = pdf.output()
 
-    filename = f"vibe-radar-madrid-{datetime.now().strftime('%Y-%m-%d')}.pdf"
+    filename = f"frequenz-madrid-{datetime.now().strftime('%Y-%m-%d')}.pdf"
     return Response(
         content=bytes(pdf_bytes),
         media_type="application/pdf",

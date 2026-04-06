@@ -844,6 +844,162 @@
         .platform-dot.soundcloud { background: var(--orange); }
 
         /* ============================================================
+           NPS MODAL
+           ============================================================ */
+        .nps-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(12,12,12,0.92);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nps-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: var(--radius);
+            padding: 2rem 2.5rem;
+            max-width: 420px;
+            width: 90%;
+            position: relative;
+        }
+
+        .nps-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .nps-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--lime);
+            margin-bottom: 1rem;
+        }
+
+        .nps-question {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .nps-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nps-btn {
+            padding: 0.7rem 1rem;
+            background: rgba(196,241,53,0.06);
+            border: 1px solid rgba(196,241,53,0.2);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s;
+        }
+
+        .nps-btn:hover {
+            background: rgba(196,241,53,0.12);
+        }
+
+        /* ============================================================
+           PIPELINE PROGRESS OVERLAY
+           ============================================================ */
+        .pipeline-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(12,12,12,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .pipeline-content {
+            text-align: center;
+            max-width: 360px;
+            padding: 2rem;
+        }
+
+        .pipeline-radar {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .pipeline-radar svg {
+            width: 72px;
+            height: 72px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .pipeline-radar .sweep-layer {
+            animation: radar-sweep 2s linear infinite;
+        }
+
+        .pipeline-step {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: 0.06em;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+
+        .pipeline-detail {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.04em;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            min-height: 1.2em;
+        }
+
+        .pipeline-track {
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            height: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .pipeline-bar {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--lime);
+            transition: width 0.6s ease;
+            width: 5%;
+        }
+
+        .pipeline-percent {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            color: var(--text-faint);
+            margin-top: 0.4rem;
+            text-align: right;
+        }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 640px) {
@@ -861,15 +1017,15 @@
     <!-- ================================================================
          NPS MODAL
     ================================================================ -->
-    <div id="npsModal" style="display:none; position:fixed; inset:0; background:rgba(12,12,12,0.92); backdrop-filter:blur(8px); z-index:999; align-items:center; justify-content:center;">
-        <div style="background:#111; border:1px solid #2a2a2a; border-radius:8px; padding:2rem 2.5rem; max-width:420px; width:90%; position:relative;">
-            <button onclick="document.getElementById('npsModal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#666;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
-            <p style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:#c4f135;margin-bottom:1rem;">Quick question</p>
-            <p style="font-size:0.95rem;font-weight:500;color:#ede8dd;margin-bottom:1.5rem;line-height:1.5;">How would you feel if you could no longer use Frequenz?</p>
-            <div style="display:flex;flex-direction:column;gap:0.5rem;" id="npsButtons">
-                <button onclick="submitNps('very_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Very disappointed</button>
-                <button onclick="submitNps('somewhat_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Somewhat disappointed</button>
-                <button onclick="submitNps('not_disappointed')" style="padding:0.7rem 1rem;background:rgba(196,241,53,0.06);border:1px solid rgba(196,241,53,0.2);border-radius:4px;color:#ede8dd;font-size:0.88rem;cursor:pointer;text-align:left;transition:background 0.15s;" onmouseover="this.style.background='rgba(196,241,53,0.12)'" onmouseout="this.style.background='rgba(196,241,53,0.06)'">Not disappointed</button>
+    <div id="npsModal" class="nps-backdrop" style="display:none;">
+        <div class="nps-card">
+            <button class="nps-close" onclick="document.getElementById('npsModal').style.display='none'">&#10005;</button>
+            <p class="nps-label">Quick question</p>
+            <p class="nps-question">How would you feel if you could no longer use Frequenz?</p>
+            <div class="nps-options" id="npsButtons">
+                <button class="nps-btn" onclick="submitNps('very_disappointed')">Very disappointed</button>
+                <button class="nps-btn" onclick="submitNps('somewhat_disappointed')">Somewhat disappointed</button>
+                <button class="nps-btn" onclick="submitNps('not_disappointed')">Not disappointed</button>
             </div>
         </div>
     </div>
@@ -877,18 +1033,18 @@
     <!-- ================================================================
          PIPELINE PROGRESS OVERLAY
     ================================================================ -->
-    <div id="pipelineOverlay" style="display:none; position:fixed; inset:0; background:rgba(12,12,12,0.95); backdrop-filter:blur(10px); z-index:1000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:2rem;">
-        <div style="text-align:center; max-width:360px; padding:2rem;">
+    <div id="pipelineOverlay" class="pipeline-backdrop" style="display:none;">
+        <div class="pipeline-content">
             <!-- Animated radar -->
-            <div style="position:relative; width:72px; height:72px; margin:0 auto 1.5rem;">
-                <svg viewBox="0 0 80 80" style="width:72px;height:72px;position:absolute;top:0;left:0;">
+            <div class="pipeline-radar">
+                <svg viewBox="0 0 80 80">
                     <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(196,241,53,0.12)" stroke-width="1.5"/>
                     <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(196,241,53,0.10)" stroke-width="1.5"/>
                     <circle cx="40" cy="40" r="12" fill="none" stroke="rgba(196,241,53,0.08)" stroke-width="1.5"/>
                     <line x1="40" y1="40" x2="76" y2="40" stroke="rgba(196,241,53,0.5)" stroke-width="1.5" stroke-linecap="round"/>
                     <circle cx="40" cy="40" r="3" fill="#c4f135"/>
                 </svg>
-                <svg viewBox="0 0 80 80" style="width:72px;height:72px;position:absolute;top:0;left:0;animation:radar-sweep 2s linear infinite;">
+                <svg viewBox="0 0 80 80" class="sweep-layer">
                     <defs>
                         <radialGradient id="sweepGrad" cx="50%" cy="50%" r="50%">
                             <stop offset="0%" stop-color="#c4f135" stop-opacity="0.35"/>
@@ -899,14 +1055,14 @@
                 </svg>
             </div>
 
-            <div id="overlayStep" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.06em;color:#ede8dd; margin-bottom:0.4rem;">Connecting...</div>
-            <div id="overlayDetail" style="font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.04em;color:#6a6a6a; margin-bottom:1.5rem; min-height:1.2em;"></div>
+            <div id="overlayStep" class="pipeline-step">Connecting...</div>
+            <div id="overlayDetail" class="pipeline-detail"></div>
 
             <!-- Progress bar -->
-            <div style="background:rgba(255,255,255,0.06); border-radius:2px; height:3px; overflow:hidden; width:100%;">
-                <div id="overlayProgressBar" style="height:100%; border-radius:2px; background:#c4f135; transition:width 0.6s ease; width:5%;"></div>
+            <div class="pipeline-track">
+                <div id="overlayProgressBar" class="pipeline-bar"></div>
             </div>
-            <div id="overlayPercent" style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;color:#3a3a3a; margin-top:0.4rem; text-align:right;">5%</div>
+            <div id="overlayPercent" class="pipeline-percent">5%</div>
         </div>
     </div>
 

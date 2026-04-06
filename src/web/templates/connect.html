@@ -4,76 +4,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frequenz — Connect Music</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0815; --card: #14102a; --border: #2a2050;
-      --cyan: #00f0ff; --magenta: #ff00aa; --green: #00dc82;
-      --text: #e8e4f0; --muted: #8b85a0;
+      --bg: #0c0c0c; --card: #111111; --border: #1e1e1e; --border-bright: #2e2e2e;
+      --lime: #c4f135; --orange: #ff5c35; --green: #4ade80;
+      --text: #ede8dd; --text-dim: #6a6a6a;
+      --font-display: 'Bebas Neue', 'Impact', sans-serif;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+      --radius: 6px;
     }
     body {
-      background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text); font-family: var(--font-body);
       min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
     }
     .wrapper { width: 100%; max-width: 480px; }
     .logo {
-      font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700;
-      background: linear-gradient(90deg, var(--cyan), var(--magenta));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.06em;
+      color: var(--text);
       margin-bottom: 4px;
     }
-    .step { color: var(--muted); font-size: 0.85rem; margin-bottom: 28px; }
+    .step {
+      color: var(--text-dim); font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 28px;
+    }
     .card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 28px; margin-bottom: 16px;
+      border-radius: var(--radius); padding: 28px; margin-bottom: 16px;
     }
     .card-header {
       display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
     }
     .platform-icon {
-      width: 44px; height: 44px; border-radius: 10px;
+      width: 44px; height: 44px; border-radius: var(--radius);
       display: flex; align-items: center; justify-content: center; font-size: 22px;
       flex-shrink: 0;
     }
     .spotify-icon { background: rgba(29, 185, 84, 0.15); }
     .soundcloud-icon { background: rgba(255, 85, 0, 0.15); }
-    .card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; }
-    .card-desc { color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+    .card-title {
+      font-family: var(--font-mono); font-weight: 700; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .card-desc { color: var(--text-dim); font-size: 0.82rem; margin-top: 2px; }
+    .badge-required {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: rgba(255,85,0,0.15);
+      color: #ff5500;
+      padding: 2px 8px;
+      border-radius: var(--radius);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge-optional {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-dim);
+      padding: 2px 8px;
+      border-radius: var(--radius);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
     .connected-badge {
-      margin-left: auto; background: rgba(0, 220, 130, 0.1); border: 1px solid rgba(0,220,130,0.3);
-      color: var(--green); font-size: 0.75rem; padding: 3px 10px; border-radius: 20px;
-      font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+      margin-left: auto; background: rgba(196,241,53,0.08); border: 1px solid rgba(196,241,53,0.25);
+      color: var(--lime); font-size: 0.55rem; padding: 3px 10px; border-radius: var(--radius);
+      font-family: var(--font-mono); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     }
     .btn-spotify {
       display: block; width: 100%; padding: 12px;
-      background: #1DB954; border: none; border-radius: 8px;
-      color: #000; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
-      font-size: 0.9rem; cursor: pointer; text-decoration: none; text-align: center;
+      background: #1DB954; border: none; border-radius: var(--radius);
+      color: #000; font-family: var(--font-mono); font-weight: 700;
+      font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; text-align: center;
       transition: opacity 0.2s;
     }
     .btn-spotify:hover { opacity: 0.9; }
+    .btn-spotify.reconnect { background: #14532d; color: #4ade80; }
+    .btn-spotify.connect-dim { background: rgba(29,185,84,0.3); color: #1DB954; }
     .sc-form { display: flex; gap: 10px; }
     .sc-input {
-      flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-      padding: 11px 14px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 11px 14px; color: var(--text); font-family: var(--font-body); font-size: 0.9rem;
       outline: none;
     }
-    .sc-input:focus { border-color: var(--cyan); }
+    .sc-input:focus { border-color: var(--lime); }
     .btn-sc {
-      padding: 11px 20px; background: #ff5500; border: none; border-radius: 8px;
-      color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
-      font-size: 0.85rem; cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
+      padding: 11px 20px; background: #ff5500; border: none; border-radius: var(--radius);
+      color: #fff; font-family: var(--font-mono); font-weight: 700;
+      font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
     }
     .btn-sc:hover { opacity: 0.9; }
+    .btn-dashboard {
+      display: block; width: 100%; padding: 12px;
+      background: var(--lime); border: none; border-radius: var(--radius);
+      color: var(--bg); font-family: var(--font-mono); font-weight: 700;
+      font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; text-align: center;
+      margin-top: 8px; transition: opacity 0.2s;
+    }
+    .btn-dashboard:hover { opacity: 0.9; }
+    .card-soundcloud { border-color: var(--orange); }
+    .card-spotify { opacity: 0.85; }
     .skip {
-      display: block; text-align: center; margin-top: 20px; color: var(--muted);
-      text-decoration: none; font-size: 0.85rem;
+      display: block; text-align: center; margin-top: 20px; color: var(--text-dim);
+      text-decoration: none; font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
     }
     .skip:hover { color: var(--text); }
     .success-msg {
-      background: rgba(0,220,130,0.08); border: 1px solid rgba(0,220,130,0.2);
-      border-radius: 8px; padding: 10px 14px; color: var(--green);
+      background: rgba(196,241,53,0.06); border: 1px solid rgba(196,241,53,0.2);
+      border-radius: var(--radius); padding: 10px 14px; color: var(--lime);
       font-size: 0.85rem; margin-bottom: 16px;
     }
   </style>
@@ -84,18 +133,18 @@
     <div class="step">Connect your music sources to find your events</div>
 
     {% if request.query_params.get('soundcloud') == 'connected' %}
-    <div class="success-msg">✓ SoundCloud connected successfully.</div>
+    <div class="success-msg">SoundCloud connected successfully.</div>
     {% endif %}
     {% if request.query_params.get('spotify') == 'connected' %}
-    <div class="success-msg">✓ Spotify connected successfully.</div>
+    <div class="success-msg">Spotify connected successfully.</div>
     {% endif %}
 
     <!-- SoundCloud (primary) -->
-    <div class="card" style="border-color: #ff5500;">
+    <div class="card card-soundcloud">
       <div class="card-header">
-        <div class="platform-icon soundcloud-icon">🎧</div>
+        <div class="platform-icon soundcloud-icon">&#127911;</div>
         <div>
-          <div class="card-title">SoundCloud <span style="font-size:0.7rem; background:rgba(255,85,0,0.15); color:#ff5500; padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle;">Required</span></div>
+          <div class="card-title">SoundCloud <span class="badge-required">Required</span></div>
           <div class="card-desc">Liked tracks, reposts, follows — this is your primary music source</div>
         </div>
         {% if connected.get('soundcloud') %}
@@ -118,17 +167,17 @@
     </div>
 
     {% if connected.get('soundcloud') %}
-    <a href="/" class="btn-spotify" style="text-decoration:none; display:block; text-align:center; background: linear-gradient(135deg, #00f0ff, #ff00aa); color:#0a0815; margin-top:8px;">
-      Go to Dashboard →
+    <a href="/" class="btn-dashboard">
+      Go to Dashboard
     </a>
     {% endif %}
 
     <!-- Spotify (optional) -->
-    <div class="card" style="opacity: 0.85;">
+    <div class="card card-spotify">
       <div class="card-header">
-        <div class="platform-icon spotify-icon">🎵</div>
+        <div class="platform-icon spotify-icon">&#127925;</div>
         <div>
-          <div class="card-title">Spotify <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); color:var(--muted); padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle;">Optional</span></div>
+          <div class="card-title">Spotify <span class="badge-optional">Optional</span></div>
           <div class="card-desc">Connect for richer matching with your Spotify library</div>
         </div>
         {% if connected.get('spotify') %}
@@ -136,11 +185,11 @@
         {% endif %}
       </div>
       {% if connected.get('spotify') %}
-        <a href="/auth/spotify" class="btn-spotify" style="background:#14532d; color:#4ade80;">
+        <a href="/auth/spotify" class="btn-spotify reconnect">
           Reconnect Spotify
         </a>
       {% else %}
-        <a href="/auth/spotify" class="btn-spotify" style="background: rgba(29,185,84,0.3); color: #1DB954;">Connect Spotify</a>
+        <a href="/auth/spotify" class="btn-spotify connect-dim">Connect Spotify</a>
       {% endif %}
     </div>
 

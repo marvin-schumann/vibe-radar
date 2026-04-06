@@ -1,4 +1,4 @@
-# Vibe Radar — Madrid Music Events Assistant
+# Frequenz — Madrid Music Events Assistant
 
 ## Session Startup
 At the start of each session, read `NOTES_FROM_TELEGRAM.md` in this directory. The **Pending** section contains tasks/direction Marvin sent via his Telegram chief-of-staff chat while away from the laptop. Work through them top-to-bottom, then move completed items to the **Done** section with date + commit refs.
