@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     app_host: str = "http://localhost:8000"
 
     # App settings
+    event_scrape_interval_hours: int = 6
     city: str = "Madrid"
     country: str = "Spain"
     match_threshold: float = 0.6  # Minimum confidence for vibe matches

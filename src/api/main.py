@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -48,11 +49,25 @@ class _SupabaseCacheHandler(CacheHandler):
 
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
+
+# ---------------------------------------------------------------------------
+# App lifespan (scheduler start/stop)
+# ---------------------------------------------------------------------------
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from src.api.scheduler import start_scheduler, stop_scheduler
+
+    start_scheduler()
+    yield
+    stop_scheduler()
+
+
 # ---------------------------------------------------------------------------
 # App setup
 # ---------------------------------------------------------------------------
 
-app = FastAPI(title="Frequenz", version="1.0.0")
+app = FastAPI(title="Frequenz", version="1.0.0", lifespan=lifespan)
 
 app.include_router(auth_router)
 
@@ -803,6 +818,8 @@ async def nps_status(user=Depends(get_session_user)) -> JSONResponse:
 @app.get("/api/refresh")
 async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
     """Trigger a fresh data collection + matching run for the current user."""
+    from src.api.scheduler import _scrape_lock
+
     if not user:
         return JSONResponse({"status": "error", "message": "Not authenticated"}, status_code=401)
 
@@ -810,6 +827,12 @@ async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
     if cache.get("refreshing"):
         return JSONResponse(
             content={"status": "already_running", "message": "A refresh is already in progress."},
+            status_code=409,
+        )
+
+    if _scrape_lock.locked():
+        return JSONResponse(
+            content={"status": "already_running", "message": "Background event scrape in progress — try again shortly."},
             status_code=409,
         )
 
@@ -829,6 +852,14 @@ async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
             content={"status": "error", "message": f"Pipeline refresh failed: {exc}"},
             status_code=500,
         )
+
+
+@app.get("/api/scheduler/status")
+async def scheduler_status() -> JSONResponse:
+    """Return the background event scraper status."""
+    from src.api.scheduler import get_scheduler_status
+
+    return JSONResponse(content=get_scheduler_status())
 
 
 # ---------------------------------------------------------------------------
