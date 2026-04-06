@@ -9,6 +9,14 @@
 
 ## Done
 
+### 2026-04-06 — Make Spotify optional, SoundCloud-first
+Completed 2026-04-06.
+- Pivoted onboarding to SoundCloud-first: SoundCloud card is now primary with "Required" badge, Spotify is secondary with "Optional" badge and muted styling
+- "Go to Dashboard" button appears once SoundCloud is connected (no longer requires Spotify)
+- Dashboard hides Spotify platform filter button when user has no Spotify data
+- Pipeline already handled both sources conditionally — no backend changes needed
+- Auth toasts genericized (not Spotify-specific)
+
 ### 2026-04-05 — Replace boring Over Time charts with cooler ones
 Completed 2026-04-05.
 - Replaced 3 boring "Over Time" charts with visually cooler alternatives:

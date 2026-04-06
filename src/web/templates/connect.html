@@ -83,41 +83,20 @@
     <div class="logo">FREQUENZ</div>
     <div class="step">Connect your music sources to find your events</div>
 
-    {% if request.query_params.get('spotify') == 'connected' %}
-    <div class="success-msg">✓ Spotify connected successfully.</div>
-    {% endif %}
     {% if request.query_params.get('soundcloud') == 'connected' %}
     <div class="success-msg">✓ SoundCloud connected successfully.</div>
     {% endif %}
+    {% if request.query_params.get('spotify') == 'connected' %}
+    <div class="success-msg">✓ Spotify connected successfully.</div>
+    {% endif %}
 
-    <!-- Spotify -->
-    <div class="card">
-      <div class="card-header">
-        <div class="platform-icon spotify-icon">🎵</div>
-        <div>
-          <div class="card-title">Spotify</div>
-          <div class="card-desc">Top artists, follows, saved tracks</div>
-        </div>
-        {% if connected.get('spotify') %}
-        <div class="connected-badge">Connected</div>
-        {% endif %}
-      </div>
-      {% if connected.get('spotify') %}
-        <a href="/auth/spotify" class="btn-spotify" style="background:#14532d; color:#4ade80;">
-          Reconnect Spotify
-        </a>
-      {% else %}
-        <a href="/auth/spotify" class="btn-spotify">Connect Spotify</a>
-      {% endif %}
-    </div>
-
-    <!-- SoundCloud -->
-    <div class="card">
+    <!-- SoundCloud (primary) -->
+    <div class="card" style="border-color: #ff5500;">
       <div class="card-header">
         <div class="platform-icon soundcloud-icon">🎧</div>
         <div>
-          <div class="card-title">SoundCloud</div>
-          <div class="card-desc">Liked tracks, reposts, follows</div>
+          <div class="card-title">SoundCloud <span style="font-size:0.7rem; background:rgba(255,85,0,0.15); color:#ff5500; padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle;">Required</span></div>
+          <div class="card-desc">Liked tracks, reposts, follows — this is your primary music source</div>
         </div>
         {% if connected.get('soundcloud') %}
         <div class="connected-badge">Connected</div>
@@ -138,11 +117,32 @@
       </form>
     </div>
 
-    {% if connected.get('spotify') or connected.get('soundcloud') %}
+    {% if connected.get('soundcloud') %}
     <a href="/" class="btn-spotify" style="text-decoration:none; display:block; text-align:center; background: linear-gradient(135deg, #00f0ff, #ff00aa); color:#0a0815; margin-top:8px;">
       Go to Dashboard →
     </a>
     {% endif %}
+
+    <!-- Spotify (optional) -->
+    <div class="card" style="opacity: 0.85;">
+      <div class="card-header">
+        <div class="platform-icon spotify-icon">🎵</div>
+        <div>
+          <div class="card-title">Spotify <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); color:var(--muted); padding:2px 8px; border-radius:10px; margin-left:6px; vertical-align:middle;">Optional</span></div>
+          <div class="card-desc">Connect for richer matching with your Spotify library</div>
+        </div>
+        {% if connected.get('spotify') %}
+        <div class="connected-badge">Connected</div>
+        {% endif %}
+      </div>
+      {% if connected.get('spotify') %}
+        <a href="/auth/spotify" class="btn-spotify" style="background:#14532d; color:#4ade80;">
+          Reconnect Spotify
+        </a>
+      {% else %}
+        <a href="/auth/spotify" class="btn-spotify" style="background: rgba(29,185,84,0.3); color: #1DB954;">Connect Spotify</a>
+      {% endif %}
+    </div>
 
     <a href="/auth/logout" class="skip">Sign out</a>
   </div>

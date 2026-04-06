@@ -1130,6 +1130,11 @@
                 renderGenreChart(tasteProfile.top_genres);
                 renderFeaturesChart(tasteProfile.avg_features, data.features_estimated);
                 renderSourceBreakdown(tasteProfile.sources, tasteProfile.total_artists);
+                // Show/hide Spotify filter button based on whether user has Spotify data
+                const spotifyBtn = document.querySelector('#globalPlatform .gp-btn[data-gp="spotify"]');
+                if (spotifyBtn) {
+                    spotifyBtn.style.display = (tasteProfile.sources && tasteProfile.sources.spotify) ? '' : 'none';
+                }
             } catch (err) {
                 console.error('Failed to load taste profile:', err);
             }
@@ -1693,10 +1698,10 @@
         function checkAuthParams() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('auth_success') === '1') {
-                showToast('Spotify connected successfully!', 'success');
+                showToast('Account connected successfully!', 'success');
                 window.history.replaceState({}, '', '/');
             } else if (params.get('auth_error') === '1') {
-                showToast('Spotify authentication failed. Please try again.', 'error', 5000);
+                showToast('Authentication failed. Please try again.', 'error', 5000);
                 window.history.replaceState({}, '', '/');
             }
         }
