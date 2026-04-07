@@ -775,6 +775,77 @@
             min-height: 80px;
         }
 
+        /* Share Cards Grid */
+        .share-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 1100px) {
+            .share-cards-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .share-cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .share-card-preview {
+            cursor: pointer;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+            background: var(--bg-card);
+        }
+
+        .share-card-preview:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .share-card-img-wrap {
+            aspect-ratio: 9 / 16;
+            overflow: hidden;
+            background: #0c0c0c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .share-card-img-wrap img.loaded { opacity: 1; }
+
+        .share-card-img-wrap .share-card-skeleton {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(110deg, #111 30%, #1a1a1a 50%, #111 70%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .share-card-label {
+            padding: 0.6rem 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
         /* Scene City: stacked bar */
         .scene-bar-container {
             display: flex;
@@ -1483,6 +1554,34 @@
                     <div id="dancefloorContent" class="dna-card-body">
                         <div class="skeleton" style="height:120px;border-radius:4px;"></div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Share Cards Section -->
+        <section class="share-cards-section" id="shareCardsSection" style="display:none; margin-bottom:3.5rem; animation: fade-up 0.5s ease-out 0.3s both;">
+            <h2 class="section-title"><span class="accent">//</span> Share Your Taste</h2>
+            <p style="font-family:var(--font-body);font-size:0.85rem;color:var(--text-dim);margin-bottom:1.2rem;">Instagram-ready cards generated from your Taste DNA. Click to download.</p>
+            <div class="share-cards-grid" id="shareCardsGrid">
+                <div class="share-card-preview" data-card="taste-dna">
+                    <div class="share-card-img-wrap"><img id="cardPreviewTasteDna" alt="Taste DNA card" /></div>
+                    <div class="share-card-label">Taste DNA</div>
+                </div>
+                <div class="share-card-preview" data-card="scene-city">
+                    <div class="share-card-img-wrap"><img id="cardPreviewSceneCity" alt="Scene City card" /></div>
+                    <div class="share-card-label">Home City</div>
+                </div>
+                <div class="share-card-preview" data-card="taste-tribe">
+                    <div class="share-card-img-wrap"><img id="cardPreviewTasteTribe" alt="Taste Tribe card" /></div>
+                    <div class="share-card-label">Taste Tribe</div>
+                </div>
+                <div class="share-card-preview" data-card="cross-genre">
+                    <div class="share-card-img-wrap"><img id="cardPreviewCrossGenre" alt="Cross-Genre Bridge card" /></div>
+                    <div class="share-card-label">Genre Bridge</div>
+                </div>
+                <div class="share-card-preview" data-card="dancefloor">
+                    <div class="share-card-img-wrap"><img id="cardPreviewDancefloor" alt="Dancefloor card" /></div>
+                    <div class="share-card-label">Dancefloor</div>
                 </div>
             </div>
         </section>
@@ -2389,7 +2488,7 @@
                         showOverlay('Done!', 'Your matches are ready.', 100);
                         setTimeout(async () => {
                             hideOverlay();
-                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna()]);
+                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna(), loadShareCards()]);
                         }, 800);
                     } else if (!d.running && !d.last_refresh) {
                         // Nothing running and no data — stop polling, show empty state
@@ -2420,6 +2519,54 @@
             } catch (e) { /* ignore */ }
         }
 
+        // ============================================================
+        // Share Cards
+        // ============================================================
+        async function loadShareCards() {
+            try {
+                const r = await fetch('/api/cards/all');
+                if (!r.ok) return;
+                const cards = await r.json();
+                if (cards.error) return;
+
+                const section = document.getElementById('shareCardsSection');
+                const nameMap = {
+                    'taste-dna': 'cardPreviewTasteDna',
+                    'scene-city': 'cardPreviewSceneCity',
+                    'taste-tribe': 'cardPreviewTasteTribe',
+                    'cross-genre': 'cardPreviewCrossGenre',
+                    'dancefloor': 'cardPreviewDancefloor',
+                };
+
+                for (const [cardName, b64] of Object.entries(cards)) {
+                    const imgId = nameMap[cardName];
+                    if (!imgId) continue;
+                    const img = document.getElementById(imgId);
+                    if (img) {
+                        img.src = 'data:image/png;base64,' + b64;
+                        img.onload = () => img.classList.add('loaded');
+                    }
+                }
+
+                section.style.display = 'block';
+
+                // Click to download
+                document.querySelectorAll('.share-card-preview').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const cardName = el.dataset.card;
+                        const img = el.querySelector('img');
+                        if (!img || !img.src || !img.src.startsWith('data:')) return;
+                        const a = document.createElement('a');
+                        a.href = img.src;
+                        a.download = `frequenz-${cardName}.png`;
+                        a.click();
+                    });
+                });
+            } catch (e) {
+                console.error('Failed to load share cards:', e);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             checkAuthParams();
 
@@ -2438,7 +2585,7 @@
                 }
             } catch (e) { /* ignore, just load normally */ }
 
-            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna()]);
+            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna(), loadShareCards()]);
             checkNps();
         });
 

@@ -22,6 +22,8 @@ dependencies = [
     "fpdf2>=2.7.0",
     "apscheduler>=3.10.0",
     "python-multipart>=0.0.9",
+    "Pillow>=10.0.0",
+    "numpy>=1.26.0",
 ]
 
 [project.optional-dependencies]

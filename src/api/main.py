@@ -877,6 +877,89 @@ async def scheduler_status() -> JSONResponse:
 
 
 # ---------------------------------------------------------------------------
+# Routes: Shareable Cards
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/cards/all")
+async def get_all_cards(user=Depends(get_session_user)) -> JSONResponse:
+    """Return all 5 cards as base64-encoded PNGs in JSON."""
+    import base64
+
+    from src.analytics.taste_dna import compute_taste_dna
+    from src.cards.generator import generate_all_cards
+
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    if not artists:
+        return JSONResponse({"error": "No artist data — run a refresh first"}, status_code=400)
+
+    dna = compute_taste_dna(artists)
+
+    profile = cache.get("taste_profile")
+    if profile:
+        dna["top_genres"] = [
+            {"genre": g, "percentage": round(c / max(profile.total_artists, 1) * 100)}
+            for g, c in profile.top_genres[:5]
+        ]
+        dna["total_artists"] = profile.total_artists
+    else:
+        dna.setdefault("total_artists", len(artists))
+        dna.setdefault("top_genres", [])
+
+    cards = generate_all_cards(dna)
+    return JSONResponse({
+        name: base64.b64encode(png).decode() for name, png in cards.items()
+    })
+
+
+@app.get("/api/cards/{card_name}.png")
+async def get_card_png(card_name: str, user=Depends(get_session_user)) -> Response:
+    """Return a single shareable card as image/png."""
+    from src.analytics.taste_dna import compute_taste_dna
+    from src.cards.generator import (
+        generate_cross_genre_card,
+        generate_dancefloor_card,
+        generate_scene_city_card,
+        generate_taste_dna_card,
+        generate_taste_tribe_card,
+    )
+
+    generators = {
+        "taste-dna": generate_taste_dna_card,
+        "scene-city": generate_scene_city_card,
+        "taste-tribe": generate_taste_tribe_card,
+        "cross-genre": generate_cross_genre_card,
+        "dancefloor": generate_dancefloor_card,
+    }
+
+    if card_name not in generators:
+        return JSONResponse({"error": f"Unknown card: {card_name}"}, status_code=404)
+
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    if not artists:
+        return JSONResponse({"error": "No artist data — run a refresh first"}, status_code=400)
+
+    dna = compute_taste_dna(artists)
+
+    # Merge top_genres + total_artists from taste profile
+    profile = cache.get("taste_profile")
+    if profile:
+        dna["top_genres"] = [
+            {"genre": g, "percentage": round(c / max(profile.total_artists, 1) * 100)}
+            for g, c in profile.top_genres[:5]
+        ]
+        dna["total_artists"] = profile.total_artists
+    else:
+        dna.setdefault("total_artists", len(artists))
+        dna.setdefault("top_genres", [])
+
+    png_bytes = generators[card_name](dna)
+    return Response(content=png_bytes, media_type="image/png")
+
+
+# ---------------------------------------------------------------------------
 # Routes: Analysis
 # ---------------------------------------------------------------------------
 
