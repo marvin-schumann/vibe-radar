@@ -637,6 +637,42 @@ async def get_taste_dna(user=Depends(get_session_user)) -> JSONResponse:
     return JSONResponse(content=result)
 
 
+@app.get("/api/dj-twin")
+async def get_dj_twin(user=Depends(get_session_user)) -> JSONResponse:
+    """Return top 5 DJ twin matches based on genre similarity."""
+    from src.matching.dj_twin import compute_dj_similarity, get_user_genre_distribution, load_dj_vectors
+
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    taste_profile = cache.get("taste_profile")
+
+    # Build user's genre distribution
+    user_genres = get_user_genre_distribution(artists=artists, taste_profile=taste_profile)
+    if not user_genres:
+        return JSONResponse(
+            content={"error": "No genre data — run a refresh first", "matches": []},
+            status_code=400,
+        )
+
+    # Load cached DJ vectors (read once per request — fast, ~100KB JSON)
+    dj_vectors = load_dj_vectors()
+    if not dj_vectors:
+        return JSONResponse(
+            content={"error": "DJ taste vectors not yet generated", "matches": []},
+            status_code=503,
+        )
+
+    matches = compute_dj_similarity(user_genres, dj_vectors, top_n=5)
+    twin = matches[0] if matches else None
+
+    return JSONResponse(content={
+        "twin": twin,
+        "matches": matches,
+        "total_djs_compared": len(dj_vectors),
+        "headline": f"Your taste is {twin['similarity_pct']}% similar to {twin['name']}" if twin else None,
+    })
+
+
 @app.get("/api/artists")
 async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
     """Return the collected artist list with full metadata from the last pipeline run."""

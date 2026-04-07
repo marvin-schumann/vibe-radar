@@ -10,5 +10,6 @@ venv/
 *.egg
 .ruff_cache/
 .pytest_cache/
-data/
+/data/
+src/data/dj_taste_vectors.json
 .cache
