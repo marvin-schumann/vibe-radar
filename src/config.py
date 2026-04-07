@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     supabase_anon_key: str = ""
     supabase_service_role_key: str = ""
 
+    # Admin / onboarding
+    admin_secret_key: str = ""  # secret key for admin approval endpoint
+    telegram_bot_token: str = ""  # Telegram bot token for signup notifications
+    telegram_chat_id: str = "1436217613"  # Marvin's Telegram chat ID
+
     # App
     app_secret_key: str = "change-me-in-production"
     app_host: str = "http://localhost:8000"

@@ -68,6 +68,20 @@ def set_approved(user_id: str, value: bool = True) -> None:
     logger.info("Set is_approved={} for user {}", value, user_id)
 
 
+def approve_by_email(email: str) -> bool:
+    """Approve a user by their email address. Returns True if found and approved."""
+    db = get_admin_client()
+    # Look up user in Supabase Auth by email
+    users = db.auth.admin.list_users()
+    target = next((u for u in users if u.email == email), None)
+    if not target:
+        logger.warning("approve_by_email: no user found with email {}", email)
+        return False
+    set_approved(target.id, True)
+    logger.info("Approved user {} ({})", email, target.id)
+    return True
+
+
 def set_lemon_squeezy_customer(user_id: str, customer_id: str) -> None:
     db = get_admin_client()
     db.table("profiles").update({"lemon_squeezy_customer_id": customer_id}).eq("id", user_id).execute()

@@ -9,6 +9,15 @@
 
 ## Done
 
+### 2026-04-07 — Semi-automated invite-only onboarding flow
+Completed 2026-04-07.
+- Added `ADMIN_SECRET_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` to config.py
+- New signup sends Telegram notification to Marvin with clickable approve link
+- Admin approval endpoint `GET/POST /admin/approve?email=X&key=SECRET` sets `is_approved=true`
+- Added `approve_by_email()` helper in `src/db/supabase.py`
+- Updated pending.html: founding member messaging, referral placeholder copy
+- Flow: signup → Telegram notification → click approve link → user gets access
+
 ### 2026-04-06 — Make Spotify optional, SoundCloud-first
 Completed 2026-04-06.
 - Pivoted onboarding to SoundCloud-first: SoundCloud card is now primary with "Required" badge, Spotify is secondary with "Optional" badge and muted styling

@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import secrets
+from urllib.parse import quote
 
-from fastapi import APIRouter, Cookie, Depends, Form, Request
+import httpx
+from fastapi import APIRouter, Cookie, Depends, Form, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 from loguru import logger
@@ -13,7 +15,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from src.api.deps import get_session_user
 from src.collectors.spotify import SCOPES
 from src.config import settings
-from src.db.supabase import get_admin_client, upsert_connected_account
+from src.db.supabase import approve_by_email, get_admin_client, upsert_connected_account
 
 router = APIRouter()
 templates = Jinja2Templates(directory="src/web/templates")
@@ -63,6 +65,29 @@ async def connect_page(request: Request, user=Depends(get_session_user)) -> HTML
 # ─────────────────────────────────────────
 
 
+async def _notify_signup_telegram(email: str) -> None:
+    """Send a Telegram notification to Marvin about a new signup."""
+    token = settings.telegram_bot_token
+    chat_id = settings.telegram_chat_id
+    if not token or not chat_id:
+        logger.warning("Telegram notification skipped — bot token or chat_id not configured")
+        return
+
+    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&key={quote(settings.admin_secret_key)}"
+    text = (
+        f"\U0001f195 New Frequenz signup: {email}\n\n"
+        f"Approve: {approve_url}"
+    )
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(url, json={"chat_id": chat_id, "text": text})
+            if resp.status_code != 200:
+                logger.warning("Telegram notification failed: {}", resp.text)
+    except Exception as exc:
+        logger.warning("Telegram notification error: {}", exc)
+
+
 @router.post("/auth/signup")
 async def signup(
     email: str = Form(...),
@@ -72,6 +97,8 @@ async def signup(
     try:
         db.auth.sign_up({"email": email, "password": password})
         # Profile auto-created by DB trigger with is_approved=false
+        # Notify Marvin via Telegram (fire-and-forget)
+        await _notify_signup_telegram(email)
         # Redirect to pending — they need to verify email first
         resp = RedirectResponse("/pending", status_code=303)
         return resp
@@ -113,6 +140,29 @@ async def logout() -> Response:
     resp.delete_cookie("session_token")
     resp.delete_cookie("refresh_token")
     return resp
+
+
+# ─────────────────────────────────────────
+# Admin approval endpoint
+# ─────────────────────────────────────────
+
+
+@router.post("/admin/approve")
+@router.get("/admin/approve")  # GET so the Telegram link is clickable
+async def admin_approve(
+    email: str = Query(...),
+    key: str = Query(...),
+) -> JSONResponse:
+    """Approve a pending user by email. Secured with ADMIN_SECRET_KEY."""
+    if not settings.admin_secret_key:
+        return JSONResponse({"error": "admin_secret_key not configured"}, status_code=500)
+    if key != settings.admin_secret_key:
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+
+    ok = approve_by_email(email)
+    if ok:
+        return JSONResponse({"status": "approved", "email": email})
+    return JSONResponse({"error": "user not found", "email": email}, status_code=404)
 
 
 # ─────────────────────────────────────────
