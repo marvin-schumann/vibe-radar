@@ -9,6 +9,16 @@
 
 ## Done
 
+### 2026-04-07 — DJ Twin Match (Phase 1: data pipeline + matching engine)
+Completed 2026-04-07, commit 8f1811e.
+- Curated 229 DJ profiles in `src/data/dj_profiles.json` (techno, house, trance, DnB, ambient, bass, disco, electro, Madrid scene)
+- `src/collectors/dj_profiles.py`: batch SoundCloud scraper with rate limiting, fetches liked tracks → genre distribution vectors
+- `src/data/dj_taste_vectors.json`: cached vectors for 25 test DJs (remaining 204 via background job)
+- `src/matching/dj_twin.py`: cosine similarity matching engine, returns top 5 with twin/adjacent/similar classification
+- `GET /api/dj-twin` endpoint in main.py
+- Tested with Marvin's real data: top twin = Paul van Dyk (91%), adjacent = Above & Beyond (45%)
+- Phase 2 (UI cards) pending — after card redesign is finalized
+
 ### 2026-04-07 — Redesign shareable cards with HTML/CSS + Playwright
 Completed 2026-04-07.
 - Replaced Pillow-based card generator with HTML/CSS templates rendered via Playwright headless Chromium
