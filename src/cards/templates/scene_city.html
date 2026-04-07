@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1080px;
+  height: 1920px;
+  background: #0c0c0c;
+  overflow: hidden;
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.card-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg, #c4f135, #ff5c35) 1;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.grain svg { width: 100%; height: 100%; }
+
+/* Cityscape silhouette */
+.cityscape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  z-index: 2;
+  opacity: 0.07;
+}
+
+/* Orange diagonal wash */
+.diagonal-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,92,53,0.08) 60%, rgba(255,92,53,0.15) 100%);
+  z-index: 1;
+}
+
+/* Glow behind city name */
+.city-glow {
+  position: absolute;
+  width: 1000px;
+  height: 600px;
+  top: 28%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(255,92,53,0.14) 0%, rgba(255,92,53,0.04) 50%, transparent 75%);
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  padding: 280px 72px 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rarity badge */
+.rarity-badge {
+  position: absolute;
+  top: 42px;
+  right: 42px;
+  z-index: 50;
+  padding: 8px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.rarity-common { background: rgba(160,160,160,0.15); color: #a0a0a0; border: 1px solid rgba(160,160,160,0.3); }
+.rarity-uncommon { background: rgba(196,241,53,0.1); color: #c4f135; border: 1px solid rgba(196,241,53,0.3); }
+.rarity-rare { background: rgba(255,92,53,0.12); color: #ff5c35; border: 1px solid rgba(255,92,53,0.35); }
+.rarity-legendary { background: linear-gradient(135deg, rgba(196,241,53,0.15), rgba(255,92,53,0.15)); color: #f5f5f5; border: 1px solid rgba(255,200,50,0.5); box-shadow: 0 0 20px rgba(255,200,50,0.15); }
+
+.card-number {
+  position: absolute;
+  bottom: 42px;
+  right: 48px;
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.5);
+  letter-spacing: 1px;
+}
+
+.branding {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.45);
+  letter-spacing: 1px;
+}
+
+/* Label */
+.sonic-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 30px;
+  color: #a0a0a0;
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* Huge city name */
+.city-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 180px;
+  color: #f5f5f5;
+  text-align: center;
+  line-height: 0.9;
+  letter-spacing: 8px;
+  text-shadow: 0 0 80px rgba(255,92,53,0.3), 0 0 160px rgba(255,92,53,0.1);
+  margin-bottom: 48px;
+}
+
+/* City breakdown */
+.breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.city-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.city-pct {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 34px;
+  text-align: right;
+}
+
+.city-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.city-detail-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 26px;
+}
+
+.city-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.city-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s;
+}
+
+.primary .city-pct { color: #ff5c35; }
+.primary .city-detail-name { color: #f5f5f5; font-weight: 700; }
+.primary .city-bar-fill { background: linear-gradient(90deg, #ff5c35, #c4f135); box-shadow: 0 0 12px rgba(255,92,53,0.4); }
+
+.secondary .city-pct { color: rgba(245,245,245,0.6); }
+.secondary .city-detail-name { color: #a0a0a0; }
+.secondary .city-bar-fill { background: rgba(245,245,245,0.15); }
+
+/* Glass stat card */
+.glass-panel {
+  background: rgba(245,245,245,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245,245,245,0.08);
+  border-radius: 16px;
+  padding: 24px 36px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.hashtag {
+  font-family: 'Space Mono', monospace;
+  font-size: 24px;
+  color: #ff5c35;
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+  <div class="card-border"></div>
+
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain)"/>
+    </svg>
+  </div>
+
+  <div class="diagonal-wash"></div>
+  <div class="city-glow"></div>
+
+  <!-- Cityscape SVG silhouette -->
+  <div class="cityscape">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 400" preserveAspectRatio="xMidYMax slice">
+      <path d="M0,400 L0,280 L40,280 L40,200 L60,200 L60,160 L80,160 L80,200 L120,200 L120,140 L140,140 L140,100 L160,100 L160,140 L180,140 L180,220 L200,220 L200,180 L220,180 L220,120 L240,120 L240,80 L260,80 L260,120 L280,120 L280,200 L320,200 L320,160 L340,160 L340,60 L360,60 L360,40 L380,40 L380,60 L400,60 L400,160 L420,160 L420,220 L460,220 L460,180 L480,180 L480,100 L500,100 L500,60 L520,60 L520,100 L540,100 L540,180 L560,180 L560,240 L600,240 L600,200 L620,200 L620,140 L640,140 L640,80 L660,80 L660,140 L680,140 L680,200 L720,200 L720,160 L740,160 L740,120 L760,120 L760,60 L780,60 L780,120 L800,120 L800,180 L840,180 L840,220 L860,220 L860,160 L880,160 L880,200 L920,200 L920,260 L960,260 L960,200 L980,200 L980,160 L1000,160 L1000,200 L1020,200 L1020,280 L1060,280 L1060,300 L1080,300 L1080,400 Z" fill="#f5f5f5"/>
+    </svg>
+  </div>
+
+  <div class="rarity-badge {{ rarity_class }}">{{ rarity_label }}</div>
+
+  <div class="content">
+    <div class="sonic-label">Your Sonic Home</div>
+    <div class="city-name">{{ top_city }}</div>
+
+    <div class="breakdown">
+      {% for c in cities %}
+      <div class="city-row {{ 'primary' if loop.index == 1 else 'secondary' }}">
+        <div class="city-pct">{{ c.pct }}%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">{{ c.name }}</div>
+          <div class="city-bar-track">
+            <div class="city-bar-fill" style="width: {{ c.bar_width }}%;"></div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="glass-panel">
+      <div class="hashtag">#FrequenzCity</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">2/5</div>
+</body>
+</html>

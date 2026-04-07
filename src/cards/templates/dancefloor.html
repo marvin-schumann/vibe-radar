@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1080px;
+  height: 1920px;
+  background: #0c0c0c;
+  overflow: hidden;
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.card-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg, #c4f135, #ff5c35) 1;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.grain svg { width: 100%; height: 100%; }
+
+/* Split color background — orange left, lime right */
+.split-bg-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,92,53,0.08) 0%, rgba(255,92,53,0.04) 50%, transparent 100%);
+  z-index: 1;
+}
+
+.split-bg-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(196,241,53,0.06) 0%, rgba(196,241,53,0.03) 50%, transparent 100%);
+  z-index: 1;
+}
+
+/* Center divider line */
+.center-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(245,245,245,0.06) 30%, rgba(245,245,245,0.06) 70%, transparent);
+  z-index: 2;
+}
+
+/* Glows */
+.glow-orange {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 25%;
+  left: 10%;
+  background: radial-gradient(circle, rgba(255,92,53,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.glow-lime {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 25%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(196,241,53,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  padding: 280px 72px 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rarity-badge {
+  position: absolute;
+  top: 42px;
+  right: 42px;
+  z-index: 50;
+  padding: 8px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.rarity-common { background: rgba(160,160,160,0.15); color: #a0a0a0; border: 1px solid rgba(160,160,160,0.3); }
+.rarity-uncommon { background: rgba(196,241,53,0.1); color: #c4f135; border: 1px solid rgba(196,241,53,0.3); }
+.rarity-rare { background: rgba(255,92,53,0.12); color: #ff5c35; border: 1px solid rgba(255,92,53,0.35); }
+.rarity-legendary { background: linear-gradient(135deg, rgba(196,241,53,0.15), rgba(255,92,53,0.15)); color: #f5f5f5; border: 1px solid rgba(255,200,50,0.5); box-shadow: 0 0 20px rgba(255,200,50,0.15); }
+
+.card-number {
+  position: absolute;
+  bottom: 42px;
+  right: 48px;
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.5);
+}
+
+.branding {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.45);
+}
+
+/* --- Card layout --- */
+
+.header-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 64px;
+}
+
+/* Big text section */
+.vs-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 64px;
+}
+
+.big-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  letter-spacing: 6px;
+  line-height: 1;
+}
+
+.word-dance { color: #ff5c35; text-shadow: 0 0 50px rgba(255,92,53,0.25); }
+.word-vs {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 40px;
+  color: #a0a0a0;
+  margin: 16px 0;
+  letter-spacing: 2px;
+}
+.word-head { color: #c4f135; text-shadow: 0 0 50px rgba(196,241,53,0.2); }
+
+/* Giant percentages */
+.pct-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+
+.pct-big {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 110px;
+  line-height: 1;
+}
+
+.pct-orange { color: #ff5c35; text-shadow: 0 0 40px rgba(255,92,53,0.25); }
+.pct-lime { color: #c4f135; text-shadow: 0 0 40px rgba(196,241,53,0.2); }
+
+.pct-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.pct-label-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 36px;
+}
+
+/* Gauge bar */
+.gauge-container {
+  width: 100%;
+  margin-bottom: 64px;
+}
+
+.gauge-track {
+  width: 100%;
+  height: 48px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.gauge-orange {
+  height: 100%;
+  background: linear-gradient(90deg, #ff5c35, #ff7a55);
+  border-radius: 24px 0 0 24px;
+  position: relative;
+  box-shadow: 0 0 24px rgba(255,92,53,0.3);
+}
+
+.gauge-orange::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px 0 0 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+
+.gauge-lime {
+  height: 100%;
+  background: linear-gradient(90deg, #a8d92e, #c4f135);
+  border-radius: 0 24px 24px 0;
+  position: relative;
+  box-shadow: 0 0 24px rgba(196,241,53,0.25);
+}
+
+.gauge-lime::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0 24px 24px 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+
+/* Spacer */
+.flex-grow { flex: 1; }
+
+/* Verdict */
+.verdict-section {
+  text-align: center;
+  margin-top: auto;
+}
+
+.verdict-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  letter-spacing: 4px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.verdict-orange { color: #ff5c35; }
+.verdict-lime { color: #c4f135; }
+.verdict-white { color: #f5f5f5; }
+
+.verdict-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 24px;
+  color: #a0a0a0;
+}
+
+/* Glass panel */
+.glass-panel {
+  background: rgba(245,245,245,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245,245,245,0.08);
+  border-radius: 16px;
+  padding: 28px 36px;
+  text-align: center;
+  width: 100%;
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+  <div class="card-border"></div>
+
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain)"/>
+    </svg>
+  </div>
+
+  <div class="split-bg-left"></div>
+  <div class="split-bg-right"></div>
+  <div class="center-line"></div>
+  <div class="glow-orange"></div>
+  <div class="glow-lime"></div>
+
+  <div class="rarity-badge {{ rarity_class }}">{{ rarity_label }}</div>
+
+  <div class="content">
+    <div class="header-label">The Verdict</div>
+
+    <div class="vs-section">
+      <div class="big-word word-dance">DANCEFLOOR</div>
+      <div class="word-vs">vs</div>
+      <div class="big-word word-head">HEADPHONES</div>
+    </div>
+
+    <div class="pct-row">
+      <div class="pct-big pct-orange">{{ dance_pct }}%</div>
+      <div class="pct-big pct-lime">{{ head_pct }}%</div>
+    </div>
+    <div class="pct-label-row">
+      <div class="pct-label">Dancefloor</div>
+      <div class="pct-label">Headphones</div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="gauge-track">
+        <div class="gauge-orange" style="width: {{ dance_pct }}%;"></div>
+        <div class="gauge-lime" style="width: {{ head_pct }}%;"></div>
+      </div>
+    </div>
+
+    <div class="flex-grow"></div>
+
+    <div class="verdict-section">
+      <div class="verdict-text {{ verdict_color_class }}">{{ verdict }}</div>
+      <div class="verdict-sub">{{ verdict_subtitle }}</div>
+    </div>
+
+    <div class="glass-panel">
+      <div class="verdict-sub">Where the music takes you</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">5/5</div>
+</body>
+</html>

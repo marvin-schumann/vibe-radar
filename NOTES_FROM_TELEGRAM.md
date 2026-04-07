@@ -9,6 +9,26 @@
 
 ## Done
 
+### 2026-04-07 — Redesign shareable cards with HTML/CSS + Playwright
+Completed 2026-04-07.
+- Replaced Pillow-based card generator with HTML/CSS templates rendered via Playwright headless Chromium
+- 5 self-contained HTML templates in `src/cards/templates/` (taste_dna, scene_city, taste_tribe, cross_genre, dancefloor)
+- Each template: inline CSS, Google Fonts CDN, SVG grain overlay, glassmorphism panels, radial glows, gradient borders
+- Collectible card feel: gradient border (lime→orange), rarity badges (COMMON/UNCOMMON/RARE/LEGENDARY), card numbering, frequenz.live branding
+- `src/cards/renderer.py`: Jinja2 templating + Playwright screenshot at 1080x1920
+- API endpoints updated to use new renderer (backward-compatible same routes)
+- Sample cards at `/tmp/frequenz-card-v2-*.png`
+
+### 2026-04-07 — Shareable Instagram-story card generator
+Completed 2026-04-07, commit afff99b.
+- Built `src/cards/generator.py` with 5 card types: Taste DNA Summary, Scene Home City, Taste Tribe, Cross-Genre Bridge, Dancefloor vs Headphones
+- Pillow + NumPy rendering at 2x (2160x3840) with LANCZOS downscale for anti-aliased output
+- Downloaded Bebas Neue, Space Mono, DM Sans fonts to `src/web/static/fonts/`
+- Radial glows via NumPy meshgrid, diagonal gradient overlays, rounded bars, lime/orange gradient color interpolation
+- API endpoints: `GET /api/cards/{name}.png` (individual) and `GET /api/cards/all` (base64 JSON)
+- Dashboard "Share Your Taste" section with 5 card previews in 9:16 aspect ratio, click-to-download
+- Sample cards saved to `/tmp/frequenz-card-*.png`
+
 ### 2026-04-07 — Semi-automated invite-only onboarding flow
 Completed 2026-04-07.
 - Added `ADMIN_SECRET_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` to config.py
