@@ -730,6 +730,289 @@
         }
 
         /* ============================================================
+           TASTE DNA SECTION
+           ============================================================ */
+        .dna-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .dna-grid { grid-template-columns: 1fr; }
+        }
+
+        .dna-card {
+            background: var(--bg-card);
+            padding: 1.5rem 1.75rem;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .dna-card:hover { background: var(--bg-card-hover); }
+
+        .dna-card:nth-child(2n) { border-right: none; }
+        .dna-card:nth-last-child(-n+2) { border-bottom: none; }
+
+        @media (max-width: 900px) {
+            .dna-card { border-right: none; }
+            .dna-card:last-child { border-bottom: none; }
+        }
+
+        .dna-card-subtitle {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            margin-top: 0.15rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .dna-card-body {
+            min-height: 80px;
+        }
+
+        /* Scene City: stacked bar */
+        .scene-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .scene-bar-track {
+            width: 100%;
+            height: 28px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            background: var(--border);
+        }
+
+        .scene-bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #0c0c0c;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .scene-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .scene-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+        }
+
+        .scene-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Taste Tribe card */
+        .tribe-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tribe-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            border: 1.5px solid var(--lime);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--lime);
+            background: rgba(196,241,53,0.06);
+            flex-shrink: 0;
+        }
+
+        .tribe-name {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            letter-spacing: 0.06em;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .tribe-tagline {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--lime);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .tribe-description {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            line-height: 1.55;
+            margin-bottom: 0.75rem;
+        }
+
+        .tribe-confidence {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            letter-spacing: 0.06em;
+        }
+
+        .tribe-confidence-bar {
+            width: 60px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .tribe-confidence-fill {
+            height: 100%;
+            background: var(--lime);
+            border-radius: 2px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Bridge cards */
+        .bridge-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bridge-item:last-child { border-bottom: none; }
+
+        .bridge-rarity {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--orange);
+            letter-spacing: 0.02em;
+            line-height: 1;
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .bridge-rarity-unit {
+            font-family: var(--font-mono);
+            font-size: 0.5rem;
+            color: var(--text-dim);
+            display: block;
+            letter-spacing: 0.04em;
+        }
+
+        .bridge-text {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .bridge-genres {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* Dancefloor gauge */
+        .dancefloor-gauge {
+            margin-top: 0.5rem;
+        }
+
+        .gauge-track {
+            width: 100%;
+            height: 32px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            background: var(--border);
+        }
+
+        .gauge-fill-dance {
+            height: 100%;
+            background: linear-gradient(90deg, var(--lime), rgba(196,241,53,0.6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #0c0c0c;
+            letter-spacing: 0.04em;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gauge-fill-head {
+            height: 100%;
+            flex: 1;
+            background: linear-gradient(90deg, rgba(77,159,255,0.3), rgba(77,159,255,0.6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.04em;
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .gauge-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .gauge-verdict {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
            SCROLLBAR
            ============================================================ */
         ::-webkit-scrollbar { width: 5px; }
@@ -1161,6 +1444,49 @@
             </div>
         </section>
 
+        <!-- Taste DNA Section -->
+        <section class="taste-dna-section" id="tasteDnaSection" style="display:none; margin-bottom:3.5rem; animation: fade-up 0.5s ease-out 0.2s both;">
+            <h2 class="section-title"><span class="accent">//</span> Your Taste DNA</h2>
+
+            <div class="dna-grid">
+                <!-- Card 1: Scene Home City -->
+                <div class="dna-card" id="sceneCityCard">
+                    <div class="card-title">Scene: Home City</div>
+                    <div class="dna-card-subtitle">Where your sound lives</div>
+                    <div id="sceneCityContent" class="dna-card-body">
+                        <div class="skeleton" style="height:120px;border-radius:4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Taste Tribe -->
+                <div class="dna-card" id="tasteTribeCard">
+                    <div class="card-title">Taste Tribe</div>
+                    <div class="dna-card-subtitle">Your listener archetype</div>
+                    <div id="tasteTribeContent" class="dna-card-body">
+                        <div class="skeleton" style="height:120px;border-radius:4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Cross-Genre Bridges -->
+                <div class="dna-card" id="bridgesCard">
+                    <div class="card-title">Cross-Genre Bridges</div>
+                    <div class="dna-card-subtitle">Your rarest genre combinations</div>
+                    <div id="bridgesContent" class="dna-card-body">
+                        <div class="skeleton" style="height:120px;border-radius:4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Dancefloor vs Headphones -->
+                <div class="dna-card" id="dancefloorCard">
+                    <div class="card-title">Dancefloor vs Headphones</div>
+                    <div class="dna-card-subtitle">Body vs mind</div>
+                    <div id="dancefloorContent" class="dna-card-body">
+                        <div class="skeleton" style="height:120px;border-radius:4px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Artists Section (hidden by default, toggled via header button) -->
         <section class="artists-section" id="artistsSection" style="display:none; margin-bottom:3rem; animation: fade-up 0.3s ease-out both;">
             <h2 class="section-title"><span class="accent">//</span> Your Artists <span id="artistTotal" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);margin-left:0.5rem;letter-spacing:0.06em;"></span></h2>
@@ -1362,6 +1688,165 @@
                     `;
                 }).join('');
             } catch (e) { /* ignore */ }
+        }
+
+        // ============================================================
+        // Taste DNA
+        // ============================================================
+        const CITY_COLORS = {
+            'Berlin': '#c4f135',
+            'London': '#ff5c35',
+            'Detroit': '#4d9fff',
+            'Amsterdam': '#ff9f43',
+            'Chicago': '#a55eea',
+            'Madrid': '#ff6b81',
+            'Ibiza': '#2ed573',
+        };
+
+        async function loadTasteDna() {
+            try {
+                const r = await fetch('/api/taste-dna');
+                const d = await r.json();
+                if (d.error) return;
+
+                const section = document.getElementById('tasteDnaSection');
+                let hasAny = false;
+
+                // Scene City
+                if (d.scene_city && d.scene_city.cities && d.scene_city.cities.length > 0) {
+                    hasAny = true;
+                    renderSceneCity(d.scene_city);
+                } else {
+                    document.getElementById('sceneCityCard').style.display = 'none';
+                }
+
+                // Taste Tribe
+                if (d.taste_tribe && d.taste_tribe.tribe) {
+                    hasAny = true;
+                    renderTasteTribe(d.taste_tribe);
+                } else {
+                    document.getElementById('tasteTribeCard').style.display = 'none';
+                }
+
+                // Bridges
+                if (d.cross_genre_bridges && d.cross_genre_bridges.bridges && d.cross_genre_bridges.bridges.length > 0) {
+                    hasAny = true;
+                    renderBridges(d.cross_genre_bridges);
+                } else {
+                    document.getElementById('bridgesCard').style.display = 'none';
+                }
+
+                // Dancefloor
+                if (d.dancefloor_ratio && d.dancefloor_ratio.total_classified > 0) {
+                    hasAny = true;
+                    renderDancefloor(d.dancefloor_ratio);
+                } else {
+                    document.getElementById('dancefloorCard').style.display = 'none';
+                }
+
+                if (hasAny) section.style.display = 'block';
+            } catch (e) {
+                console.error('Failed to load taste DNA:', e);
+            }
+        }
+
+        function renderSceneCity(data) {
+            const el = document.getElementById('sceneCityContent');
+            const cities = data.cities;
+
+            // Stacked bar
+            let barHtml = '<div class="scene-bar-track">';
+            cities.forEach(c => {
+                const color = CITY_COLORS[c.city] || '#6a6a6a';
+                const label = c.percentage >= 8 ? `${c.city} ${c.percentage}%` : (c.percentage >= 4 ? `${c.percentage}%` : '');
+                barHtml += `<div class="scene-bar-segment" style="width:${c.percentage}%;background:${color};">${label}</div>`;
+            });
+            barHtml += '</div>';
+
+            // Legend
+            let legendHtml = '<div class="scene-legend">';
+            cities.forEach(c => {
+                const color = CITY_COLORS[c.city] || '#6a6a6a';
+                legendHtml += `<div class="scene-legend-item"><div class="scene-legend-dot" style="background:${color};"></div>${c.flag} ${c.city} ${c.percentage}%</div>`;
+            });
+            legendHtml += '</div>';
+
+            // Headline
+            const top = cities[0];
+            const headline = `<div style="font-family:var(--font-body);font-size:0.85rem;color:var(--text);margin-bottom:1rem;line-height:1.5;">Your sound is <span style="color:${CITY_COLORS[top.city] || 'var(--lime)'};font-weight:600;">${top.percentage}% ${top.city}</span>${cities.length > 1 ? `, ${cities[1].percentage}% ${cities[1].city}` : ''}${cities.length > 2 ? `, ${cities[2].percentage}% ${cities[2].city}` : ''}</div>`;
+
+            el.innerHTML = headline + barHtml + legendHtml;
+        }
+
+        function renderTasteTribe(data) {
+            const el = document.getElementById('tasteTribeContent');
+            const t = data.tribe;
+
+            let html = `
+                <div class="tribe-header">
+                    <div class="tribe-icon">${escapeHtml(t.icon)}</div>
+                    <div>
+                        <div class="tribe-name">${escapeHtml(t.name)}</div>
+                        <div class="tribe-tagline">"${escapeHtml(t.tagline)}"</div>
+                    </div>
+                </div>
+                <div class="tribe-description">${escapeHtml(t.description)}</div>
+                <div class="tribe-confidence">
+                    <span>${t.confidence}% match</span>
+                    <div class="tribe-confidence-bar"><div class="tribe-confidence-fill" style="width:${t.confidence}%;"></div></div>
+                </div>
+            `;
+
+            if (data.secondary) {
+                html += `<div style="margin-top:0.75rem;padding-top:0.65rem;border-top:1px solid var(--border);">
+                    <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.06em;">SECONDARY: </span>
+                    <span style="font-family:var(--font-display);font-size:1rem;letter-spacing:0.06em;color:var(--text);">${escapeHtml(data.secondary.name)}</span>
+                    <span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--text-dim);margin-left:0.5rem;">${data.secondary.confidence}%</span>
+                </div>`;
+            }
+
+            if (data.entropy !== undefined) {
+                html += `<div style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.55rem;color:var(--text-faint);letter-spacing:0.04em;">ENTROPY: ${data.entropy} &middot; AVG POP: ${data.avg_popularity}</div>`;
+            }
+
+            el.innerHTML = html;
+        }
+
+        function renderBridges(data) {
+            const el = document.getElementById('bridgesContent');
+            if (!data.bridges.length) {
+                el.innerHTML = '<div style="color:var(--text-dim);font-size:0.78rem;">Not enough genre diversity detected yet.</div>';
+                return;
+            }
+
+            el.innerHTML = data.bridges.map(b => `
+                <div class="bridge-item">
+                    <div class="bridge-rarity">
+                        ${b.rarity_pct}%<span class="bridge-rarity-unit">of listeners</span>
+                    </div>
+                    <div>
+                        <div class="bridge-genres">${escapeHtml(b.genre_a)} + ${escapeHtml(b.genre_b)}</div>
+                        <div class="bridge-text">${escapeHtml(b.description)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDancefloor(data) {
+            const el = document.getElementById('dancefloorContent');
+            el.innerHTML = `
+                <div class="dancefloor-gauge">
+                    <div class="gauge-track">
+                        <div class="gauge-fill-dance" style="width:${data.dancefloor_pct}%;">${data.dancefloor_pct}%</div>
+                        <div class="gauge-fill-head">${data.headphones_pct}%</div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span class="gauge-label">Dancefloor</span>
+                        <span class="gauge-label">Headphones</span>
+                    </div>
+                    <div class="gauge-verdict">${escapeHtml(data.label)}</div>
+                </div>
+            `;
         }
 
         // ============================================================
@@ -1904,7 +2389,7 @@
                         showOverlay('Done!', 'Your matches are ready.', 100);
                         setTimeout(async () => {
                             hideOverlay();
-                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore()]);
+                            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna()]);
                         }, 800);
                     } else if (!d.running && !d.last_refresh) {
                         // Nothing running and no data — stop polling, show empty state
@@ -1953,7 +2438,7 @@
                 }
             } catch (e) { /* ignore, just load normally */ }
 
-            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore()]);
+            await Promise.all([loadTasteProfile(), loadEvents(), loadArtists(), loadDepthScore(), loadTasteDna()]);
             checkNps();
         });
 

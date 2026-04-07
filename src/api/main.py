@@ -623,6 +623,20 @@ async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
     })
 
 
+@app.get("/api/taste-dna")
+async def get_taste_dna(user=Depends(get_session_user)) -> JSONResponse:
+    """Compute Taste DNA features from artist genre data."""
+    from src.analytics.taste_dna import compute_taste_dna
+
+    cache = _user_cache(user["id"]) if user else _cache
+    artists = cache.get("artist_objects") or []
+    if not artists:
+        return JSONResponse(content={"error": "No artist data", "scene_city": None, "taste_tribe": None, "cross_genre_bridges": None, "dancefloor_ratio": None})
+
+    result = compute_taste_dna(artists)
+    return JSONResponse(content=result)
+
+
 @app.get("/api/artists")
 async def get_artists(user=Depends(get_session_user)) -> JSONResponse:
     """Return the collected artist list with full metadata from the last pipeline run."""
