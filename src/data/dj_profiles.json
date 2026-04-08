@@ -1945,5 +1945,2385 @@
       "house"
     ],
     "city": "Detroit"
+  },
+  {
+    "name": "Astrix",
+    "soundcloud": "astikiofficial",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Infected Mushroom",
+    "soundcloud": "infected-mushroom",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Haifa"
+  },
+  {
+    "name": "Blastoyz",
+    "soundcloud": "blastoyz",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Captain Hook",
+    "soundcloud": "captain-hook",
+    "genres": [
+      "psytrance",
+      "progressive trance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Ace Ventura",
+    "soundcloud": "schatsi",
+    "genres": [
+      "psytrance",
+      "progressive trance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Neelix",
+    "soundcloud": "neelix",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Hamburg"
+  },
+  {
+    "name": "Avalon",
+    "soundcloud": "djavalon",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Liquid Soul",
+    "soundcloud": "liquid-soul",
+    "genres": [
+      "psytrance",
+      "progressive trance"
+    ],
+    "city": "Zurich"
+  },
+  {
+    "name": "Ghost Rider",
+    "soundcloud": "ghost-rider-music",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Berg",
+    "soundcloud": "djberg",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Upgrade",
+    "soundcloud": "upgradepsy",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Skazi",
+    "soundcloud": "skaziofficial",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Mandragora",
+    "soundcloud": "mandragorapsy",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Ranji",
+    "soundcloud": "ranjimusic",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Coming Soon",
+    "soundcloud": "comingsoonofficial",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Tristan",
+    "soundcloud": "tristanpsy",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Outsiders",
+    "soundcloud": "theoutsidersmusic",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Highlight Tribe",
+    "soundcloud": "highlighttribe",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Goa"
+  },
+  {
+    "name": "Shpongle",
+    "soundcloud": "shponglemusic",
+    "genres": [
+      "psytrance",
+      "ambient"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Hilight Tribe",
+    "soundcloud": "hilighttribe",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Major7",
+    "soundcloud": "major7",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Reality Test",
+    "soundcloud": "realitytest",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Ritmo",
+    "soundcloud": "ritmomusic",
+    "genres": [
+      "psytrance",
+      "progressive trance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Aly & Fila",
+    "soundcloud": "alyandfila",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Cairo"
+  },
+  {
+    "name": "John O'Callaghan",
+    "soundcloud": "johnocallaghan",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Dublin"
+  },
+  {
+    "name": "Cosmic Gate",
+    "soundcloud": "cosmicgateofficial",
+    "genres": [
+      "trance",
+      "progressive trance"
+    ],
+    "city": "Krefeld"
+  },
+  {
+    "name": "Bryan Kearney",
+    "soundcloud": "bryankearney",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Dublin"
+  },
+  {
+    "name": "Markus Schulz",
+    "soundcloud": "markusschulz",
+    "genres": [
+      "trance",
+      "progressive trance"
+    ],
+    "city": "Cologne"
+  },
+  {
+    "name": "Andrew Rayel",
+    "soundcloud": "andrewrayel",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Chisinau"
+  },
+  {
+    "name": "Gareth Emery",
+    "soundcloud": "garethemery",
+    "genres": [
+      "trance"
+    ],
+    "city": "Los Angeles"
+  },
+  {
+    "name": "Ilan Bluestone",
+    "soundcloud": "ilanbluestone",
+    "genres": [
+      "trance",
+      "progressive trance"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Jason Ross",
+    "soundcloud": "jasonrossofficial",
+    "genres": [
+      "trance",
+      "progressive"
+    ],
+    "city": "Los Angeles"
+  },
+  {
+    "name": "Gabriel & Dresden",
+    "soundcloud": "gabrielanddresden",
+    "genres": [
+      "trance",
+      "progressive trance"
+    ],
+    "city": "San Francisco"
+  },
+  {
+    "name": "Gaia",
+    "soundcloud": "gaiamusic",
+    "genres": [
+      "trance"
+    ],
+    "city": "Leiden"
+  },
+  {
+    "name": "Allen Watts",
+    "soundcloud": "allenwatts",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Warsaw"
+  },
+  {
+    "name": "Mark Sherry",
+    "soundcloud": "marksherry",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Glasgow"
+  },
+  {
+    "name": "Standerwick",
+    "soundcloud": "standerwick",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "Factor B",
+    "soundcloud": "factorb",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "Melbourne"
+  },
+  {
+    "name": "Sean Tyas",
+    "soundcloud": "seantyas",
+    "genres": [
+      "uplifting trance"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Sander van Doorn",
+    "soundcloud": "sandervandoorn",
+    "genres": [
+      "trance",
+      "progressive"
+    ],
+    "city": "Eindhoven"
+  },
+  {
+    "name": "Andrew Bayer",
+    "soundcloud": "andrewbayer",
+    "genres": [
+      "trance",
+      "progressive"
+    ],
+    "city": "Washington DC"
+  },
+  {
+    "name": "Genix",
+    "soundcloud": "genaborealisdj",
+    "genres": [
+      "trance",
+      "progressive"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "KhoMha",
+    "soundcloud": "khomhamusic",
+    "genres": [
+      "trance",
+      "progressive trance"
+    ],
+    "city": "Mexico City"
+  },
+  {
+    "name": "Scot Project",
+    "soundcloud": "scotproject",
+    "genres": [
+      "hard trance"
+    ],
+    "city": "Bielefeld"
+  },
+  {
+    "name": "Kai Tracid",
+    "soundcloud": "kaitracid",
+    "genres": [
+      "hard trance"
+    ],
+    "city": "Cologne"
+  },
+  {
+    "name": "Talla 2XLC",
+    "soundcloud": "talla2xlc",
+    "genres": [
+      "trance",
+      "hard trance"
+    ],
+    "city": "Frankfurt"
+  },
+  {
+    "name": "Cloonee",
+    "soundcloud": "cloonee",
+    "genres": [
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "James Hype",
+    "soundcloud": "jameshype",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Layton Giordani",
+    "soundcloud": "laytongiordani",
+    "genres": [
+      "techno"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Mason Maynard",
+    "soundcloud": "mason-maynard",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Manchester"
+  },
+  {
+    "name": "Wade",
+    "soundcloud": "wade-music",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Barcelona"
+  },
+  {
+    "name": "Harry Romero",
+    "soundcloud": "harryromero",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "New Jersey"
+  },
+  {
+    "name": "Chus",
+    "soundcloud": "djchus",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Mark Knight",
+    "soundcloud": "djmarkknight",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Loco Dice",
+    "soundcloud": "locodice",
+    "genres": [
+      "tech house",
+      "techno"
+    ],
+    "city": "Dusseldorf"
+  },
+  {
+    "name": "Hot Since 82",
+    "soundcloud": "hotsince82",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Leeds"
+  },
+  {
+    "name": "Eats Everything",
+    "soundcloud": "eatseverything",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "Solardo",
+    "soundcloud": "solardo",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Manchester"
+  },
+  {
+    "name": "wAFF",
+    "soundcloud": "waffmusic",
+    "genres": [
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Detlef",
+    "soundcloud": "detlef-music",
+    "genres": [
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Max Styler",
+    "soundcloud": "maxstyler",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Los Angeles"
+  },
+  {
+    "name": "Biscits",
+    "soundcloud": "biscits",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Joshwa",
+    "soundcloud": "joshwauk",
+    "genres": [
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "LP Giobbi",
+    "soundcloud": "lpgiobbi",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Los Angeles"
+  },
+  {
+    "name": "Lucati",
+    "soundcloud": "lucatimusic",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Los Angeles"
+  },
+  {
+    "name": "Blond:ish",
+    "soundcloud": "blondish",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Montreal"
+  },
+  {
+    "name": "Shimza",
+    "soundcloud": "shimaborisa",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Johannesburg"
+  },
+  {
+    "name": "Da Capo",
+    "soundcloud": "da-capo-sa",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Johannesburg"
+  },
+  {
+    "name": "Enoo Napa",
+    "soundcloud": "enoonapa",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Johannesburg"
+  },
+  {
+    "name": "Themba",
+    "soundcloud": "thembamusic",
+    "genres": [
+      "afro house",
+      "techno"
+    ],
+    "city": "Johannesburg"
+  },
+  {
+    "name": "Caiiro",
+    "soundcloud": "caiiro",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Pretoria"
+  },
+  {
+    "name": "Sun-El Musician",
+    "soundcloud": "sun-el-musician",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Johannesburg"
+  },
+  {
+    "name": "Kususa",
+    "soundcloud": "kususa",
+    "genres": [
+      "afro house",
+      "afro tech"
+    ],
+    "city": "Durban"
+  },
+  {
+    "name": "Culoe De Song",
+    "soundcloud": "culoedesong",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Durban"
+  },
+  {
+    "name": "Zakes Bantwini",
+    "soundcloud": "zakesbantwini",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Durban"
+  },
+  {
+    "name": "Hyenah",
+    "soundcloud": "hyenah",
+    "genres": [
+      "afro house",
+      "house"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Floyd Lavine",
+    "soundcloud": "floydlavine",
+    "genres": [
+      "afro house",
+      "house"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Pablo Fierro",
+    "soundcloud": "pablofierro",
+    "genres": [
+      "afro house",
+      "house"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Djeff",
+    "soundcloud": "djlobodjeff",
+    "genres": [
+      "afro house"
+    ],
+    "city": "Luanda"
+  },
+  {
+    "name": "Colyn",
+    "soundcloud": "colynmusic",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Cassian",
+    "soundcloud": "cassian",
+    "genres": [
+      "melodic techno",
+      "progressive"
+    ],
+    "city": "Sydney"
+  },
+  {
+    "name": "Chris Avantgarde",
+    "soundcloud": "chrisavantgarde",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Munich"
+  },
+  {
+    "name": "Patrice Baumel",
+    "soundcloud": "patricebaumel",
+    "genres": [
+      "melodic techno",
+      "progressive"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Konstantin Sibold",
+    "soundcloud": "konstantinsibold",
+    "genres": [
+      "melodic techno",
+      "house"
+    ],
+    "city": "Stuttgart"
+  },
+  {
+    "name": "Ae:ther",
+    "soundcloud": "aaborethermusic",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Hamburg"
+  },
+  {
+    "name": "Ocula",
+    "soundcloud": "oculamusic",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "8Kays",
+    "soundcloud": "8kays",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Kyiv"
+  },
+  {
+    "name": "Vaal",
+    "soundcloud": "vaalmusic",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Soel",
+    "soundcloud": "soel-music",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "TRYM",
+    "soundcloud": "trymmusic",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Hamburg"
+  },
+  {
+    "name": "Headless Horseman",
+    "soundcloud": "headlesshorseman",
+    "genres": [
+      "industrial techno"
+    ],
+    "city": "Dublin"
+  },
+  {
+    "name": "Ansome",
+    "soundcloud": "ansome",
+    "genres": [
+      "industrial techno"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "Klangkuenstler",
+    "soundcloud": "klangkuenstler",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Munich"
+  },
+  {
+    "name": "HOR",
+    "soundcloud": "horberlin",
+    "genres": [
+      "techno",
+      "hard techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Inhalt der Nacht",
+    "soundcloud": "inhaltdernacht",
+    "genres": [
+      "industrial techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "AIROD",
+    "soundcloud": "airod",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Toulouse"
+  },
+  {
+    "name": "Alignment",
+    "soundcloud": "alignmentmusic",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Budapest"
+  },
+  {
+    "name": "Brutalismus 3000",
+    "soundcloud": "brutalismus3000",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Vienna"
+  },
+  {
+    "name": "Shlømo",
+    "soundcloud": "shlomo",
+    "genres": [
+      "techno",
+      "industrial techno"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "KI/KI",
+    "soundcloud": "kikidjproducer",
+    "genres": [
+      "hard techno",
+      "trance"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Klofama",
+    "soundcloud": "klofama",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Novah",
+    "soundcloud": "novahmusic",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Basswell",
+    "soundcloud": "basswell",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Onlynumbers",
+    "soundcloud": "onlynumbers",
+    "genres": [
+      "hard techno"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Rene Wise",
+    "soundcloud": "renewise",
+    "genres": [
+      "techno",
+      "industrial techno"
+    ],
+    "city": "Detroit"
+  },
+  {
+    "name": "Nia Archives",
+    "soundcloud": "niaarchives",
+    "genres": [
+      "jungle",
+      "breakbeat"
+    ],
+    "city": "Manchester"
+  },
+  {
+    "name": "SHERELLE",
+    "soundcloud": "sherelle",
+    "genres": [
+      "jungle",
+      "breakbeat"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Shy FX",
+    "soundcloud": "shyfx",
+    "genres": [
+      "jungle",
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Tim Reaper",
+    "soundcloud": "timreaper",
+    "genres": [
+      "jungle",
+      "breakbeat"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Sully",
+    "soundcloud": "sullyuk",
+    "genres": [
+      "jungle",
+      "breakbeat"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Coco Bryce",
+    "soundcloud": "cocobryce",
+    "genres": [
+      "jungle",
+      "breakbeat"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Scratcha DVA",
+    "soundcloud": "scratchadva",
+    "genres": [
+      "breakbeat",
+      "bass"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "DJ Seinfeld",
+    "soundcloud": "djseinfeld",
+    "genres": [
+      "breakbeat",
+      "house"
+    ],
+    "city": "Malmo"
+  },
+  {
+    "name": "Skee Mask",
+    "soundcloud": "skeemask",
+    "genres": [
+      "breakbeat",
+      "ambient"
+    ],
+    "city": "Munich"
+  },
+  {
+    "name": "Jossy Mitsu",
+    "soundcloud": "jossymitsu",
+    "genres": [
+      "breakbeat",
+      "jungle"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Sub Focus",
+    "soundcloud": "subfocus",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Dimension",
+    "soundcloud": "dimension_uk",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Calibre",
+    "soundcloud": "calibre-music",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Belfast"
+  },
+  {
+    "name": "Chase & Status",
+    "soundcloud": "chaseandstatus",
+    "genres": [
+      "dnb",
+      "bass"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Wilkinson",
+    "soundcloud": "wilkinsonuk",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Camo & Krooked",
+    "soundcloud": "camoandkrooked",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Vienna"
+  },
+  {
+    "name": "Netsky",
+    "soundcloud": "netsky",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Edegem"
+  },
+  {
+    "name": "Fred V",
+    "soundcloud": "fredvmusic",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "Metrik",
+    "soundcloud": "metrikmusic",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Hugh Hardie",
+    "soundcloud": "hughhardie",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Edinburgh"
+  },
+  {
+    "name": "Alix Perez",
+    "soundcloud": "alixperez",
+    "genres": [
+      "dnb",
+      "bass"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Machinedrum",
+    "soundcloud": "machinedrum",
+    "genres": [
+      "dnb",
+      "bass"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Kanine",
+    "soundcloud": "kanine-music",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "LSB",
+    "soundcloud": "lsbmusic",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Maduk",
+    "soundcloud": "madukdnb",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Haarlem"
+  },
+  {
+    "name": "S.P.Y",
+    "soundcloud": "spydnb",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Pendulum",
+    "soundcloud": "pendulum",
+    "genres": [
+      "dnb",
+      "bass"
+    ],
+    "city": "Perth"
+  },
+  {
+    "name": "Friction",
+    "soundcloud": "djfriction",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Koven",
+    "soundcloud": "kovenuk",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "DJ EZ",
+    "soundcloud": "djez",
+    "genres": [
+      "uk garage",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "MJ Cole",
+    "soundcloud": "mjcole",
+    "genres": [
+      "uk garage"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Conducta",
+    "soundcloud": "conducta",
+    "genres": [
+      "uk garage"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "El-B",
+    "soundcloud": "elb-music",
+    "genres": [
+      "uk garage"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Todd Edwards",
+    "soundcloud": "toddedwards",
+    "genres": [
+      "uk garage",
+      "house"
+    ],
+    "city": "New Jersey"
+  },
+  {
+    "name": "Wookie",
+    "soundcloud": "wookie",
+    "genres": [
+      "uk garage",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Tru Fonix",
+    "soundcloud": "trufonix",
+    "genres": [
+      "uk garage"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Bklava",
+    "soundcloud": "bklava",
+    "genres": [
+      "uk garage",
+      "house"
+    ],
+    "city": "Birmingham"
+  },
+  {
+    "name": "Huxley",
+    "soundcloud": "huxley",
+    "genres": [
+      "uk garage",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Champion",
+    "soundcloud": "championdj",
+    "genres": [
+      "uk garage"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Deepchord",
+    "soundcloud": "deepchord",
+    "genres": [
+      "dub techno"
+    ],
+    "city": "Detroit"
+  },
+  {
+    "name": "Monolake",
+    "soundcloud": "monolake",
+    "genres": [
+      "dub techno",
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Moritz von Oswald",
+    "soundcloud": "moritzvon-oswald",
+    "genres": [
+      "dub techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Pole",
+    "soundcloud": "polemusic",
+    "genres": [
+      "dub techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Fluxion",
+    "soundcloud": "fluxion",
+    "genres": [
+      "dub techno"
+    ],
+    "city": "Athens"
+  },
+  {
+    "name": "Vril",
+    "soundcloud": "vrilmusic",
+    "genres": [
+      "dub techno",
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Rhythm & Sound",
+    "soundcloud": "rhythmandsound",
+    "genres": [
+      "dub techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Andy Stott",
+    "soundcloud": "andystott",
+    "genres": [
+      "dub techno",
+      "ambient"
+    ],
+    "city": "Manchester"
+  },
+  {
+    "name": "Vladislav Delay",
+    "soundcloud": "vladislavdelay",
+    "genres": [
+      "dub techno",
+      "ambient"
+    ],
+    "city": "Helsinki"
+  },
+  {
+    "name": "Ken Ishii",
+    "soundcloud": "kenishiiofficial",
+    "genres": [
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "DJ Nobu",
+    "soundcloud": "djnobu",
+    "genres": [
+      "techno"
+    ],
+    "city": "Chiba"
+  },
+  {
+    "name": "Soichi Terada",
+    "soundcloud": "soichiterada",
+    "genres": [
+      "house"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Shinichi Osawa",
+    "soundcloud": "shinichiosawa",
+    "genres": [
+      "electro",
+      "house"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Takkyu Ishino",
+    "soundcloud": "takkyuishino",
+    "genres": [
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Satoshi Tomiie",
+    "soundcloud": "satoshitomiie",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "DJ Sodeyama",
+    "soundcloud": "sodeyama",
+    "genres": [
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Wata Igarashi",
+    "soundcloud": "wataigarashi",
+    "genres": [
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Gonno",
+    "soundcloud": "gonno",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Powder",
+    "soundcloud": "powder-jp",
+    "genres": [
+      "house",
+      "disco"
+    ],
+    "city": "Osaka"
+  },
+  {
+    "name": "Classmatic",
+    "soundcloud": "classmatic",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Santa Catarina"
+  },
+  {
+    "name": "Gui Boratto",
+    "soundcloud": "guiboratto",
+    "genres": [
+      "techno",
+      "progressive"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Victor Ruiz",
+    "soundcloud": "victorruiz",
+    "genres": [
+      "techno"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Wehbba",
+    "soundcloud": "wehbba",
+    "genres": [
+      "techno"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Beltran",
+    "soundcloud": "beltranmusic",
+    "genres": [
+      "techno"
+    ],
+    "city": "Buenos Aires"
+  },
+  {
+    "name": "Hernan Cattaneo",
+    "soundcloud": "hernancattaneo",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Buenos Aires"
+  },
+  {
+    "name": "Nick Warren",
+    "soundcloud": "djnickwarren",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "DJ Fronter",
+    "soundcloud": "djfronter",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Cali"
+  },
+  {
+    "name": "Betoko",
+    "soundcloud": "betoko",
+    "genres": [
+      "techno",
+      "progressive"
+    ],
+    "city": "Mexico City"
+  },
+  {
+    "name": "Bastian Bux",
+    "soundcloud": "bastianbux",
+    "genres": [
+      "techno"
+    ],
+    "city": "Barcelona"
+  },
+  {
+    "name": "Efe Ce Ele",
+    "soundcloud": "efecele",
+    "genres": [
+      "techno",
+      "electro"
+    ],
+    "city": "Bogota"
+  },
+  {
+    "name": "Luca Bacchetti",
+    "soundcloud": "lucabacchetti",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Rome"
+  },
+  {
+    "name": "D-Nox",
+    "soundcloud": "d-nox",
+    "genres": [
+      "progressive",
+      "techno"
+    ],
+    "city": "Sao Paulo"
+  },
+  {
+    "name": "Nic Fanciulli",
+    "soundcloud": "nicfanciulli",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Maidstone"
+  },
+  {
+    "name": "Richy Ahmed",
+    "soundcloud": "richyahmed",
+    "genres": [
+      "house",
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Andrea Oliva",
+    "soundcloud": "andreaoliva",
+    "genres": [
+      "house",
+      "tech house"
+    ],
+    "city": "Geneva"
+  },
+  {
+    "name": "Chelina Manuhutu",
+    "soundcloud": "chelinamanuhutu",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "tINI",
+    "soundcloud": "tini-tinimusic",
+    "genres": [
+      "house",
+      "minimal"
+    ],
+    "city": "Munich"
+  },
+  {
+    "name": "Damian Lazarus",
+    "soundcloud": "damianlazarus",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Bedouin",
+    "soundcloud": "bedouinsoundclash",
+    "genres": [
+      "house",
+      "progressive"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Luciano Ibiza",
+    "soundcloud": "lucianocadenzamusic",
+    "genres": [
+      "minimal",
+      "house"
+    ],
+    "city": "Ibiza"
+  },
+  {
+    "name": "Laing",
+    "soundcloud": "laingmusic",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Claude VonStroke",
+    "soundcloud": "claudevonstroke",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Detroit"
+  },
+  {
+    "name": "404Error",
+    "soundcloud": "404error-dj",
+    "genres": [
+      "techno"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Wally Lopez",
+    "soundcloud": "wallylopezofficial",
+    "genres": [
+      "house",
+      "tech house"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Nano",
+    "soundcloud": "nanodj",
+    "genres": [
+      "techno"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Guti",
+    "soundcloud": "gutiofficial",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Hector",
+    "soundcloud": "hectorvami",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Sparrow & Barbossa",
+    "soundcloud": "sparrowandbarbossa",
+    "genres": [
+      "house",
+      "disco"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Chris Figueroa",
+    "soundcloud": "chrisfigueroa",
+    "genres": [
+      "house"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Pomboklap",
+    "soundcloud": "pomboklap",
+    "genres": [
+      "house"
+    ],
+    "city": "Madrid"
+  },
+  {
+    "name": "Tommy Four Seven",
+    "soundcloud": "tommyfourseven",
+    "genres": [
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Lewis Fautzi",
+    "soundcloud": "lewisfautzi",
+    "genres": [
+      "techno"
+    ],
+    "city": "Lisbon"
+  },
+  {
+    "name": "Phase",
+    "soundcloud": "phase-official",
+    "genres": [
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "UVB",
+    "soundcloud": "uvbofficial",
+    "genres": [
+      "techno",
+      "industrial techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Clouds",
+    "soundcloud": "cloudsband",
+    "genres": [
+      "techno"
+    ],
+    "city": "Glasgow"
+  },
+  {
+    "name": "Boston 168",
+    "soundcloud": "boston168",
+    "genres": [
+      "techno"
+    ],
+    "city": "Bologna"
+  },
+  {
+    "name": "Setaoc Mass",
+    "soundcloud": "setaocmass",
+    "genres": [
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "SNTS",
+    "soundcloud": "sntssnts",
+    "genres": [
+      "techno",
+      "industrial techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "AnD",
+    "soundcloud": "and-official",
+    "genres": [
+      "techno",
+      "industrial techno"
+    ],
+    "city": "Manchester"
+  },
+  {
+    "name": "Dasha Rush",
+    "soundcloud": "dasharush",
+    "genres": [
+      "techno"
+    ],
+    "city": "Moscow"
+  },
+  {
+    "name": "Kas:st",
+    "soundcloud": "kasst",
+    "genres": [
+      "techno",
+      "melodic techno"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Introversion",
+    "soundcloud": "introversion-music",
+    "genres": [
+      "techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "SPFDJ",
+    "soundcloud": "spfdj",
+    "genres": [
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Partiboi69",
+    "soundcloud": "partiboi69",
+    "genres": [
+      "electro",
+      "techno"
+    ],
+    "city": "Melbourne"
+  },
+  {
+    "name": "DJ Heartstring",
+    "soundcloud": "djheartstring",
+    "genres": [
+      "trance",
+      "techno"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Gerd Janson",
+    "soundcloud": "gerdjanson",
+    "genres": [
+      "house"
+    ],
+    "city": "Frankfurt"
+  },
+  {
+    "name": "Jackmaster",
+    "soundcloud": "jackmaster",
+    "genres": [
+      "house"
+    ],
+    "city": "Glasgow"
+  },
+  {
+    "name": "Danilo Plessow (MCDE)",
+    "soundcloud": "motorcitydrum",
+    "genres": [
+      "house",
+      "disco"
+    ],
+    "city": "Heidelberg"
+  },
+  {
+    "name": "Horsemeat Disco",
+    "soundcloud": "horsemeatdisco",
+    "genres": [
+      "disco",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Antal",
+    "soundcloud": "antal",
+    "genres": [
+      "house",
+      "disco"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Young Marco",
+    "soundcloud": "youngmarco",
+    "genres": [
+      "house",
+      "disco"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Saoirse",
+    "soundcloud": "saoirse-dj",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Bradley Zero",
+    "soundcloud": "bradleyzero",
+    "genres": [
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Job Jobse",
+    "soundcloud": "jobjobse",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "salute",
+    "soundcloud": "saluteuk",
+    "genres": [
+      "house",
+      "bass"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Moxie",
+    "soundcloud": "moxiedj",
+    "genres": [
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Horse Meat Disco",
+    "soundcloud": "horsemeatdisco",
+    "genres": [
+      "disco",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Will Clarke",
+    "soundcloud": "willclarkemusic",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Bristol"
+  },
+  {
+    "name": "Toman",
+    "soundcloud": "tomanmusic",
+    "genres": [
+      "house",
+      "tech house"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Archie Hamilton",
+    "soundcloud": "archiehamilton",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Louie Vega",
+    "soundcloud": "louievegaofficial",
+    "genres": [
+      "house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Kenny Dope",
+    "soundcloud": "kennydopeofficial",
+    "genres": [
+      "house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Todd Terry",
+    "soundcloud": "toddterry",
+    "genres": [
+      "house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Frankie Knuckles",
+    "soundcloud": "frankieknuckles",
+    "genres": [
+      "house"
+    ],
+    "city": "Chicago"
+  },
+  {
+    "name": "MK",
+    "soundcloud": "marckinchen",
+    "genres": [
+      "house"
+    ],
+    "city": "Detroit"
+  },
+  {
+    "name": "Sonny Fodera",
+    "soundcloud": "sonnyfodera",
+    "genres": [
+      "house"
+    ],
+    "city": "Melbourne"
+  },
+  {
+    "name": "John Digweed",
+    "soundcloud": "johndigweed",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Hastings"
+  },
+  {
+    "name": "Danny Tenaglia",
+    "soundcloud": "dannytenaglia",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Roger Sanchez",
+    "soundcloud": "rogersanchez",
+    "genres": [
+      "house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Guy J",
+    "soundcloud": "guy-j",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Jeremy Olander",
+    "soundcloud": "jeremyolander",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Stockholm"
+  },
+  {
+    "name": "Tinlicker",
+    "soundcloud": "tinlicker",
+    "genres": [
+      "progressive",
+      "trance"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "Marsh",
+    "soundcloud": "marshmusic",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Yolanda Be Cool",
+    "soundcloud": "yolandabecool",
+    "genres": [
+      "house"
+    ],
+    "city": "Sydney"
+  },
+  {
+    "name": "Eli & Fur",
+    "soundcloud": "eliandfur",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "CID",
+    "soundcloud": "cidmusic",
+    "genres": [
+      "house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Sabo",
+    "soundcloud": "djsabo",
+    "genres": [
+      "house",
+      "afro house"
+    ],
+    "city": "New York"
+  },
+  {
+    "name": "Nicola Cruz",
+    "soundcloud": "nicolacruz",
+    "genres": [
+      "house",
+      "ambient"
+    ],
+    "city": "Quito"
+  },
+  {
+    "name": "Acid Pauli",
+    "soundcloud": "acidpauli",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Behrouz",
+    "soundcloud": "behrouz",
+    "genres": [
+      "house"
+    ],
+    "city": "Tehran"
+  },
+  {
+    "name": "Chaim",
+    "soundcloud": "chaimmusic",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Rodriguez Jr.",
+    "soundcloud": "rodriguezjr",
+    "genres": [
+      "melodic techno",
+      "house"
+    ],
+    "city": "Paris"
+  },
+  {
+    "name": "Viken Arman",
+    "soundcloud": "vikenarman",
+    "genres": [
+      "house",
+      "progressive"
+    ],
+    "city": "Marseille"
+  },
+  {
+    "name": "Red Axes",
+    "soundcloud": "redaxes",
+    "genres": [
+      "house",
+      "electro"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Oceanvs Orientalis",
+    "soundcloud": "oceanvsorientalis",
+    "genres": [
+      "house",
+      "ambient"
+    ],
+    "city": "Istanbul"
+  },
+  {
+    "name": "Eelke Kleijn",
+    "soundcloud": "eelkekleijn",
+    "genres": [
+      "progressive",
+      "house"
+    ],
+    "city": "Rotterdam"
+  },
+  {
+    "name": "Jan Blomqvist",
+    "soundcloud": "janblomqvist",
+    "genres": [
+      "house",
+      "progressive"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "N'to",
+    "soundcloud": "ntomusic",
+    "genres": [
+      "melodic techno",
+      "house"
+    ],
+    "city": "Marseille"
+  },
+  {
+    "name": "Worakls",
+    "soundcloud": "worakls",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Marseille"
+  },
+  {
+    "name": "Joachim Pastor",
+    "soundcloud": "joachimpastor",
+    "genres": [
+      "melodic techno"
+    ],
+    "city": "Marseille"
+  },
+  {
+    "name": "Stavroz",
+    "soundcloud": "stavroz",
+    "genres": [
+      "house",
+      "progressive"
+    ],
+    "city": "Ghent"
+  },
+  {
+    "name": "Ajja",
+    "soundcloud": "ajjamusic",
+    "genres": [
+      "psytrance"
+    ],
+    "city": "Switzerland"
+  },
+  {
+    "name": "Emok",
+    "soundcloud": "emok",
+    "genres": [
+      "psytrance",
+      "progressive trance"
+    ],
+    "city": "Copenhagen"
+  },
+  {
+    "name": "Lifeforms",
+    "soundcloud": "lifeformsmusic",
+    "genres": [
+      "progressive trance"
+    ],
+    "city": "Tel Aviv"
+  },
+  {
+    "name": "Ruben de Ronde",
+    "soundcloud": "rubenderonde",
+    "genres": [
+      "trance"
+    ],
+    "city": "Amsterdam"
+  },
+  {
+    "name": "MaRLo",
+    "soundcloud": "marlomusic",
+    "genres": [
+      "trance"
+    ],
+    "city": "Melbourne"
+  },
+  {
+    "name": "Protoculture",
+    "soundcloud": "protoculture",
+    "genres": [
+      "trance",
+      "psytrance"
+    ],
+    "city": "Cape Town"
+  },
+  {
+    "name": "Grum",
+    "soundcloud": "grummusic",
+    "genres": [
+      "trance",
+      "progressive"
+    ],
+    "city": "Glasgow"
+  },
+  {
+    "name": "Lee Foss",
+    "soundcloud": "leefoss",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Chicago"
+  },
+  {
+    "name": "Latmun",
+    "soundcloud": "latmun",
+    "genres": [
+      "tech house"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Hannah Wants",
+    "soundcloud": "hannahwants",
+    "genres": [
+      "tech house",
+      "house"
+    ],
+    "city": "Birmingham"
+  },
+  {
+    "name": "Waze & Odyssey",
+    "soundcloud": "wazeandodyssey",
+    "genres": [
+      "house",
+      "uk garage"
+    ],
+    "city": "Leeds"
+  },
+  {
+    "name": "Nathan Barato",
+    "soundcloud": "nathanbarato",
+    "genres": [
+      "tech house"
+    ],
+    "city": "Toronto"
+  },
+  {
+    "name": "Technimatic",
+    "soundcloud": "technimatic",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Makoto",
+    "soundcloud": "makotomusic",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Tokyo"
+  },
+  {
+    "name": "Etherwood",
+    "soundcloud": "etherwood",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Oxford"
+  },
+  {
+    "name": "Logistics",
+    "soundcloud": "logisticsnhs",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "High Contrast",
+    "soundcloud": "highcontrast",
+    "genres": [
+      "dnb"
+    ],
+    "city": "Cardiff"
+  },
+  {
+    "name": "Pola & Bryson",
+    "soundcloud": "polaandbryson",
+    "genres": [
+      "dnb"
+    ],
+    "city": "UK"
+  },
+  {
+    "name": "Hybrid Minds",
+    "soundcloud": "hybridminds",
+    "genres": [
+      "dnb"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "Layo & Bushwacka!",
+    "soundcloud": "layoandbushwacka",
+    "genres": [
+      "house",
+      "breakbeat"
+    ],
+    "city": "London"
+  },
+  {
+    "name": "DJ Pierre",
+    "soundcloud": "djpierreofficial",
+    "genres": [
+      "house"
+    ],
+    "city": "Chicago"
+  },
+  {
+    "name": "Kenny Glasgow",
+    "soundcloud": "kennyglasgow",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Toronto"
+  },
+  {
+    "name": "Pig&Dan",
+    "soundcloud": "piganddan",
+    "genres": [
+      "techno"
+    ],
+    "city": "Mallorca"
+  },
+  {
+    "name": "Mano Le Tough",
+    "soundcloud": "manoletough",
+    "genres": [
+      "house"
+    ],
+    "city": "Berlin"
+  },
+  {
+    "name": "Roman Flugel",
+    "soundcloud": "romanflugel",
+    "genres": [
+      "house",
+      "techno"
+    ],
+    "city": "Frankfurt"
+  },
+  {
+    "name": "Rebuke",
+    "soundcloud": "rebukemusic",
+    "genres": [
+      "techno",
+      "house"
+    ],
+    "city": "Derry"
   }
 ]
