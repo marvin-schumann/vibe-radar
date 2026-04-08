@@ -12,6 +12,7 @@ from fastapi.templating import Jinja2Templates
 from loguru import logger
 from spotipy.oauth2 import SpotifyOAuth
 
+from src.api.approval_tokens import create_token, validate_and_consume
 from src.api.deps import get_session_user
 from src.collectors.spotify import SCOPES
 from src.config import settings
@@ -20,7 +21,7 @@ from src.db.supabase import approve_by_email, get_admin_client, upsert_connected
 router = APIRouter()
 templates = Jinja2Templates(directory="src/web/templates")
 
-_COOKIE_OPTS = dict(httponly=True, samesite="lax", secure=False)  # set secure=True in prod
+_COOKIE_OPTS = dict(httponly=True, samesite="lax", secure=(settings.app_environment == "production"))
 
 
 # ─────────────────────────────────────────
@@ -73,7 +74,8 @@ async def _notify_signup_telegram(email: str) -> None:
         logger.warning("Telegram notification skipped — bot token or chat_id not configured")
         return
 
-    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&key={quote(settings.admin_secret_key)}"
+    token = create_token(email)
+    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&token={quote(token)}"
     text = (
         f"\U0001f195 New Frequenz signup: {email}\n\n"
         f"Approve: {approve_url}"
@@ -147,17 +149,35 @@ async def logout() -> Response:
 # ─────────────────────────────────────────
 
 
-@router.post("/admin/approve")
-@router.get("/admin/approve")  # GET so the Telegram link is clickable
-async def admin_approve(
+@router.get("/admin/approve")
+async def admin_approve_page(
     email: str = Query(...),
-    key: str = Query(...),
+    token: str = Query(...),
+    request: Request = None,
+) -> HTMLResponse:
+    """Show a confirmation page with a button that POSTs to actually approve."""
+    html = f"""<!DOCTYPE html>
+<html><head><title>Approve User</title>
+<style>body{{font-family:system-ui;max-width:420px;margin:60px auto;text-align:center}}
+button{{background:#22c55e;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:16px;cursor:pointer}}
+button:hover{{background:#16a34a}}</style></head>
+<body><h2>Approve user?</h2><p>{email}</p>
+<form method="POST" action="/admin/approve">
+<input type="hidden" name="email" value="{email}">
+<input type="hidden" name="token" value="{token}">
+<button type="submit">Approve</button>
+</form></body></html>"""
+    return HTMLResponse(content=html)
+
+
+@router.post("/admin/approve")
+async def admin_approve(
+    email: str = Form(...),
+    token: str = Form(...),
 ) -> JSONResponse:
-    """Approve a pending user by email. Secured with ADMIN_SECRET_KEY."""
-    if not settings.admin_secret_key:
-        return JSONResponse({"error": "admin_secret_key not configured"}, status_code=500)
-    if key != settings.admin_secret_key:
-        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    """Approve a pending user. Validates a one-time token (not the master key)."""
+    if not validate_and_consume(token, email):
+        return JSONResponse({"error": "invalid or expired token"}, status_code=403)
 
     ok = approve_by_email(email)
     if ok:

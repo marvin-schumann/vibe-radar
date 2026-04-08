@@ -91,7 +91,7 @@ async def persist_refreshed_tokens(request: Request, call_next):
     response = await call_next(request)
     if getattr(request.state, "new_tokens", None):
         access, refresh = request.state.new_tokens
-        opts = dict(httponly=True, samesite="lax", secure=False)
+        opts = dict(httponly=True, samesite="lax", secure=(settings.app_environment == "production"))
         response.set_cookie("session_token", access, **opts)
         response.set_cookie("refresh_token", refresh, **opts)
     return response
@@ -920,8 +920,11 @@ async def refresh_data(user=Depends(get_session_user)) -> JSONResponse:
 
 
 @app.get("/api/scheduler/status")
-async def scheduler_status() -> JSONResponse:
-    """Return the background event scraper status."""
+async def scheduler_status(user=Depends(get_session_user)) -> JSONResponse:
+    """Return the background event scraper status. Requires authentication."""
+    if not user:
+        return JSONResponse(content={"error": "unauthorized"}, status_code=401)
+
     from src.api.scheduler import get_scheduler_status
 
     return JSONResponse(content=get_scheduler_status())

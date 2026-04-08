@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     # App
     app_secret_key: str = "change-me-in-production"
     app_host: str = "http://localhost:8000"
+    app_environment: str = "development"
 
     # App settings
     event_scrape_interval_hours: int = 6
