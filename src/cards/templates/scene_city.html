@@ -35,41 +35,54 @@ body {
 }
 .grain svg { width: 100%; height: 100%; }
 
-/* Cityscape silhouette */
-.cityscape {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 400px;
-  z-index: 2;
-  opacity: 0.07;
-}
-
-/* Orange diagonal wash */
+/* Subtle lime diagonal wash */
 .diagonal-wash {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, transparent 30%, rgba(255,92,53,0.08) 60%, rgba(255,92,53,0.15) 100%);
+  background: linear-gradient(135deg, transparent 30%, rgba(196,241,53,0.04) 60%, rgba(196,241,53,0.08) 100%);
   z-index: 1;
 }
 
-/* Glow behind city name */
+/* Lime glow behind city name */
 .city-glow {
   position: absolute;
   width: 1000px;
-  height: 600px;
-  top: 28%;
+  height: 500px;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse, rgba(255,92,53,0.14) 0%, rgba(255,92,53,0.04) 50%, transparent 75%);
+  background: radial-gradient(ellipse, rgba(196,241,53,0.12) 0%, rgba(196,241,53,0.04) 45%, transparent 70%);
   z-index: 1;
+}
+
+/* Lime glow rising from behind skyline */
+.skyline-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1200px;
+  height: 500px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(196,241,53,0.10) 0%, rgba(196,241,53,0.04) 40%, transparent 70%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Skyline container */
+.skyline-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1080px;
+  height: 420px;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .content {
   position: relative;
   z-index: 10;
-  padding: 280px 72px 280px;
+  padding: 260px 72px 280px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -119,26 +132,26 @@ body {
   letter-spacing: 1px;
 }
 
-/* Label */
+/* Sonic home label */
 .sonic-label {
   font-family: 'DM Sans', sans-serif;
-  font-size: 30px;
+  font-size: 28px;
   color: #a0a0a0;
   text-align: center;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-/* Huge city name */
+/* Huge city name — lime */
 .city-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 180px;
-  color: #f5f5f5;
+  font-size: 140px;
+  color: #c4f135;
   text-align: center;
   line-height: 0.9;
-  letter-spacing: 8px;
-  text-shadow: 0 0 80px rgba(255,92,53,0.3), 0 0 160px rgba(255,92,53,0.1);
+  letter-spacing: 10px;
+  text-shadow: 0 0 60px rgba(196,241,53,0.35), 0 0 120px rgba(196,241,53,0.15);
   margin-bottom: 48px;
 }
 
@@ -148,65 +161,71 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 18px;
-  margin-top: 24px;
+  gap: 16px;
+  max-width: 750px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .city-row {
   display: grid;
   grid-template-columns: 100px 1fr;
-  gap: 24px;
+  gap: 20px;
   align-items: center;
 }
 
 .city-pct {
   font-family: 'Space Mono', monospace;
   font-weight: 700;
-  font-size: 34px;
+  font-size: 32px;
   text-align: right;
 }
 
 .city-detail {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .city-detail-name {
   font-family: 'DM Sans', sans-serif;
-  font-size: 26px;
+  font-size: 24px;
 }
 
 .city-bar-track {
   width: 100%;
-  height: 10px;
+  height: 8px;
   background: rgba(245,245,245,0.06);
-  border-radius: 5px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .city-bar-fill {
   height: 100%;
-  border-radius: 5px;
-  transition: width 0.3s;
+  border-radius: 4px;
 }
 
-.primary .city-pct { color: #ff5c35; }
+/* Primary city — lime accent */
+.primary .city-pct { color: #c4f135; }
 .primary .city-detail-name { color: #f5f5f5; font-weight: 700; }
-.primary .city-bar-fill { background: linear-gradient(90deg, #ff5c35, #c4f135); box-shadow: 0 0 12px rgba(255,92,53,0.4); }
+.primary .city-bar-fill {
+  background: linear-gradient(90deg, #c4f135, #e8f77a);
+  box-shadow: 0 0 12px rgba(196,241,53,0.4);
+}
 
-.secondary .city-pct { color: rgba(245,245,245,0.6); }
+/* Secondary cities */
+.secondary .city-pct { color: rgba(245,245,245,0.5); }
 .secondary .city-detail-name { color: #a0a0a0; }
-.secondary .city-bar-fill { background: rgba(245,245,245,0.15); }
+.secondary .city-bar-fill { background: rgba(245,245,245,0.12); }
 
-/* Glass stat card */
+/* Glass panel */
 .glass-panel {
   background: rgba(245,245,245,0.04);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(245,245,245,0.08);
   border-radius: 16px;
-  padding: 24px 36px;
+  padding: 22px 36px;
   text-align: center;
   margin-top: auto;
 }
@@ -214,7 +233,7 @@ body {
 .hashtag {
   font-family: 'Space Mono', monospace;
   font-size: 24px;
-  color: #ff5c35;
+  color: #c4f135;
   letter-spacing: 1px;
 }
 </style>
@@ -231,11 +250,24 @@ body {
 
   <div class="diagonal-wash"></div>
   <div class="city-glow"></div>
+  <div class="skyline-glow"></div>
 
-  <!-- Cityscape SVG silhouette -->
-  <div class="cityscape">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 400" preserveAspectRatio="xMidYMax slice">
-      <path d="M0,400 L0,280 L40,280 L40,200 L60,200 L60,160 L80,160 L80,200 L120,200 L120,140 L140,140 L140,100 L160,100 L160,140 L180,140 L180,220 L200,220 L200,180 L220,180 L220,120 L240,120 L240,80 L260,80 L260,120 L280,120 L280,200 L320,200 L320,160 L340,160 L340,60 L360,60 L360,40 L380,40 L380,60 L400,60 L400,160 L420,160 L420,220 L460,220 L460,180 L480,180 L480,100 L500,100 L500,60 L520,60 L520,100 L540,100 L540,180 L560,180 L560,240 L600,240 L600,200 L620,200 L620,140 L640,140 L640,80 L660,80 L660,140 L680,140 L680,200 L720,200 L720,160 L740,160 L740,120 L760,120 L760,60 L780,60 L780,120 L800,120 L800,180 L840,180 L840,220 L860,220 L860,160 L880,160 L880,200 L920,200 L920,260 L960,260 L960,200 L980,200 L980,160 L1000,160 L1000,200 L1020,200 L1020,280 L1060,280 L1060,300 L1080,300 L1080,400 Z" fill="#f5f5f5"/>
+  <!-- City skyline SVG silhouette with reflection -->
+  <div class="skyline-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="1080" height="420">
+      <defs>
+        <linearGradient id="reflectFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" stop-opacity="1"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="reflectMask">
+          <rect x="0" y="385" width="1080" height="35" fill="url(#reflectFade)"/>
+        </mask>
+      </defs>
+      <!-- Skyline silhouette -->
+      <path d="{{ skyline_d }}" fill="#1a1a1a"/>
+      <!-- Compressed reflection -->
+      <path d="{{ skyline_d }}" fill="#1a1a1a" transform="translate(0,385) scale(1,-0.08) translate(0,-385)" mask="url(#reflectMask)" opacity="0.08"/>
     </svg>
   </div>
 
@@ -260,7 +292,7 @@ body {
     </div>
 
     <div class="glass-panel">
-      <div class="hashtag">#FrequenzCity</div>
+      <div class="hashtag">{{ hashtag }}</div>
     </div>
   </div>
 
