@@ -133,7 +133,7 @@ class ExactMatcher:
     def _build_reason(artist_name: str, event_artist_name: str, score: int) -> str:
         """Build a human-readable match reason."""
         if score == 100:
-            return f"Exact match: '{event_artist_name}' on your Spotify"
+            return f"Exact match: '{event_artist_name}' is in your library"
         return (
             f"Close match: '{event_artist_name}' \u2248 '{artist_name}' "
             f"({score}% similar)"

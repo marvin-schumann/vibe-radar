@@ -162,64 +162,89 @@ TRIBES: list[dict[str, Any]] = [
 
 
 # ---------------------------------------------------------------------------
-# Genre co-occurrence rarity matrix (lower = rarer combo)
-# Baseline: how likely two genre families are to co-occur in a typical listener
+# Electronic subgenre taxonomy: raw SC tags → clean families
+# Only electronic music families are considered for bridge detection.
+# Non-electronic tags (rock, pop, world, etc.) are ignored.
 # ---------------------------------------------------------------------------
 
-# Group genres into families for bridge detection
-GENRE_FAMILIES: dict[str, list[str]] = {
-    "techno": ["techno", "dark techno", "minimal techno", "dub techno", "industrial techno", "hard techno"],
-    "house": ["house", "deep house", "tech house", "acid house", "chicago house", "melodic house", "afro house", "latin house"],
-    "ambient": ["ambient", "dark ambient", "drone", "downtempo", "new age", "ambient house"],
-    "bass": ["drum and bass", "jungle", "dubstep", "grime", "uk garage", "bassline", "uk bass", "footwork"],
-    "experimental": ["experimental", "idm", "glitch", "noise", "modular", "generative", "experimental electronic", "electroacoustic"],
-    "disco/funk": ["disco", "nu-disco", "funk", "boogie", "italo disco"],
-    "trance": ["trance", "psytrance", "progressive trance", "goa"],
-    "hip-hop/r&b": ["hip-hop", "rap", "r&b", "trap", "lo-fi hip hop"],
-    "jazz": ["jazz", "nu jazz", "jazz fusion", "acid jazz"],
-    "classical/neo": ["classical", "neo-classical", "modern classical", "orchestral"],
-    "world": ["world", "afrobeats", "latin", "reggae", "dub", "cumbia", "flamenco"],
-    "pop/indie": ["pop", "indie", "synth-pop", "electropop", "indie electronic"],
-    "rock/metal": ["rock", "metal", "post-punk", "industrial", "shoegaze", "post-rock"],
-    "breakbeat": ["breakbeat", "breaks", "big beat", "electro"],
+ELECTRONIC_SUBGENRES: dict[str, list[str]] = {
+    "techno": [
+        "techno", "hard techno", "industrial techno", "minimal techno",
+        "dub techno", "acid techno", "dark techno", "detroit techno",
+        "melodic techno",
+    ],
+    "house": [
+        "house", "deep house", "tech house", "progressive house",
+        "afro house", "acid house", "chicago house", "melodic house",
+        "latin house", "ghetto house",
+    ],
+    "trance": [
+        "trance", "psytrance", "uplifting trance", "progressive trance",
+        "hard trance", "goa",
+    ],
+    "bass": [
+        "dubstep", "drum and bass", "jungle", "uk bass", "garage",
+        "uk garage", "grime", "bassline", "dnb", "footwork", "juke",
+        "halftime",
+    ],
+    "ambient": [
+        "ambient", "downtempo", "chillout", "drone", "dark ambient",
+        "ambient house", "new age",
+    ],
+    "disco": [
+        "disco", "nu-disco", "italo disco", "funk", "boogie",
+    ],
+    "experimental": [
+        "idm", "experimental", "glitch", "noise", "modular",
+        "generative", "experimental electronic", "electroacoustic",
+        "deconstructed club", "leftfield",
+    ],
+    "breaks": [
+        "breakbeat", "breaks", "big beat", "electro",
+    ],
 }
 
-# Pairs that are considered rare bridges (unusual co-occurrences)
-# Value = estimated % of listeners who bridge these families
+# Keep GENRE_FAMILIES as alias for _genre_to_family (used elsewhere)
+GENRE_FAMILIES = ELECTRONIC_SUBGENRES
+
+# ---------------------------------------------------------------------------
+# Rarity matrix for electronic subgenre bridges
+# Value = estimated % of electronic music listeners who bridge these families.
+# Only within-electronic pairs — no rock/pop/world noise.
+# ---------------------------------------------------------------------------
+
 RARE_BRIDGES: dict[tuple[str, str], float] = {
-    ("techno", "jazz"): 3,
-    ("techno", "classical/neo"): 2,
-    ("techno", "world"): 5,
-    ("techno", "hip-hop/r&b"): 4,
-    ("bass", "ambient"): 4,
-    ("bass", "jazz"): 3,
-    ("bass", "classical/neo"): 2,
-    ("house", "rock/metal"): 3,
-    ("house", "classical/neo"): 4,
-    ("house", "jazz"): 6,
-    ("ambient", "bass"): 4,
-    ("ambient", "hip-hop/r&b"): 5,
-    ("ambient", "rock/metal"): 6,
-    ("experimental", "disco/funk"): 3,
-    ("experimental", "pop/indie"): 5,
-    ("experimental", "hip-hop/r&b"): 4,
-    ("trance", "jazz"): 2,
-    ("trance", "ambient"): 7,
-    ("disco/funk", "bass"): 5,
-    ("disco/funk", "experimental"): 3,
-    ("jazz", "bass"): 3,
-    ("jazz", "experimental"): 5,
-    ("classical/neo", "bass"): 2,
-    ("classical/neo", "experimental"): 6,
-    ("world", "experimental"): 4,
-    ("world", "bass"): 5,
-    ("breakbeat", "ambient"): 5,
-    ("breakbeat", "jazz"): 4,
-    ("techno", "disco/funk"): 8,
-    ("house", "experimental"): 7,
-    ("house", "bass"): 9,
-    ("techno", "pop/indie"): 5,
-    ("ambient", "disco/funk"): 3,
+    # Rare (< 5% of electronic listeners)
+    ("techno", "trance"): 4,
+    ("techno", "disco"): 5,
+    ("techno", "bass"): 6,
+    ("trance", "bass"): 3,
+    ("trance", "experimental"): 3,
+    ("trance", "disco"): 2,
+    ("trance", "breaks"): 4,
+    ("bass", "disco"): 3,
+    ("bass", "ambient"): 5,
+    ("ambient", "disco"): 3,
+    ("ambient", "breaks"): 5,
+    ("experimental", "disco"): 4,
+    ("experimental", "house"): 8,
+    ("experimental", "trance"): 3,
+    # Uncommon (5-10%)
+    ("techno", "ambient"): 9,
+    ("techno", "experimental"): 10,
+    ("techno", "breaks"): 8,
+    ("house", "bass"): 10,
+    ("house", "ambient"): 7,
+    ("house", "breaks"): 9,
+    ("house", "trance"): 6,
+    ("bass", "experimental"): 7,
+    ("bass", "breaks"): 12,
+    ("breaks", "experimental"): 8,
+    ("breaks", "disco"): 6,
+    ("ambient", "experimental"): 14,
+    # Common (> 10%) — still shown but labelled differently
+    ("techno", "house"): 25,
+    ("house", "disco"): 22,
 }
 
 # Same pair reversed also counts
@@ -422,32 +447,41 @@ def _compute_taste_tribe(
 
 
 def _genre_to_family(genre: str) -> str | None:
-    """Map a genre string to its family."""
+    """Map a genre string to its electronic subgenre family.
+
+    Returns None for non-electronic genres (rock, pop, world, etc.)
+    so they are filtered out of bridge computation.
+    """
     genre = genre.lower().strip()
-    for family, keywords in GENRE_FAMILIES.items():
+    for family, keywords in ELECTRONIC_SUBGENRES.items():
         if genre in keywords or any(kw in genre for kw in keywords):
             return family
     return None
 
 
 def _compute_bridges(genre_counts: Counter) -> dict[str, Any]:
-    """Find the user's rarest genre combination bridges."""
+    """Find the user's rarest electronic subgenre bridges.
+
+    Only considers genres that map to ELECTRONIC_SUBGENRES families.
+    Non-electronic tags are ignored to avoid meaningless bridges
+    like "house + rock".
+    """
     if not genre_counts:
         return {"bridges": []}
 
-    # Map genres to families
+    # Map genres to electronic families only
     family_counts: Counter = Counter()
     for genre, count in genre_counts.items():
         family = _genre_to_family(genre)
         if family:
             family_counts[family] += count
 
-    # Need at least 2 families for bridges
+    # Need at least 2 electronic families for bridges
     active_families = [f for f, c in family_counts.items() if c >= 1]
     if len(active_families) < 2:
         return {"bridges": []}
 
-    # Find rare bridges among user's active families
+    # Find rare bridges among user's active electronic families
     bridges: list[dict[str, Any]] = []
     seen_pairs: set[tuple[str, str]] = set()
 
@@ -464,11 +498,23 @@ def _compute_bridges(genre_counts: Counter) -> dict[str, Any]:
             if rarity_pct is None:
                 continue
 
+            # Rarity label based on electronic listener context
+            if rarity_pct <= 5:
+                rarity_label = "rare"
+            elif rarity_pct <= 10:
+                rarity_label = "uncommon"
+            else:
+                rarity_label = "notable"
+
             bridges.append({
                 "genre_a": f1,
                 "genre_b": f2,
                 "rarity_pct": rarity_pct,
-                "description": f"You bridge {f1} and {f2} \u2014 only {rarity_pct}% of listeners do that",
+                "rarity_label": rarity_label,
+                "description": (
+                    f"You bridge {f1} + {f2} — only ~{rarity_pct}% "
+                    f"of electronic listeners do ({rarity_label})"
+                ),
             })
 
     bridges.sort(key=lambda x: x["rarity_pct"])

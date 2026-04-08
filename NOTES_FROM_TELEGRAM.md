@@ -7,6 +7,50 @@
 
 (none)
 
+---
+
+## SoundCloud-Only Audit (2026-04-09)
+
+Full audit of which features depend on Spotify data and what breaks if Spotify is removed.
+
+### Features that BREAK without Spotify
+
+| Feature | File | Data used | Impact |
+|---|---|---|---|
+| **Underground Depth Score** | `src/api/main.py:589-638` (`/api/depth-score`) | `artist.popularity` (Spotify 0-100) | Entire endpoint returns `{score: null}`. No SoundCloud equivalent of popularity score. |
+| **Audio Features Radar** | `src/visualization/taste_profile.py:113-137` | `artist.audio_features` (Spotify API) | Radar chart renders all zeros. Fallback: genre-based estimation exists in `vibe.py:68-84` but is coarse. |
+| **Popularity display** | `index.html:1815` | `artist.popularity` | Shows "undefined" or missing in artist cards. |
+| **Audio feature comparison in vibe matching** | `src/matching/vibe.py:224-238` | `artist.audio_features` | Loses 40% audio feature boost in confidence score; falls back to genre-only (100% Jaccard). |
+
+### Features that DEGRADE but still work
+
+| Feature | File | Degradation |
+|---|---|---|
+| **Vibe matching confidence** | `src/matching/vibe.py` | Genre-only matching (no audio feature boost). Still functional, lower confidence scores. |
+| **Taste profile building** | `src/matching/vibe.py:123-176` | Always uses genre-based feature estimation (`features_estimated=True`). Works but less precise. |
+| **Taste Tribe scoring** | `src/analytics/taste_dna.py:346-416` | `avg_popularity` defaults to 50 when no popularity data. Tribe assignment still works via genre keywords (50% weight) and entropy (25%). |
+
+### Features UNAFFECTED by Spotify removal
+
+| Feature | File | Notes |
+|---|---|---|
+| **Exact artist matching** | `src/matching/exact.py` | Pure name fuzzy matching. BUT: line 136 hardcodes "on your Spotify" in match reason — needs fix. |
+| **Scene City** | `src/analytics/taste_dna.py:298-329` | Genre-based only. |
+| **Cross-Genre Bridges** | `src/analytics/taste_dna.py:433+` | Genre family analysis only. (Fixed in this session — now electronic-only.) |
+| **Dancefloor Ratio** | `src/analytics/taste_dna.py:483-525` | Genre classification only. |
+| **SoundCloud Analytics** | `src/analytics/soundcloud.py` | Fully independent (time-series, track counts, bump chart, heatmap). |
+| **Event collection** | `src/collectors/events/*` | Independent of music sources. |
+| **DJ Twin matching** | `src/matching/dj_twin.py` | Cosine similarity on genre vectors. |
+| **Shareable cards** | `src/cards/` | Uses taste DNA outputs (genre-based). |
+
+### Proposed SoundCloud-Only Implementations
+
+1. **Underground Depth Score** → Replace Spotify popularity with SoundCloud follower count or play count percentile. Low followers + high engagement = underground. Need to compute percentile ranking across all users' artists.
+2. **Audio Features Radar** → Already has genre-based estimation fallback (`vibe.py:68-84`). Could improve the `_GENRE_AUDIO_ESTIMATES` mapping with more SC-specific genres. Mark as "estimated" in UI.
+3. **Popularity display** → Replace with `play_count` from SoundCloud. Different scale but still meaningful for ranking.
+4. **Exact match reason text** → Change "on your Spotify" to "in your library" (line 136 in exact.py).
+5. **Vibe matching** → Genre-only matching is already the fallback and works well for electronic music where genre tags are specific.
+
 ## Done
 
 ### 2026-04-07 — DJ Twin Match (Phase 1: data pipeline + matching engine)
