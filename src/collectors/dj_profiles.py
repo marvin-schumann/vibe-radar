@@ -49,7 +49,8 @@ _BROWSER_HEADERS = {
 }
 
 _PAGE_LIMIT = 200
-_RATE_LIMIT_DELAY = 1.0  # seconds between requests
+_RATE_LIMIT_DELAY = 2.0  # seconds between requests (raised from 1.0 to avoid throttling)
+_SAVE_EVERY = 10  # save progress every N DJs
 
 
 # ---------------------------------------------------------------------------
@@ -104,6 +105,9 @@ class DJProfileCollector:
             logger.info("All DJ profiles already cached — nothing to scrape")
             return self._existing_vectors
 
+        scraped = 0
+        failed = 0
+
         async with httpx.AsyncClient(
             headers=_BROWSER_HEADERS,
             follow_redirects=True,
@@ -123,24 +127,42 @@ class DJProfileCollector:
                 try:
                     vector = await self._scrape_dj(client, sc_username, profile)
                     self._existing_vectors[name] = vector
+                    scraped += 1
                     logger.info(
                         "  → {} genres, top: {}",
                         len(vector["genre_distribution"]),
                         list(vector["genre_distribution"].items())[:3],
                     )
-                except Exception as exc:
+                except httpx.HTTPStatusError as exc:
+                    if exc.response.status_code == 429:
+                        logger.warning(
+                            "Rate limited by SoundCloud after {} DJs — stopping gracefully",
+                            scraped,
+                        )
+                        break
+                    failed += 1
                     logger.warning("  → Failed to scrape {}: {}", name, exc)
+                except Exception as exc:
+                    failed += 1
+                    logger.warning("  → Failed to scrape {}: {}", name, exc)
+
+                # Incremental save every _SAVE_EVERY DJs
+                if i % _SAVE_EVERY == 0:
+                    self._save_vectors(self._existing_vectors)
+                    logger.info(
+                        "Progress saved: {} total vectors (scraped {}/{}, {} failed)",
+                        len(self._existing_vectors), scraped, len(to_scrape), failed,
+                    )
 
                 # Rate limit
                 if i < len(to_scrape):
                     await asyncio.sleep(_RATE_LIMIT_DELAY)
 
-        # Save merged results
+        # Final save
         self._save_vectors(self._existing_vectors)
         logger.info(
-            "DJ taste vectors saved: {} total ({} new this run)",
-            len(self._existing_vectors),
-            len(to_scrape),
+            "Scraping complete: scraped {}/{}, {} failed. Total vectors: {}",
+            scraped, len(to_scrape), failed, len(self._existing_vectors),
         )
         return self._existing_vectors
 

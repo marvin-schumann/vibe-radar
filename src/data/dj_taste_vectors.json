@@ -1,0 +1,5640 @@
+{
+  "Charlotte de Witte": {
+    "name": "Charlotte de Witte",
+    "soundcloud": "charlottedewittemusic",
+    "soundcloud_url": "https://soundcloud.com/charlottedewittemusic",
+    "city": "Brussels",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 91.0,
+      "trance": 3.3,
+      "electronic": 2.5,
+      "giegling": 0.8,
+      "house": 0.8,
+      "psytrance": 0.8,
+      "podcast": 0.8
+    },
+    "total_liked_tracks": 148
+  },
+  "Amelie Lens": {
+    "name": "Amelie Lens",
+    "soundcloud": "amelielens",
+    "soundcloud_url": "https://soundcloud.com/amelielens",
+    "city": "Antwerp",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 80.6,
+      "trance": 4.7,
+      "electronic": 3.1,
+      "entertainment": 0.8,
+      "t for techno": 0.8,
+      "dance": 0.8,
+      "podcast series": 0.8,
+      "acid": 0.8,
+      "teaser": 0.8,
+      "mnshift": 0.8,
+      "kobosil": 0.8,
+      "ra": 0.8,
+      "house": 0.8,
+      "ostgut ton": 0.8,
+      "diep": 0.8,
+      "texture radio": 0.8,
+      "cosmic pop": 0.8,
+      "alan fitzpatrick": 0.8
+    },
+    "total_liked_tracks": 132
+  },
+  "Ben Klock": {
+    "name": "Ben Klock",
+    "soundcloud": "ben-klock",
+    "soundcloud_url": "https://soundcloud.com/ben-klock",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Marcel Dettmann": {
+    "name": "Marcel Dettmann",
+    "soundcloud": "marceldettmann",
+    "soundcloud_url": "https://soundcloud.com/marceldettmann",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "dance - techno": 33.3,
+      "techno": 33.3,
+      "electro": 33.3
+    },
+    "total_liked_tracks": 3
+  },
+  "Blawan": {
+    "name": "Blawan",
+    "soundcloud": "ternesc",
+    "soundcloud_url": "https://soundcloud.com/ternesc",
+    "city": "Leeds",
+    "curated_genres": [
+      "techno",
+      "electro"
+    ],
+    "genre_distribution": {
+      "techno": 50.0,
+      "electronic": 16.7,
+      "bass": 16.7,
+      "soundtrack": 16.7
+    },
+    "total_liked_tracks": 6
+  },
+  "Paula Temple": {
+    "name": "Paula Temple",
+    "soundcloud": "paulatemple",
+    "soundcloud_url": "https://soundcloud.com/paulatemple",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 65.4,
+      "electronic": 13.8,
+      "hard techno": 3.1,
+      "drum & bass": 2.5,
+      "industrial": 1.3,
+      "ambient": 1.3,
+      "veselka": 0.6,
+      "techno / minimale": 0.6,
+      "premiere": 0.6,
+      "entertainment": 0.6,
+      "halftime hardcore": 0.6,
+      "dubstep": 0.6,
+      "cult tape 001": 0.6,
+      "electronic: electronica": 0.6,
+      "vsn135": 0.6,
+      "hard-industrial techno": 0.6,
+      "cybertech/electro/techno": 0.6,
+      "future techno": 0.6,
+      "peryl": 0.6,
+      "bass": 0.6,
+      "schranz": 0.6,
+      "uralhardkicks": 0.6,
+      "hardtechno": 0.6,
+      "dance & edm": 0.6,
+      "industrial-techno": 0.6,
+      "hard ebm": 0.6
+    },
+    "total_liked_tracks": 198
+  },
+  "Peggy Gou": {
+    "name": "Peggy Gou",
+    "soundcloud": "peggygou",
+    "soundcloud_url": "https://soundcloud.com/peggygou",
+    "city": "Berlin",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "electronic": 38.5,
+      "house": 38.5,
+      "techno": 7.7,
+      "peggy gou": 7.7,
+      "point g": 7.7
+    },
+    "total_liked_tracks": 14
+  },
+  "Kerri Chandler": {
+    "name": "Kerri Chandler",
+    "soundcloud": "kerri-chandler",
+    "soundcloud_url": "https://soundcloud.com/kerri-chandler",
+    "city": "East Orange",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 50.0,
+      "electronic": 25.0,
+      "kerri chandler": 25.0
+    },
+    "total_liked_tracks": 5
+  },
+  "DJ Koze": {
+    "name": "DJ Koze",
+    "soundcloud": "dj-koze-official",
+    "soundcloud_url": "https://soundcloud.com/dj-koze-official",
+    "city": "Hamburg",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {
+      "electronic": 54.5,
+      "house": 18.2,
+      "pop - rock: alternative - indie": 18.2,
+      "drum & bass": 9.1
+    },
+    "total_liked_tracks": 13
+  },
+  "Dennis Ferrer": {
+    "name": "Dennis Ferrer",
+    "soundcloud": "dennis-ferrer",
+    "soundcloud_url": "https://soundcloud.com/dennis-ferrer",
+    "city": "New York",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 61.1,
+      "deep house": 22.2,
+      "electronic groove": 5.6,
+      "live set": 5.6,
+      "ntfo": 5.6
+    },
+    "total_liked_tracks": 18
+  },
+  "Ricardo Villalobos": {
+    "name": "Ricardo Villalobos",
+    "soundcloud": "ricardo-villalobos",
+    "soundcloud_url": "https://soundcloud.com/ricardo-villalobos",
+    "city": "Berlin",
+    "curated_genres": [
+      "minimal",
+      "house"
+    ],
+    "genre_distribution": {
+      "trap": 25.0,
+      "electronic": 20.0,
+      "hip-hop & rap": 10.0,
+      "house": 10.0,
+      "dubstep": 10.0,
+      "r&b & soul": 5.0,
+      "future bass": 5.0,
+      "dance & edm": 5.0,
+      "hardtrap": 5.0,
+      "techno, techouse, tribal": 5.0
+    },
+    "total_liked_tracks": 21
+  },
+  "Richie Hawtin": {
+    "name": "Richie Hawtin",
+    "soundcloud": "richiehawtin",
+    "soundcloud_url": "https://soundcloud.com/richiehawtin",
+    "city": "Berlin",
+    "curated_genres": [
+      "minimal",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 80.0,
+      "entertainment": 20.0
+    },
+    "total_liked_tracks": 5
+  },
+  "Above & Beyond": {
+    "name": "Above & Beyond",
+    "soundcloud": "aboveandbeyond",
+    "soundcloud_url": "https://soundcloud.com/aboveandbeyond",
+    "city": "London",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {
+      "deep house": 14.9,
+      "dance": 14.4,
+      "progressive house": 12.1,
+      "trance": 9.2,
+      "electronic": 7.5,
+      "house": 4.6,
+      "dance & edm": 4.0,
+      "above & beyond": 4.0,
+      "anjunabeats": 3.4,
+      "super8 & tab": 3.4,
+      "anjunadeep": 3.4,
+      "techno": 2.3,
+      "mat zo": 1.1,
+      "matt lange": 1.1,
+      "alternative": 0.6,
+      "r&b & soul": 0.6,
+      "liveset": 0.6,
+      "night owl radio": 0.6,
+      "jason ross": 0.6,
+      "jason ross & wrechiski": 0.6,
+      "wrechiski": 0.6,
+      "mixtape": 0.6,
+      "remake": 0.6,
+      "jasonross,": 0.6,
+      "capa": 0.6,
+      "bt": 0.6,
+      "jean-michel jarre": 0.6,
+      "fehrplay": 0.6,
+      "fred berthet": 0.6,
+      "retro romantico disco": 0.6,
+      "burning man yoga": 0.6,
+      "bluestone": 0.6,
+      "andrew bayer": 0.6,
+      "parker & hanson": 0.6,
+      "aboveandbeyond": 0.6,
+      "17steps": 0.6,
+      "the anjunadeep edition": 0.6,
+      "lane 8": 0.6,
+      "fact": 0.6
+    },
+    "total_liked_tracks": 179
+  },
+  "Armin van Buuren": {
+    "name": "Armin van Buuren",
+    "soundcloud": "arminvanbuuren",
+    "soundcloud_url": "https://soundcloud.com/arminvanbuuren",
+    "city": "Leiden",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Paul van Dyk": {
+    "name": "Paul van Dyk",
+    "soundcloud": "paulvandykofficial",
+    "soundcloud_url": "https://soundcloud.com/paulvandykofficial",
+    "city": "Berlin",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {
+      "trance": 59.4,
+      "paul thomas": 6.2,
+      "allen & envy": 4.7,
+      "night owl radio": 3.1,
+      "ben nicky": 3.1,
+      "shato": 3.1,
+      "vocal trance": 3.1,
+      "dance": 1.6,
+      "pop": 1.6,
+      "electronic": 1.6,
+      "jose amnesia": 1.6,
+      "tech trance": 1.6,
+      "maarten de jong": 1.6,
+      "shadow of two": 1.6,
+      "paul miller": 1.6,
+      "las salinas": 1.6,
+      "woody van eyden": 1.6,
+      "progressive house": 1.6
+    },
+    "total_liked_tracks": 65
+  },
+  "Andy C": {
+    "name": "Andy C",
+    "soundcloud": "andyc_ram",
+    "soundcloud_url": "https://soundcloud.com/andyc_ram",
+    "city": "London",
+    "curated_genres": [
+      "dnb"
+    ],
+    "genre_distribution": {
+      "drum & bass": 91.7,
+      "delta heavy": 8.3
+    },
+    "total_liked_tracks": 12
+  },
+  "Noisia": {
+    "name": "Noisia",
+    "soundcloud": "noisia",
+    "soundcloud_url": "https://soundcloud.com/noisia",
+    "city": "Groningen",
+    "curated_genres": [
+      "dnb",
+      "bass"
+    ],
+    "genre_distribution": {
+      "drum & bass": 34.0,
+      "electronic": 32.0,
+      "soundtrack": 4.0,
+      "dvsn038": 4.0,
+      "electronica": 4.0,
+      "remix": 2.0,
+      "klassiek": 2.0,
+      "noisia radio": 2.0,
+      "track of the day": 2.0,
+      "hip hop": 2.0,
+      "dvsn040": 2.0,
+      "dvn038": 2.0,
+      "two fingers": 2.0,
+      "templar": 2.0,
+      "house music": 2.0,
+      "edm": 2.0
+    },
+    "total_liked_tracks": 54
+  },
+  "Goldie": {
+    "name": "Goldie",
+    "soundcloud": "goldie-official",
+    "soundcloud_url": "https://soundcloud.com/goldie-official",
+    "city": "London",
+    "curated_genres": [
+      "dnb"
+    ],
+    "genre_distribution": {
+      "drum & bass": 40.0,
+      "metalheadz": 30.0,
+      "d&b": 10.0,
+      "goldie": 10.0,
+      "lenzman": 10.0
+    },
+    "total_liked_tracks": 11
+  },
+  "DJ Marky": {
+    "name": "DJ Marky",
+    "soundcloud": "djmarkyofficial",
+    "soundcloud_url": "https://soundcloud.com/djmarkyofficial",
+    "city": "Sao Paulo",
+    "curated_genres": [
+      "dnb"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Aphex Twin": {
+    "name": "Aphex Twin",
+    "soundcloud": "user18081971",
+    "soundcloud_url": "https://soundcloud.com/user18081971",
+    "city": "London",
+    "curated_genres": [
+      "ambient",
+      "electro"
+    ],
+    "genre_distribution": {
+      "afx": 46.7,
+      "experimental": 13.3,
+      "aphex twin": 6.7,
+      "eu": 6.7,
+      "bossa": 6.7,
+      "spx900": 6.7,
+      "like early aphex": 6.7,
+      "microtonal": 6.7
+    },
+    "total_liked_tracks": 16
+  },
+  "Four Tet": {
+    "name": "Four Tet",
+    "soundcloud": "four-tet",
+    "soundcloud_url": "https://soundcloud.com/four-tet",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "ambient"
+    ],
+    "genre_distribution": {
+      "ukg": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Jon Hopkins": {
+    "name": "Jon Hopkins",
+    "soundcloud": "jonhopkins",
+    "soundcloud_url": "https://soundcloud.com/jonhopkins",
+    "city": "London",
+    "curated_genres": [
+      "ambient",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Skream": {
+    "name": "Skream",
+    "soundcloud": "skreamizm",
+    "soundcloud_url": "https://soundcloud.com/skreamizm",
+    "city": "Croydon",
+    "curated_genres": [
+      "bass",
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 24.7,
+      "house": 22.7,
+      "techno": 8.2,
+      "disco": 5.2,
+      "dubstep": 5.2,
+      "dance & edm": 3.1,
+      "tech house": 3.1,
+      "dance": 3.1,
+      "garage": 2.1,
+      "ukg": 2.1,
+      "electronic groove": 1.0,
+      "justin robertson": 1.0,
+      "uk garage": 1.0,
+      "speed garage": 1.0,
+      "dsd044": 1.0,
+      "world": 1.0,
+      "scdd023": 1.0,
+      "synth/techno/percussive/house": 1.0,
+      "disco/detroit house/techno": 1.0,
+      "ebm/synth": 1.0,
+      "dubstep/grime/garage": 1.0,
+      "hapno": 1.0,
+      "snflp001": 1.0,
+      "acid hiphop": 1.0,
+      "skream": 1.0,
+      "bbc": 1.0,
+      "jackmaster": 1.0,
+      "bass music": 1.0,
+      "dubstep/techno/house": 1.0,
+      "dnb": 1.0
+    },
+    "total_liked_tracks": 129
+  },
+  "Benga": {
+    "name": "Benga",
+    "soundcloud": "benga-official",
+    "soundcloud_url": "https://soundcloud.com/benga-official",
+    "city": "London",
+    "curated_genres": [
+      "bass"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Mala": {
+    "name": "Mala",
+    "soundcloud": "maladmz",
+    "soundcloud_url": "https://soundcloud.com/maladmz",
+    "city": "London",
+    "curated_genres": [
+      "bass"
+    ],
+    "genre_distribution": {
+      "dubstep": 66.7,
+      "textural explorations": 33.3
+    },
+    "total_liked_tracks": 3
+  },
+  "Todd Terje": {
+    "name": "Todd Terje",
+    "soundcloud": "toddterje",
+    "soundcloud_url": "https://soundcloud.com/toddterje",
+    "city": "Oslo",
+    "curated_genres": [
+      "disco"
+    ],
+    "genre_distribution": {
+      "jonny nash": 33.3,
+      "electronic": 33.3,
+      "nu disco": 33.3
+    },
+    "total_liked_tracks": 7
+  },
+  "Lindstrom": {
+    "name": "Lindstrom",
+    "soundcloud": "feedelity",
+    "soundcloud_url": "https://soundcloud.com/feedelity",
+    "city": "Oslo",
+    "curated_genres": [
+      "disco"
+    ],
+    "genre_distribution": {
+      "electronic": 26.7,
+      "alternative": 13.3,
+      "jazz & blues": 6.7,
+      "olefonken": 6.7,
+      "études studio mix": 6.7,
+      "smalltown": 6.7,
+      "maya vik": 6.7,
+      "jaga": 6.7,
+      "pop": 6.7,
+      "kickass": 6.7,
+      "soul funk": 6.7
+    },
+    "total_liked_tracks": 20
+  },
+  "Helena Hauff": {
+    "name": "Helena Hauff",
+    "soundcloud": "helena-hauff",
+    "soundcloud_url": "https://soundcloud.com/helena-hauff",
+    "city": "Hamburg",
+    "curated_genres": [
+      "electro",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "DJ Stingray 313": {
+    "name": "DJ Stingray 313",
+    "soundcloud": "djstingrayofficial",
+    "soundcloud_url": "https://soundcloud.com/djstingrayofficial",
+    "city": "Detroit",
+    "curated_genres": [
+      "electro"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Oscar Mulero": {
+    "name": "Oscar Mulero",
+    "soundcloud": "oscarmulero",
+    "soundcloud_url": "https://soundcloud.com/oscarmulero",
+    "city": "Madrid",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 78.5,
+      "electronic": 20.0,
+      "techno breaks": 1.5
+    },
+    "total_liked_tracks": 75
+  },
+  "Paco Osuna": {
+    "name": "Paco Osuna",
+    "soundcloud": "paco-osuna",
+    "soundcloud_url": "https://soundcloud.com/paco-osuna",
+    "city": "Barcelona",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "tech house": 39.6,
+      "techno": 25.0,
+      "deep house": 10.4,
+      "house": 6.2,
+      "electronic": 4.2,
+      "pacoosuna": 4.2,
+      "deep tech": 2.1,
+      "dance & edm": 2.1,
+      "minimal tech house": 2.1,
+      "melodic techno": 2.1,
+      "techno\\ house": 2.1
+    },
+    "total_liked_tracks": 60
+  },
+  "UNER": {
+    "name": "UNER",
+    "soundcloud": "unermusic",
+    "soundcloud_url": "https://soundcloud.com/unermusic",
+    "city": "Lleida",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 50.0,
+      "electronica": 50.0
+    },
+    "total_liked_tracks": 2
+  },
+  "Edu Imbernon": {
+    "name": "Edu Imbernon",
+    "soundcloud": "imbernonmusic",
+    "soundcloud_url": "https://soundcloud.com/imbernonmusic",
+    "city": "Valencia",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "electronic": 77.2,
+      "indie dance": 5.7,
+      "melodic techno": 4.4,
+      "melodic house": 3.2,
+      "house": 1.9,
+      "deep house": 1.9,
+      "dance": 1.3,
+      "melodic house & techno": 1.3,
+      "alternative rock": 0.6,
+      "progressive #indiedance #organic": 0.6,
+      "melodic": 0.6,
+      "techno": 0.6,
+      "electrónica": 0.6
+    },
+    "total_liked_tracks": 196
+  },
+  "Fatima Hajji": {
+    "name": "Fatima Hajji",
+    "soundcloud": "fatimahajji",
+    "soundcloud_url": "https://soundcloud.com/fatimahajji",
+    "city": "Valencia",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 77.5,
+      "hard techno": 13.5,
+      "hardtechno": 2.8,
+      "schranz": 2.2,
+      "electronic": 1.7,
+      "tekno": 0.6,
+      "hardcore/hard techno": 0.6,
+      "reverse bass": 0.6,
+      "eg techno": 0.6
+    },
+    "total_liked_tracks": 194
+  },
+  "Cristian Varela": {
+    "name": "Cristian Varela",
+    "soundcloud": "cristianvarela",
+    "soundcloud_url": "https://soundcloud.com/cristianvarela",
+    "city": "Madrid",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 46.6,
+      "house": 24.1,
+      "deep house": 13.8,
+      "electronic": 8.6,
+      "dance & edm": 1.7,
+      "soundtrack": 1.7,
+      "ambient": 1.7,
+      "awards": 1.7
+    },
+    "total_liked_tracks": 63
+  },
+  "Folamour": {
+    "name": "Folamour",
+    "soundcloud": "folamour",
+    "soundcloud_url": "https://soundcloud.com/folamour",
+    "city": "Lyon",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {
+      "house": 14.5,
+      "disco": 9.1,
+      "electronic": 7.3,
+      "funk": 3.6,
+      "r&b & soul": 3.6,
+      "dance - house": 1.8,
+      "storytelling": 1.8,
+      "mawimbi records": 1.8,
+      "indie": 1.8,
+      "where were we?": 1.8,
+      "oriental disco": 1.8,
+      "reggae": 1.8,
+      "nu-disco": 1.8,
+      "bootleg": 1.8,
+      "zouk": 1.8,
+      "balearic cumbia": 1.8,
+      "phil collins drums": 1.8,
+      "lovedancing": 1.8,
+      "sexy good vibes": 1.8,
+      "jazz": 1.8,
+      "haitian analog": 1.8,
+      "first touch": 1.8,
+      "voyage funktastique": 1.8,
+      "dusky basement house": 1.8,
+      "slack pop": 1.8,
+      "russian deep house": 1.8,
+      "mix": 1.8,
+      "hodini": 1.8,
+      "funk disco boogie souljazz": 1.8,
+      "the family mattress": 1.8,
+      "tito": 1.8,
+      "kartell": 1.8,
+      "matthias reiling": 1.8,
+      "giegling": 1.8,
+      "house®": 1.8,
+      "omltd001": 1.8,
+      "balearic beatdown": 1.8,
+      "brame": 1.8,
+      "podcast": 1.8
+    },
+    "total_liked_tracks": 64
+  },
+  "Solomun": {
+    "name": "Solomun",
+    "soundcloud": "solomun",
+    "soundcloud_url": "https://soundcloud.com/solomun",
+    "city": "Hamburg",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Boris Brejcha": {
+    "name": "Boris Brejcha",
+    "soundcloud": "boris-brejcha",
+    "soundcloud_url": "https://soundcloud.com/boris-brejcha",
+    "city": "Ludwigshafen",
+    "curated_genres": [
+      "techno",
+      "minimal"
+    ],
+    "genre_distribution": {
+      "high-tech minimal": 47.8,
+      "melodic high-tech minimal": 8.7,
+      "fs004": 8.7,
+      "fs005": 8.7,
+      "techno": 4.3,
+      "birthday": 4.3,
+      "tech house": 4.3,
+      "minimal": 4.3,
+      "boris brejcha": 4.3,
+      "smooth": 4.3
+    },
+    "total_liked_tracks": 23
+  },
+  "ARTBAT": {
+    "name": "ARTBAT",
+    "soundcloud": "artbatmusic",
+    "soundcloud_url": "https://soundcloud.com/artbatmusic",
+    "city": "Kyiv",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 24.1,
+      "electronic": 21.8,
+      "deep house": 13.8,
+      "melodic house & techno": 5.7,
+      "tech house": 3.4,
+      "dance": 2.3,
+      "house": 2.3,
+      "deep tech": 2.3,
+      "lo pop": 2.3,
+      "drum & bass": 1.1,
+      "indie": 1.1,
+      "indie dance": 1.1,
+      "pureibizaradio": 1.1,
+      "melodic techno": 1.1,
+      "track of the day": 1.1,
+      "world": 1.1,
+      "sjpez": 1.1,
+      "artbat": 1.1,
+      "tech": 1.1,
+      "vomvo": 1.1,
+      "dj artur": 1.1,
+      "the lab": 1.1,
+      "giacomotto": 1.1,
+      "ten walls": 1.1,
+      "electronic house": 1.1,
+      "housemusic": 1.1,
+      "interstate 405": 1.1,
+      "techno house": 1.1
+    },
+    "total_liked_tracks": 111
+  },
+  "Maceo Plex": {
+    "name": "Maceo Plex",
+    "soundcloud": "maceoplex",
+    "soundcloud_url": "https://soundcloud.com/maceoplex",
+    "city": "Barcelona",
+    "curated_genres": [
+      "techno",
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 33.3,
+      "techno": 28.6,
+      "maceo plex": 9.5,
+      "dance": 4.8,
+      "premiere": 4.8,
+      "deep house": 4.8,
+      "alternative": 4.8,
+      "house": 4.8,
+      "electro": 4.8
+    },
+    "total_liked_tracks": 36
+  },
+  "Tale of Us": {
+    "name": "Tale of Us",
+    "soundcloud": "taleofus",
+    "soundcloud_url": "https://soundcloud.com/taleofus",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "techno": 62.5,
+      "superimpositions": 12.5,
+      "ambient": 12.5,
+      "slackk": 12.5
+    },
+    "total_liked_tracks": 11
+  },
+  "Nina Kraviz": {
+    "name": "Nina Kraviz",
+    "soundcloud": "nina-kraviz",
+    "soundcloud_url": "https://soundcloud.com/nina-kraviz",
+    "city": "Moscow",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 47.5,
+      "electronic": 22.2,
+      "house": 8.1,
+      "tech house": 5.1,
+      "alternative": 2.0,
+      "nina kraviz": 2.0,
+      "deep techno": 1.0,
+      "house, acid, omars, minimal, techno, chicago house": 1.0,
+      "knotweed records": 1.0,
+      "youcanstilllisten": 1.0,
+      "ambient": 1.0,
+      "ghetto house": 1.0,
+      "dance mania": 1.0,
+      "гост": 1.0,
+      "k-hand": 1.0,
+      "ninakraviz": 1.0,
+      "трип": 1.0,
+      "acid": 1.0,
+      "boiler room": 1.0
+    },
+    "total_liked_tracks": 115
+  },
+  "Adam Beyer": {
+    "name": "Adam Beyer",
+    "soundcloud": "adambeyer",
+    "soundcloud_url": "https://soundcloud.com/adambeyer",
+    "city": "Stockholm",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 86.9,
+      "tech house": 8.2,
+      "house": 3.3,
+      "dance": 1.6
+    },
+    "total_liked_tracks": 65
+  },
+  "Joseph Capriati": {
+    "name": "Joseph Capriati",
+    "soundcloud": "joseph-capriati",
+    "soundcloud_url": "https://soundcloud.com/joseph-capriati",
+    "city": "Naples",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 73.7,
+      "podcast": 10.5,
+      "electronic": 10.5,
+      "r&b & soul": 5.3
+    },
+    "total_liked_tracks": 26
+  },
+  "Len Faki": {
+    "name": "Len Faki",
+    "soundcloud": "lenfaki",
+    "soundcloud_url": "https://soundcloud.com/lenfaki",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 90.0,
+      "electronic": 10.0
+    },
+    "total_liked_tracks": 21
+  },
+  "Carl Cox": {
+    "name": "Carl Cox",
+    "soundcloud": "carlcox",
+    "soundcloud_url": "https://soundcloud.com/carlcox",
+    "city": "Melbourne",
+    "curated_genres": [
+      "techno",
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 50.0,
+      "tech house": 20.0,
+      "dj chus": 10.0,
+      "thecubeguys": 10.0,
+      "house - tech house": 10.0
+    },
+    "total_liked_tracks": 11
+  },
+  "Eric Prydz": {
+    "name": "Eric Prydz",
+    "soundcloud": "ericprydz",
+    "soundcloud_url": "https://soundcloud.com/ericprydz",
+    "city": "Stockholm",
+    "curated_genres": [
+      "progressive",
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Deadmau5": {
+    "name": "Deadmau5",
+    "soundcloud": "deadmau5",
+    "soundcloud_url": "https://soundcloud.com/deadmau5",
+    "city": "Toronto",
+    "curated_genres": [
+      "progressive",
+      "electro"
+    ],
+    "genre_distribution": {
+      "dance & edm": 41.0,
+      "electronic": 28.2,
+      "techno": 12.8,
+      "electromag": 10.3,
+      "house": 7.7
+    },
+    "total_liked_tracks": 48
+  },
+  "Skrillex": {
+    "name": "Skrillex",
+    "soundcloud": "skrillex",
+    "soundcloud_url": "https://soundcloud.com/skrillex",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "bass",
+      "electro"
+    ],
+    "genre_distribution": {
+      "electronic": 27.3,
+      "hip-hop & rap": 18.2,
+      "pop": 18.2,
+      "purity": 9.1,
+      "hip hop": 9.1,
+      "dance": 9.1,
+      "zolajesus": 9.1
+    },
+    "total_liked_tracks": 15
+  },
+  "Dixon": {
+    "name": "Dixon",
+    "soundcloud": "dixon",
+    "soundcloud_url": "https://soundcloud.com/dixon",
+    "city": "Berlin",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "dixon": 37.5,
+      "boiler room": 25.0,
+      "boiler room debuts": 12.5,
+      "techno": 12.5,
+      "entertainment": 12.5
+    },
+    "total_liked_tracks": 11
+  },
+  "Honey Dijon": {
+    "name": "Honey Dijon",
+    "soundcloud": "honeydijon",
+    "soundcloud_url": "https://soundcloud.com/honeydijon",
+    "city": "Chicago",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "dance": 14.3,
+      "deep house": 14.3,
+      "lustpoderosa": 14.3,
+      "kepler sound district": 14.3,
+      "soulful #house #deep #nyc #chicago #classic #honeydijon": 14.3,
+      "techno": 14.3,
+      "big disco business!": 14.3
+    },
+    "total_liked_tracks": 7
+  },
+  "Black Coffee": {
+    "name": "Black Coffee",
+    "soundcloud": "realblackcoffee",
+    "soundcloud_url": "https://soundcloud.com/realblackcoffee",
+    "city": "Durban",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 33.3,
+      "deep house": 25.0,
+      "dance": 16.7,
+      "afro house": 8.3,
+      "house": 8.3,
+      "oriental": 8.3
+    },
+    "total_liked_tracks": 13
+  },
+  "Jamie Jones": {
+    "name": "Jamie Jones",
+    "soundcloud": "jamie-jones",
+    "soundcloud_url": "https://soundcloud.com/jamie-jones",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 52.2,
+      "techno": 13.0,
+      "electronic": 13.0,
+      "afro house": 4.3,
+      "playa tech": 4.3,
+      "othertone": 4.3,
+      "undrtone": 4.3,
+      "entertainment": 4.3
+    },
+    "total_liked_tracks": 30
+  },
+  "Claptone": {
+    "name": "Claptone",
+    "soundcloud": "claptone",
+    "soundcloud_url": "https://soundcloud.com/claptone",
+    "city": "Berlin",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "dance": 75.0,
+      "house": 15.0,
+      "country": 5.0,
+      "electronic": 5.0
+    },
+    "total_liked_tracks": 23
+  },
+  "The Martinez Brothers": {
+    "name": "The Martinez Brothers",
+    "soundcloud": "themartinezbros",
+    "soundcloud_url": "https://soundcloud.com/themartinezbros",
+    "city": "New York",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 36.8,
+      "dance": 10.5,
+      "latin": 5.3,
+      "hip hop": 5.3,
+      "collaborator": 5.3,
+      "kanyewest": 5.3,
+      "techno": 5.3,
+      "deep-house": 5.3,
+      "sol asylum": 5.3,
+      "circol": 5.3,
+      "techhouse": 5.3,
+      "the martinez brothers": 5.3
+    },
+    "total_liked_tracks": 21
+  },
+  "Anyma": {
+    "name": "Anyma",
+    "soundcloud": "anyma_ofc",
+    "soundcloud_url": "https://soundcloud.com/anyma_ofc",
+    "city": "Milan",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "melodic techno": 50.0,
+      "electronic": 50.0
+    },
+    "total_liked_tracks": 4
+  },
+  "Fred again..": {
+    "name": "Fred again..",
+    "soundcloud": "fredagain",
+    "soundcloud_url": "https://soundcloud.com/fredagain",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "bass"
+    ],
+    "genre_distribution": {
+      "electronic": 42.9,
+      "lockdown live": 14.3,
+      "rap/hip-hop": 14.3,
+      "deep house": 14.3,
+      "rinse fm": 14.3
+    },
+    "total_liked_tracks": 19
+  },
+  "Reinier Zonneveld": {
+    "name": "Reinier Zonneveld",
+    "soundcloud": "reinier-zonneveld",
+    "soundcloud_url": "https://soundcloud.com/reinier-zonneveld",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 78.7,
+      "electronic": 10.3,
+      "deep house": 7.7,
+      "hardstyle & hardcore": 0.6,
+      "track of the day": 0.6,
+      "elektro": 0.6,
+      "melodic deep": 0.6,
+      "house": 0.6
+    },
+    "total_liked_tracks": 185
+  },
+  "Indira Paganotto": {
+    "name": "Indira Paganotto",
+    "soundcloud": "indirapaganotto",
+    "soundcloud_url": "https://soundcloud.com/indirapaganotto",
+    "city": "Madrid",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 79.4,
+      "electronic": 5.6,
+      "trance": 3.2,
+      "psytrance": 2.4,
+      "interactive noise": 0.8,
+      "ambient": 0.8,
+      "singing bowl sound healing": 0.8,
+      "dance": 0.8,
+      "alternative": 0.8,
+      "psytechno": 0.8,
+      "action": 0.8,
+      "indira paganotto": 0.8,
+      "drum & bass": 0.8,
+      "tranceclimax": 0.8,
+      "youcanstilllisten": 0.8,
+      "eg techno": 0.8
+    },
+    "total_liked_tracks": 187
+  },
+  "Deborah De Luca": {
+    "name": "Deborah De Luca",
+    "soundcloud": "deborahdeluca",
+    "soundcloud_url": "https://soundcloud.com/deborahdeluca",
+    "city": "Naples",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 61.6,
+      "house": 5.3,
+      "electronic": 4.6,
+      "giuseppecennamo": 3.3,
+      "deep house": 2.6,
+      "tech house": 2.0,
+      "трип": 1.3,
+      "ra": 1.3,
+      "edit": 1.3,
+      "carillon": 1.3,
+      "dance": 0.7,
+      "verflixt": 0.7,
+      "trance": 0.7,
+      "drum & bass": 0.7,
+      "disco": 0.7,
+      "alternative": 0.7,
+      "paul": 0.7,
+      "ethereal techno": 0.7,
+      "dance mania": 0.7,
+      "acid": 0.7,
+      "miss kittin": 0.7,
+      "electronica": 0.7,
+      "melodic techno": 0.7,
+      "techno/tech house": 0.7,
+      "premiere": 0.7,
+      "horizons": 0.7,
+      "nina kraviz": 0.7,
+      "ean golden, live, enter, experience, sake bar, ibiza, bella sarris,": 0.7,
+      "new release 2016": 0.7,
+      "area 51": 0.7,
+      "unlocked": 0.7,
+      "tech-house": 0.7,
+      "techno house": 0.7
+    },
+    "total_liked_tracks": 164
+  },
+  "Sara Landry": {
+    "name": "Sara Landry",
+    "soundcloud": "sara-landry-dj",
+    "soundcloud_url": "https://soundcloud.com/sara-landry-dj",
+    "city": "New York",
+    "curated_genres": [
+      "techno",
+      "hardcore"
+    ],
+    "genre_distribution": {
+      "techno": 65.3,
+      "trance": 8.3,
+      "hard techno": 5.8,
+      "drum & bass": 4.1,
+      "electronic": 2.5,
+      "bounce": 0.8,
+      "schranz": 0.8,
+      "hardtechno": 0.8,
+      "240 sound": 0.8,
+      "trance techno": 0.8,
+      "hard bounce": 0.8,
+      "bennyrevival": 0.8,
+      "melodark minimal": 0.8,
+      "house": 0.8,
+      "dance & edm": 0.8,
+      "religion & spirituality": 0.8,
+      "classical": 0.8,
+      "industrial techno": 0.8,
+      "rave": 0.8,
+      "deep house": 0.8,
+      "ambient": 0.8,
+      "eletrônica": 0.8
+    },
+    "total_liked_tracks": 145
+  },
+  "I Hate Models": {
+    "name": "I Hate Models",
+    "soundcloud": "ihatemodels",
+    "soundcloud_url": "https://soundcloud.com/ihatemodels",
+    "city": "Paris",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 35.7,
+      "electronic": 8.6,
+      "trance": 2.1,
+      "dance & edm": 1.4,
+      "frenchcore": 1.4,
+      "electrónica": 1.4,
+      "ambient": 1.4,
+      "podcast": 1.4,
+      "premiere": 1.4,
+      "storytelling": 1.4,
+      "house": 1.4,
+      "flexxseal": 1.4,
+      "hardcore": 1.4,
+      "materiá": 1.4,
+      "religion & spirituality": 1.4,
+      "tekno": 0.7,
+      "hard techno": 0.7,
+      "hard bounce": 0.7,
+      "hard trance": 0.7,
+      "bounce": 0.7,
+      "ihm": 0.7,
+      "hardtechno/tekno": 0.7,
+      "disco inferno 02": 0.7,
+      "italo body music": 0.7,
+      "disco inferno": 0.7,
+      "rlr ihm ade": 0.7,
+      "techno - raw, deep, hypnotic": 0.7,
+      "nu metal remix": 0.7,
+      "latin": 0.7,
+      "i hate models": 0.7,
+      "140": 0.7,
+      "hard drum": 0.7,
+      "hip-hop & rap": 0.7,
+      "goa": 0.7,
+      "machine funk": 0.7,
+      "dj tool?": 0.7,
+      "anna funk damage": 0.7,
+      "broken dreams": 0.7,
+      "hardtechno": 0.7,
+      "speed": 0.7,
+      "hardpsy": 0.7,
+      "soundtrack": 0.7,
+      "schranzformator": 0.7,
+      "religión y espiritualidad": 0.7,
+      "broadcast": 0.7,
+      "breakcore": 0.7,
+      "nervoushorizon": 0.7,
+      "cover": 0.7,
+      "electro": 0.7,
+      "mg001": 0.7,
+      "splat": 0.7,
+      "star wars": 0.7,
+      "nice age": 0.7,
+      "deep": 0.7,
+      "melanconic progressive": 0.7,
+      "abstract": 0.7,
+      "industrial rave": 0.7,
+      "rawacid": 0.7,
+      "electropunk": 0.7,
+      "tri": 0.7,
+      "svbkvlt": 0.7,
+      "industrial": 0.7,
+      "amniote": 0.7,
+      "istheway": 0.7,
+      "elektro punk": 0.7,
+      "nn013": 0.7
+    },
+    "total_liked_tracks": 181
+  },
+  "Lilly Palmer": {
+    "name": "Lilly Palmer",
+    "soundcloud": "lilly_palmer",
+    "soundcloud_url": "https://soundcloud.com/lilly_palmer",
+    "city": "Cologne",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 66.3,
+      "electronic": 13.0,
+      "deep house": 6.5,
+      "tech house": 3.3,
+      "all day i dream": 1.1,
+      "forrest": 1.1,
+      "n-tec": 1.1,
+      "schories": 1.1,
+      "melodic techno": 1.1,
+      "podcast": 1.1,
+      "house": 1.1,
+      "andy bros": 1.1,
+      "underground": 1.1,
+      "deep tech": 1.1
+    },
+    "total_liked_tracks": 104
+  },
+  "Nico Moreno": {
+    "name": "Nico Moreno",
+    "soundcloud": "nicomorenomusic",
+    "soundcloud_url": "https://soundcloud.com/nicomorenomusic",
+    "city": "Lyon",
+    "curated_genres": [
+      "techno",
+      "hardcore"
+    ],
+    "genre_distribution": {
+      "techno": 75.0,
+      "hard techno": 11.0,
+      "hardtechno": 2.3,
+      "electronic": 1.7,
+      "dance & edm": 1.2,
+      "dance": 1.2,
+      "schranz": 1.2,
+      "industrial": 0.6,
+      "gabber": 0.6,
+      "industrial techno": 0.6,
+      "hard rave": 0.6,
+      "rage techno": 0.6,
+      "techstep": 0.6,
+      "softgroove": 0.6,
+      "soft groove": 0.6,
+      "dance en edm": 0.6,
+      "hip hop": 0.6,
+      "r & b": 0.6
+    },
+    "total_liked_tracks": 189
+  },
+  "Kolsch": {
+    "name": "Kolsch",
+    "soundcloud": "kolsch",
+    "soundcloud_url": "https://soundcloud.com/kolsch",
+    "city": "Copenhagen",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "jungle/ drum and bass": 50.0,
+      "deep house": 50.0
+    },
+    "total_liked_tracks": 2
+  },
+  "Rodhad": {
+    "name": "Rodhad",
+    "soundcloud": "rodhad",
+    "soundcloud_url": "https://soundcloud.com/rodhad",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 25.7,
+      "ambient": 6.8,
+      "electronic": 4.1,
+      "soundtrack": 2.7,
+      "beats": 2.7,
+      "storytelling": 2.7,
+      "drum & bass": 2.7,
+      "guest mix": 2.7,
+      "deephouse": 2.7,
+      "seance": 2.7,
+      "interview": 1.4,
+      "kosmische #berlin school #new age #ambient": 1.4,
+      "soul-metall": 1.4,
+      "delayed": 1.4,
+      "bass": 1.4,
+      "onlyvinyl": 1.4,
+      "musique concrète | cinematic | ambient": 1.4,
+      "instrumental": 1.4,
+      "hidden hawaii": 1.4,
+      "atmospheric": 1.4,
+      "kr!z": 1.4,
+      "new wave": 1.4,
+      "djeez": 1.4,
+      "loungin": 1.4,
+      "slownovsky": 1.4,
+      "boiler room": 1.4,
+      "beach bum folk": 1.4,
+      "otaku": 1.4,
+      "mellow": 1.4,
+      "tropical heat": 1.4,
+      "tapewave": 1.4,
+      "elisabeth": 1.4,
+      "dystopian | collapsed | devastated": 1.4,
+      "techno / dubstep / experimental": 1.4,
+      "hip-hop": 1.4,
+      "ambient / modern classical / feelings": 1.4,
+      "dub techno": 1.4,
+      "deep house / dub techno": 1.4,
+      "deep journey": 1.4,
+      "adult": 1.4,
+      "ambient techno dub": 1.4,
+      "ambient dub space forest": 1.4,
+      "dubtech": 1.4
+    },
+    "total_liked_tracks": 94
+  },
+  "Michael Bibi": {
+    "name": "Michael Bibi",
+    "soundcloud": "bibi-87",
+    "soundcloud_url": "https://soundcloud.com/bibi-87",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "tech house": 39.1,
+      "house": 21.9,
+      "techno": 6.2,
+      "electronic": 3.1,
+      "tech": 3.1,
+      "wade": 3.1,
+      "fuck genre names its all house & techno": 1.6,
+      "drum & bass": 1.6,
+      "michael bibi": 1.6,
+      "ninetoes": 1.6,
+      "house // techno": 1.6,
+      "blues": 1.6,
+      "techy": 1.6,
+      "mix": 1.6,
+      "fuse london": 1.6,
+      "deep house": 1.6,
+      "hiphopanonymous": 1.6,
+      "music on": 1.6,
+      "solid grooves": 1.6,
+      "house music": 1.6,
+      "deephouse": 1.6
+    },
+    "total_liked_tracks": 71
+  },
+  "PAWSA": {
+    "name": "PAWSA",
+    "soundcloud": "pawsa",
+    "soundcloud_url": "https://soundcloud.com/pawsa",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "FISHER": {
+    "name": "FISHER",
+    "soundcloud": "fisher-official",
+    "soundcloud_url": "https://soundcloud.com/fisher-official",
+    "city": "Gold Coast",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Mochakk": {
+    "name": "Mochakk",
+    "soundcloud": "mochakkmusic",
+    "soundcloud_url": "https://soundcloud.com/mochakkmusic",
+    "city": "Sao Paulo",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 19.9,
+      "house": 19.2,
+      "techno": 8.9,
+      "deep house": 6.8,
+      "tech house": 6.2,
+      "disco": 3.4,
+      "premiere tbx": 2.1,
+      "dance": 1.4,
+      "minimal": 1.4,
+      "dubstep": 1.4,
+      "r&b & soul": 1.4,
+      "ukg": 1.4,
+      "drum & bass": 1.4,
+      "drb24": 0.7,
+      "drb21": 0.7,
+      "pop": 0.7,
+      "submundo": 0.7,
+      "golddiggerrecs": 0.7,
+      "favela bass": 0.7,
+      "turbo recordings": 0.7,
+      "eletrônica": 0.7,
+      "r&b": 0.7,
+      "funk": 0.7,
+      "hard trance": 0.7,
+      "140": 0.7,
+      "hip-hop & rap": 0.7,
+      "kayley harriet": 0.7,
+      "insideout001": 0.7,
+      "playedby": 0.7,
+      "inimigos do shazam": 0.7,
+      "roddylima": 0.7,
+      "minimal deep tech": 0.7,
+      "free download": 0.7,
+      "speed garage": 0.7,
+      "minimal / deeptech": 0.7,
+      "nudiscofunk": 0.7,
+      "djsneak": 0.7,
+      "dance & edm": 0.7,
+      "minimal / deep tech": 0.7,
+      "primitive uk": 0.7,
+      "dancehall": 0.7,
+      "detectionaudio": 0.7,
+      "speedtest rave": 0.7,
+      "uk garage": 0.7,
+      "jackin' house": 0.7,
+      "garage": 0.7,
+      "lofi": 0.7,
+      "deep baile": 0.7,
+      "house - deep": 0.7,
+      "rap": 0.7
+    },
+    "total_liked_tracks": 197
+  },
+  "Chris Lake": {
+    "name": "Chris Lake",
+    "soundcloud": "chrislake",
+    "soundcloud_url": "https://soundcloud.com/chrislake",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 47.1,
+      "electro house": 17.6,
+      "hip-hop & rap": 5.9,
+      "boys noize": 5.9,
+      "harddotd15": 5.9,
+      "savages": 5.9,
+      "future house": 5.9,
+      "disco house": 5.9
+    },
+    "total_liked_tracks": 22
+  },
+  "Dom Dolla": {
+    "name": "Dom Dolla",
+    "soundcloud": "domdolla",
+    "soundcloud_url": "https://soundcloud.com/domdolla",
+    "city": "Melbourne",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 33.3,
+      "electronic": 14.5,
+      "tech house": 10.1,
+      "dance & edm": 8.0,
+      "dance": 5.8,
+      "nightbass": 2.9,
+      "deep house": 2.9,
+      "bass music": 1.4,
+      "techno": 0.7,
+      "new noise": 0.7,
+      "live dj mix": 0.7,
+      "something else": 0.7,
+      "madeaux": 0.7,
+      "only 100s": 0.7,
+      "guttertech": 0.7,
+      "odd house": 0.7,
+      "✨": 0.7,
+      "serious": 0.7,
+      "track of the day": 0.7,
+      "4x4": 0.7,
+      "night owl radio": 0.7,
+      "pop": 0.7,
+      "night bass": 0.7,
+      "r&b & soul": 0.7,
+      "magic tape": 0.7,
+      "3000": 0.7,
+      "hannahwants": 0.7,
+      "alternative": 0.7,
+      "demarzo": 0.7,
+      "chapter": 0.7,
+      "light deep": 0.7,
+      "hip-hop & rap": 0.7,
+      "houseandbass": 0.7,
+      "bass house": 0.7,
+      "game": 0.7,
+      "pride": 0.7,
+      "super house": 0.7
+    },
+    "total_liked_tracks": 178
+  },
+  "John Summit": {
+    "name": "John Summit",
+    "soundcloud": "johnsummit",
+    "soundcloud_url": "https://soundcloud.com/johnsummit",
+    "city": "Chicago",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 29.2,
+      "tech house": 17.0,
+      "dubstep": 13.2,
+      "electronic": 5.7,
+      "techno": 4.7,
+      "melodic house & techno": 4.7,
+      "dance & edm": 1.9,
+      "deep house": 1.9,
+      "trance": 1.9,
+      "minimal / deep tech": 1.9,
+      "minimal/deep tech": 1.9,
+      "indie dance": 0.9,
+      "bass house": 0.9,
+      "ukg": 0.9,
+      "indie": 0.9,
+      "breaks": 0.9,
+      "deep tech": 0.9,
+      "dance": 0.9,
+      "premiere tbx": 0.9,
+      "when we dip xyz": 0.9,
+      "playa tech": 0.9,
+      "techyes": 0.9,
+      "minimal": 0.9,
+      "drum & bass": 0.9,
+      "remix": 0.9,
+      "dance - melodic house & techno": 0.9,
+      "garage": 0.9,
+      "trsrs013": 0.9
+    },
+    "total_liked_tracks": 198
+  },
+  "Keinemusik": {
+    "name": "Keinemusik",
+    "soundcloud": "keinemusik",
+    "soundcloud_url": "https://soundcloud.com/keinemusik",
+    "city": "Berlin",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 28.3,
+      "deep house": 18.9,
+      "electronic": 15.7,
+      "techno": 4.4,
+      "&me": 2.5,
+      "keinemusik": 2.5,
+      "indie": 1.9,
+      "afro": 1.3,
+      "afro house": 1.3,
+      "entertainment": 1.3,
+      "disco": 1.3,
+      "david mayer": 1.3,
+      "turbo recordings": 0.6,
+      "pop": 0.6,
+      "world": 0.6,
+      "razor-n-tape": 0.6,
+      "anomaly": 0.6,
+      "amapiano": 0.6,
+      "dance": 0.6,
+      "soundtrack": 0.6,
+      "\"dance & electronic\" (dance/techno/disco)": 0.6,
+      "electronic groove": 0.6,
+      "anjunadeep": 0.6,
+      "weltmusik": 0.6,
+      "elektro": 0.6,
+      "religion & spiritualität": 0.6,
+      "scfirst": 0.6,
+      "electronic, deep house, experimental, kraut": 0.6,
+      "everything": 0.6,
+      "sven väth": 0.6,
+      "circoloco": 0.6,
+      "dgtl": 0.6,
+      "tech house": 0.6,
+      "exclusive": 0.6,
+      "music": 0.6,
+      "off house": 0.6,
+      "bbc radio 1": 0.6,
+      "jaded ep": 0.6,
+      "electronic pop": 0.6,
+      "matrixxman": 0.6,
+      "rampa": 0.6,
+      "terminal m": 0.6,
+      "gru052": 0.6
+    },
+    "total_liked_tracks": 187
+  },
+  "Oliver Heldens": {
+    "name": "Oliver Heldens",
+    "soundcloud": "oliverheldens",
+    "soundcloud_url": "https://soundcloud.com/oliverheldens",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "dance & edm": 34.4,
+      "electronic": 25.5,
+      "house": 22.4,
+      "techno": 10.4,
+      "trance": 1.6,
+      "dance": 1.6,
+      "hardgroove": 1.0,
+      "alternative": 0.5,
+      "hip hop": 0.5,
+      "heldeep": 0.5,
+      "remix": 0.5,
+      "gecko": 0.5,
+      "shades of cuts": 0.5
+    },
+    "total_liked_tracks": 196
+  },
+  "Nora En Pure": {
+    "name": "Nora En Pure",
+    "soundcloud": "noraenpure",
+    "soundcloud_url": "https://soundcloud.com/noraenpure",
+    "city": "Zurich",
+    "curated_genres": [
+      "house",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "deep house": 49.0,
+      "nu disco": 9.8,
+      "house": 7.8,
+      "enormous tunes": 7.8,
+      "nora en pure": 7.8,
+      "melodic house": 2.0,
+      "re:imagined": 2.0,
+      "mashup": 2.0,
+      "electronica": 2.0,
+      "deep": 2.0,
+      "angelika vee": 2.0,
+      "deep house / nu disco / house": 2.0,
+      "nu disco / indie dance": 2.0,
+      "nora": 2.0
+    },
+    "total_liked_tracks": 52
+  },
+  "Vintage Culture": {
+    "name": "Vintage Culture",
+    "soundcloud": "vintageculturemusic",
+    "soundcloud_url": "https://soundcloud.com/vintageculturemusic",
+    "city": "Sao Paulo",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 48.9,
+      "dance & edm": 20.0,
+      "house": 8.9,
+      "dance": 8.9,
+      "techno": 4.4,
+      "diynamic radio show": 1.1,
+      "deep house": 1.1,
+      "playa tech": 1.1,
+      "melodic house & techno": 1.1,
+      "burningman": 1.1,
+      "resident": 1.1,
+      "progressive melodic": 1.1,
+      "roddylima": 1.1
+    },
+    "total_liked_tracks": 199
+  },
+  "Lost Frequencies": {
+    "name": "Lost Frequencies",
+    "soundcloud": "lo-freq-1",
+    "soundcloud_url": "https://soundcloud.com/lo-freq-1",
+    "city": "Brussels",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "deep house": 14.1,
+      "house": 9.8,
+      "dance & edm": 6.1,
+      "electronic": 6.1,
+      "tropical house": 2.5,
+      "future bass": 2.5,
+      "melodic house": 1.8,
+      "future house": 1.8,
+      "certified jackin": 1.8,
+      "afro house": 1.2,
+      "techno": 1.2,
+      "pop": 1.2,
+      "deep melodic": 1.2,
+      "my style": 1.2,
+      "gabe": 1.2,
+      "dance": 1.2,
+      "remix": 1.2,
+      "tropkillaz": 1.2,
+      "moksi": 1.2,
+      "trailer house / future western": 0.6,
+      "ukg": 0.6,
+      "drum & bass": 0.6,
+      "vocals tips": 0.6,
+      "disco house": 0.6,
+      "skankin": 0.6,
+      "chill'": 0.6,
+      "a$$tronaut": 0.6,
+      "tep no": 0.6,
+      "zero eleven music": 0.6,
+      "pop - alternative": 0.6,
+      "<3": 0.6,
+      "alternative/ hip-hop": 0.6,
+      "frenchhouse": 0.6,
+      "cuff": 0.6,
+      "#brazilianbass": 0.6,
+      "run away": 0.6,
+      "motez": 0.6,
+      "hip-hop & rap": 0.6,
+      "club": 0.6,
+      "tech house": 0.6,
+      "disco funk": 0.6,
+      "dubstep": 0.6,
+      "benasis": 0.6,
+      "hi-techo": 0.6,
+      "futuredisco": 0.6,
+      "hannah wants": 0.6,
+      "progressive house": 0.6,
+      "mercer": 0.6,
+      "lucas&steve": 0.6,
+      "the dopest": 0.6,
+      "switch up": 0.6,
+      "future garage house": 0.6,
+      "low steppa": 0.6,
+      "hip hop": 0.6,
+      "soul hop": 0.6,
+      "droeloe": 0.6,
+      "mesto": 0.6,
+      "hiphop": 0.6,
+      "para one": 0.6,
+      "tchami": 0.6,
+      "deep": 0.6,
+      "bass": 0.6,
+      "bass house": 0.6,
+      "ðøμ ðøŀŀa": 0.6,
+      "chris lorenzo": 0.6,
+      "indie": 0.6,
+      "cloud house": 0.6,
+      "sexy": 0.6,
+      "ibeard": 0.6,
+      "x&g": 0.6,
+      "wuki": 0.6,
+      "aglory": 0.6,
+      "bass music": 0.6,
+      "mm": 0.6,
+      "chill": 0.6,
+      "rainer + grimm": 0.6,
+      "all of them": 0.6,
+      "residents' hour": 0.6,
+      "twerk": 0.6,
+      "dirtcaps": 0.6,
+      "wub": 0.6,
+      "kylalagrange": 0.6,
+      "easylove": 0.6,
+      "rüfüs": 0.6,
+      "cosmosmidnight": 0.6,
+      "beat tape 2": 0.6
+    },
+    "total_liked_tracks": 174
+  },
+  "Adriatique": {
+    "name": "Adriatique",
+    "soundcloud": "adriatique",
+    "soundcloud_url": "https://soundcloud.com/adriatique",
+    "city": "Zurich",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "deep house": 37.5,
+      "electronic": 25.0,
+      "house": 12.5,
+      "techno": 6.2,
+      "melodic deep": 6.2,
+      "frankeyandsandrino": 6.2,
+      "electronica": 6.2
+    },
+    "total_liked_tracks": 18
+  },
+  "Pan-Pot": {
+    "name": "Pan-Pot",
+    "soundcloud": "pan-pot",
+    "soundcloud_url": "https://soundcloud.com/pan-pot",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 84.5,
+      "electronic": 5.0,
+      "house": 1.7,
+      "dance & edm": 1.1,
+      "entertainment": 1.1,
+      "shelter live series": 1.1,
+      "storytelling": 0.6,
+      "deep house/downtempo/percussive": 0.6,
+      "drum & bass": 0.6,
+      "pan-pot": 0.6,
+      "be-at.tv": 0.6,
+      "downtempo": 0.6,
+      "michael klein": 0.6,
+      "music": 0.6,
+      "mix": 0.6,
+      "boiler room": 0.6
+    },
+    "total_liked_tracks": 190
+  },
+  "Stephan Bodzin": {
+    "name": "Stephan Bodzin",
+    "soundcloud": "stephanbodzin",
+    "soundcloud_url": "https://soundcloud.com/stephanbodzin",
+    "city": "Bremen",
+    "curated_genres": [
+      "techno",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "electronic": 16.7,
+      "pan-pot": 16.7,
+      "frisky radio": 16.7,
+      "luna semara": 16.7,
+      "rex": 16.7,
+      "techno": 16.7
+    },
+    "total_liked_tracks": 7
+  },
+  "Enrico Sangiuliano": {
+    "name": "Enrico Sangiuliano",
+    "soundcloud": "enricosangiuliano",
+    "soundcloud_url": "https://soundcloud.com/enricosangiuliano",
+    "city": "Emilia-Romagna",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 64.2,
+      "enrico sangiuliano": 15.1,
+      "ltu premiere": 1.9,
+      "dance": 1.9,
+      "electronic": 1.9,
+      "electro": 1.9,
+      "afx": 1.9,
+      "tehcno": 1.9,
+      "tech house": 1.9,
+      "enrico": 1.9,
+      "deep house": 1.9,
+      "nathan fake": 1.9,
+      "techno house": 1.9
+    },
+    "total_liked_tracks": 72
+  },
+  "Recondite": {
+    "name": "Recondite",
+    "soundcloud": "recondite_music",
+    "soundcloud_url": "https://soundcloud.com/recondite_music",
+    "city": "Munich",
+    "curated_genres": [
+      "ambient",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 50.0,
+      "melodic techno": 25.0,
+      "deep house / dub techno": 25.0
+    },
+    "total_liked_tracks": 6
+  },
+  "Dax J": {
+    "name": "Dax J",
+    "soundcloud": "daxj",
+    "soundcloud_url": "https://soundcloud.com/daxj",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 63.4,
+      "dub techno": 2.3,
+      "dax j": 2.3,
+      "jungle": 1.7,
+      "d&b": 1.7,
+      "electronic": 1.2,
+      "drum & bass": 1.2,
+      "house": 1.2,
+      "awakenings": 1.2,
+      "garage": 0.6,
+      "uk garage": 0.6,
+      "floating": 0.6,
+      "dub": 0.6,
+      "radio show": 0.6,
+      "idm": 0.6,
+      "techno # acid": 0.6,
+      "techno #acid": 0.6,
+      "be-at.tv": 0.6,
+      "electronic body music": 0.6,
+      "thebunkerny": 0.6,
+      "roy ayers": 0.6,
+      "white material": 0.6,
+      "reso": 0.6,
+      "rod": 0.6,
+      "okain": 0.6,
+      "ipman": 0.6,
+      "rinse fm": 0.6,
+      "daxj": 0.6,
+      "drum and bass": 0.6,
+      "babylon": 0.6,
+      "aphex twin": 0.6,
+      "deep": 0.6,
+      "deadswan": 0.6,
+      "justsaying": 0.6,
+      "aphex": 0.6,
+      "freerotation 2015": 0.6,
+      "make your transition": 0.6,
+      "peter van hoesen": 0.6,
+      "chillout": 0.6,
+      "blues": 0.6,
+      "oldschool hardcore": 0.6,
+      "oldskool hardcore / jungle": 0.6,
+      "hardcore / drum and bass": 0.6,
+      "oldskool": 0.6,
+      "bleak": 0.6,
+      "jc": 0.6,
+      "gary gritness": 0.6,
+      "soenda": 0.6,
+      "darkcore jungle tekno": 0.6,
+      "freestyle": 0.6
+    },
+    "total_liked_tracks": 186
+  },
+  "Kobosil": {
+    "name": "Kobosil",
+    "soundcloud": "kobosil",
+    "soundcloud_url": "https://soundcloud.com/kobosil",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 55.2,
+      "electronic": 13.5,
+      "ostgut ton": 3.1,
+      "boiler room": 2.1,
+      "house": 2.1,
+      "bass": 2.1,
+      "hard dance": 1.0,
+      "hard techno": 1.0,
+      "october series 2021": 1.0,
+      "ambient": 1.0,
+      "unpolished": 1.0,
+      "jay clarke": 1.0,
+      "music": 1.0,
+      "kobosil": 1.0,
+      "слияние": 1.0,
+      "соната": 1.0,
+      "blue marbled 10\"": 1.0,
+      "deep house / techno": 1.0,
+      "boring": 1.0,
+      "dub": 1.0,
+      "experimental electronic": 1.0,
+      "other": 1.0,
+      "deep house": 1.0,
+      "lush": 1.0,
+      "chillout": 1.0,
+      "electro": 1.0,
+      "techno podcast": 1.0
+    },
+    "total_liked_tracks": 175
+  },
+  "Rebekah": {
+    "name": "Rebekah",
+    "soundcloud": "rebekah",
+    "soundcloud_url": "https://soundcloud.com/rebekah",
+    "city": "Birmingham",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 85.2,
+      "house": 3.7,
+      "techno / industrial": 3.7,
+      "industrial techno": 1.9,
+      "catharsism": 1.9,
+      "nicolai toma": 1.9,
+      "techno-industrial": 1.9
+    },
+    "total_liked_tracks": 63
+  },
+  "Perc": {
+    "name": "Perc",
+    "soundcloud": "perc",
+    "soundcloud_url": "https://soundcloud.com/perc",
+    "city": "London",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 89.6,
+      "drum & bass": 3.8,
+      "electronic": 1.6,
+      "techstep": 1.1,
+      "jungle": 0.5,
+      "storytelling": 0.5,
+      "indie": 0.5,
+      "ra": 0.5,
+      "techno / unstream": 0.5,
+      "dance": 0.5,
+      "slam": 0.5
+    },
+    "total_liked_tracks": 193
+  },
+  "Laurent Garnier": {
+    "name": "Laurent Garnier",
+    "soundcloud": "laurent-garnier",
+    "soundcloud_url": "https://soundcloud.com/laurent-garnier",
+    "city": "Paris",
+    "curated_genres": [
+      "techno",
+      "house"
+    ],
+    "genre_distribution": {
+      "techno": 26.1,
+      "electro": 8.7,
+      "laurent garnier": 8.7,
+      "boiler room": 8.7,
+      "klassik blueprint muzik": 4.3,
+      "chillout": 4.3,
+      "chill": 4.3,
+      "gleam": 4.3,
+      "husbands": 4.3,
+      "laurent": 4.3,
+      "crack": 4.3,
+      "le sucre": 4.3,
+      "gregor tresher": 4.3,
+      "vocal dub": 4.3,
+      "house": 4.3
+    },
+    "total_liked_tracks": 25
+  },
+  "Jeff Mills": {
+    "name": "Jeff Mills",
+    "soundcloud": "axis-jeff-mills",
+    "soundcloud_url": "https://soundcloud.com/axis-jeff-mills",
+    "city": "Detroit",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "jazz & blues": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Bonobo": {
+    "name": "Bonobo",
+    "soundcloud": "bonobo",
+    "soundcloud_url": "https://soundcloud.com/bonobo",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "ambient",
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 100.0
+    },
+    "total_liked_tracks": 4
+  },
+  "Bicep": {
+    "name": "Bicep",
+    "soundcloud": "feelmybicep",
+    "soundcloud_url": "https://soundcloud.com/feelmybicep",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "house": 23.0,
+      "electronic": 13.5,
+      "techno": 5.6,
+      "dance & edm": 2.4,
+      "disco": 2.4,
+      "bicep": 1.6,
+      "deep house": 1.6,
+      "piano house": 1.6,
+      "ice house": 1.6,
+      "house techno breakbeat rave": 0.8,
+      "podcast": 0.8,
+      "feel my bicep": 0.8,
+      "muscle mix": 0.8,
+      "pete tong": 0.8,
+      "premiere": 0.8,
+      "truancy": 0.8,
+      "mix": 0.8,
+      "50 weapons": 0.8,
+      "tropical techno": 0.8,
+      "esp institute": 0.8,
+      "boiler room debuts": 0.8,
+      "slumber session": 0.8,
+      "afrobeat": 0.8,
+      "dyone": 0.8,
+      "aus": 0.8,
+      "hot tub slamz": 0.8,
+      "will saul": 0.8,
+      "bicep & midland": 0.8,
+      "bass": 0.8,
+      "essential mix": 0.8,
+      "synth step": 0.8,
+      "uk bass": 0.8,
+      "music": 0.8,
+      "talabot": 0.8,
+      "italo trance": 0.8,
+      "beef breakz": 0.8,
+      "italo fuzz": 0.8,
+      "robert hood": 0.8,
+      "deep": 0.8,
+      "zebidiah": 0.8,
+      "dubby": 0.8,
+      "wee pumper": 0.8,
+      "italo trance breaks": 0.8,
+      "loopy disco belterz": 0.8,
+      "acid": 0.8,
+      "house music": 0.8,
+      "italo techno": 0.8,
+      "world full of weirdos": 0.8,
+      "new jack swing, edits,": 0.8,
+      "blue marbled 10\"": 0.8,
+      "garage house": 0.8,
+      "reggae": 0.8,
+      "party": 0.8,
+      "2step warehouse": 0.8,
+      "ambient": 0.8,
+      "the shake sound": 0.8,
+      "house techo": 0.8,
+      "disco electro g funk": 0.8,
+      "my love is underground": 0.8,
+      "cosmic arp-house": 0.8,
+      "sleaze-core baby": 0.8,
+      "funk": 0.8,
+      "skippy garage house": 0.8,
+      "jazz funk house": 0.8,
+      "disco funk dub": 0.8,
+      "sturm und drang": 0.8,
+      "emotional house": 0.8,
+      "epic disco": 0.8
+    },
+    "total_liked_tracks": 149
+  },
+  "Lane 8": {
+    "name": "Lane 8",
+    "soundcloud": "lane8",
+    "soundcloud_url": "https://soundcloud.com/lane8",
+    "city": "Denver",
+    "curated_genres": [
+      "progressive",
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Ben Bohmer": {
+    "name": "Ben Bohmer",
+    "soundcloud": "ben-bohmer",
+    "soundcloud_url": "https://soundcloud.com/ben-bohmer",
+    "city": "Berlin",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "deep house": 31.8,
+      "electronic": 25.8,
+      "techno": 9.3,
+      "house": 2.6,
+      "progressive house": 2.0,
+      "melodic house & techno": 2.0,
+      "electronica": 2.0,
+      "dance - electro": 1.3,
+      "ambient": 1.3,
+      "dance & edm": 1.3,
+      "organic house": 0.7,
+      "indie dance": 0.7,
+      "chillout": 0.7,
+      "p r e m i e r e //": 0.7,
+      "electro": 0.7,
+      "melodic techno": 0.7,
+      "premieren": 0.7,
+      "premiere": 0.7,
+      "space date": 0.7,
+      "tomorrowland 2018": 0.7,
+      "alternative": 0.7,
+      "fusion": 0.7,
+      "daytime disco": 0.7,
+      "ethereal techno": 0.7,
+      "∞ ♥": 0.7,
+      "vibe": 0.7,
+      "electronic groove": 0.7,
+      "afrohouse": 0.7,
+      "needcast": 0.7,
+      "track of the day": 0.7,
+      "muui": 0.7,
+      "minimal": 0.7,
+      "nick warren": 0.7,
+      "world": 0.7,
+      "intermixtures vol. 1": 0.7,
+      "disco": 0.7,
+      "zero": 0.7,
+      "boc": 0.7,
+      "house techno": 0.7,
+      "dub techno": 0.7,
+      "dance": 0.7
+    },
+    "total_liked_tracks": 188
+  },
+  "Monolink": {
+    "name": "Monolink",
+    "soundcloud": "monolink",
+    "soundcloud_url": "https://soundcloud.com/monolink",
+    "city": "Berlin",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "electronic": 13.8,
+      "deep house": 11.2,
+      "techno": 3.9,
+      "downtempo": 3.3,
+      "montagssorbet": 3.3,
+      "remix": 2.6,
+      "ketapop": 2.6,
+      "bummeltechno": 2.0,
+      "deephouse": 2.0,
+      "melodic house": 1.3,
+      "o/y": 1.3,
+      "house": 1.3,
+      "world": 1.3,
+      "getting deeper": 1.3,
+      "slo-fi": 1.3,
+      "talderverwirrung": 1.3,
+      "electronica": 1.3,
+      "detmolt": 1.3,
+      "downbeat": 1.3,
+      "ambient": 0.7,
+      "rumpelmusig": 0.7,
+      "other people podcast": 0.7,
+      "♥": 0.7,
+      "live": 0.7,
+      "set": 0.7,
+      "live set": 0.7,
+      "trance": 0.7,
+      "sonntag": 0.7,
+      "on the rug": 0.7,
+      "iama room": 0.7,
+      "weltmusik": 0.7,
+      "*live": 0.7,
+      "slomosexual": 0.7,
+      "bummel": 0.7,
+      "storytelling": 0.7,
+      "intercultural": 0.7,
+      "stormset": 0.7,
+      "holger hecler": 0.7,
+      "monolink": 0.7,
+      "mystic music": 0.7,
+      "bernstein": 0.7,
+      "electroacoustica": 0.7,
+      "podcast": 0.7,
+      "eletrônica": 0.7,
+      "mira": 0.7,
+      "oceanvs": 0.7,
+      "folk & singer-songwriter": 0.7,
+      "jacob groening": 0.7,
+      "music": 0.7,
+      "100bpm": 0.7,
+      "satori": 0.7,
+      "all day i dream": 0.7,
+      "burning man": 0.7,
+      "acid pauli": 0.7,
+      "dolph remix": 0.7,
+      "garbicz festival 2015": 0.7,
+      "garbicz": 0.7,
+      "fusion 2015": 0.7,
+      "tropical": 0.7,
+      "stimming": 0.7,
+      "foreverunderground": 0.7,
+      "classical": 0.7,
+      "jonn dark": 0.7,
+      "burningman": 0.7,
+      "indie": 0.7,
+      "laina": 0.7,
+      "mix": 0.7,
+      "lake people": 0.7,
+      "midas 104": 0.7,
+      "dole&kom": 0.7,
+      "folk": 0.7,
+      "acid bogen": 0.7,
+      "robot": 0.7,
+      "the micronaut": 0.7,
+      "105bpm": 0.7,
+      "ablution": 0.7,
+      "circle": 0.7,
+      "ole biege": 0.7,
+      "versatile": 0.7,
+      "deep, house": 0.7,
+      "deep house / \"fliegemusik\"": 0.7,
+      "folk\\ pop": 0.7,
+      "swing house": 0.7
+    },
+    "total_liked_tracks": 174
+  },
+  "Innellea": {
+    "name": "Innellea",
+    "soundcloud": "innellea",
+    "soundcloud_url": "https://soundcloud.com/innellea",
+    "city": "Munich",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "electronic": 38.8,
+      "techno": 28.4,
+      "deep house": 9.0,
+      "house": 6.0,
+      "indie dance": 4.5,
+      "melodic house & techno": 4.5,
+      "melodic techno": 3.0,
+      "innellea": 3.0,
+      "dance & edm": 1.5,
+      "dance": 1.5
+    },
+    "total_liked_tracks": 96
+  },
+  "Massano": {
+    "name": "Massano",
+    "soundcloud": "massanomusic",
+    "soundcloud_url": "https://soundcloud.com/massanomusic",
+    "city": "Milan",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "melodic techno": 48.7,
+      "techno": 20.5,
+      "melodic house & techno": 12.8,
+      "electronic": 7.7,
+      "piano": 2.6,
+      "pop/rock": 2.6,
+      "atlant radio show": 2.6,
+      "invites": 2.6
+    },
+    "total_liked_tracks": 56
+  },
+  "Agents of Time": {
+    "name": "Agents of Time",
+    "soundcloud": "agents-of-time",
+    "soundcloud_url": "https://soundcloud.com/agents-of-time",
+    "city": "Bari",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "electronic": 37.3,
+      "techno": 23.7,
+      "dance": 8.5,
+      "agents of time": 6.8,
+      "agentsoftime": 5.1,
+      "melodic techno": 1.7,
+      "house": 1.7,
+      "curle059": 1.7,
+      "obscura": 1.7,
+      "dgtl": 1.7,
+      "agents of": 1.7,
+      "miteinandermusik": 1.7,
+      "stephan bodzin": 1.7,
+      "romanflügel": 1.7,
+      "remix": 1.7,
+      "dark": 1.7
+    },
+    "total_liked_tracks": 81
+  },
+  "Korolova": {
+    "name": "Korolova",
+    "soundcloud": "korolovadj",
+    "soundcloud_url": "https://soundcloud.com/korolovadj",
+    "city": "Kyiv",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 44.4,
+      "house": 13.0,
+      "electronic": 9.3,
+      "dance & edm": 9.3,
+      "progressive house": 7.4,
+      "melodic techno": 5.6,
+      "progressive house / melodic techno": 1.9,
+      "dance": 1.9,
+      "electronic groove": 1.9,
+      "editgameofthrones": 1.9,
+      "indie dance / melodic techno / electronica": 1.9,
+      "melodic house & techno": 1.9
+    },
+    "total_liked_tracks": 65
+  },
+  "Miss Monique": {
+    "name": "Miss Monique",
+    "soundcloud": "alesia-arkusha",
+    "soundcloud_url": "https://soundcloud.com/alesia-arkusha",
+    "city": "Kyiv",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "progressive house": 43.4,
+      "progressive": 13.3,
+      "house": 6.2,
+      "techno": 5.3,
+      "electronic": 4.4,
+      "trance": 4.4,
+      "deep house": 2.7,
+      "miss monique": 2.7,
+      "dj": 2.7,
+      "dance & edm": 0.9,
+      "indie": 0.9,
+      "melodic techno": 0.9,
+      "united we stream": 0.9,
+      "the joof sound": 0.9,
+      "melodic house": 0.9,
+      "above & beyond": 0.9,
+      "21street": 0.9,
+      "liquid soul": 0.9,
+      "podcast": 0.9,
+      "progresive house": 0.9,
+      "live": 0.9,
+      "various": 0.9,
+      "radio": 0.9,
+      "dance": 0.9,
+      "dance : progressive house": 0.9,
+      "omnia": 0.9
+    },
+    "total_liked_tracks": 142
+  },
+  "ATB": {
+    "name": "ATB",
+    "soundcloud": "atb-music",
+    "soundcloud_url": "https://soundcloud.com/atb-music",
+    "city": "Freiburg",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {
+      "edm": 12.5,
+      "james egbert": 12.5,
+      "$erviced": 12.5,
+      "rusty hook": 12.5,
+      "atb": 12.5,
+      "trap": 12.5,
+      "dubstep": 12.5,
+      "hip hop": 12.5
+    },
+    "total_liked_tracks": 10
+  },
+  "Coyu": {
+    "name": "Coyu",
+    "soundcloud": "coyu",
+    "soundcloud_url": "https://soundcloud.com/coyu",
+    "city": "Barcelona",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 84.4,
+      "house": 3.1,
+      "electrónica": 1.6,
+      "garage": 1.6,
+      "bootleg": 1.6,
+      "deep house": 1.6,
+      "deprerreo": 1.6,
+      "hard dance": 1.6,
+      "heisss": 1.6,
+      "electronic": 1.6
+    },
+    "total_liked_tracks": 65
+  },
+  "Henry Saiz": {
+    "name": "Henry Saiz",
+    "soundcloud": "henry-saiz",
+    "soundcloud_url": "https://soundcloud.com/henry-saiz",
+    "city": "Madrid",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 11.1,
+      "deep house": 7.4,
+      "techno": 7.4,
+      "synthwave": 7.4,
+      "electronica": 7.4,
+      "henry saiz": 7.4,
+      "progressive": 3.7,
+      "afterhour": 3.7,
+      "progressive house": 3.7,
+      "linmiri": 3.7,
+      "afx": 3.7,
+      "africa": 3.7,
+      "free edit": 3.7,
+      "pop": 3.7,
+      "italo disco": 3.7,
+      "origami sound": 3.7,
+      "electronic": 3.7,
+      "electronica / house / hypno": 3.7,
+      "the labyrinth": 3.7,
+      "summerhouse": 3.7
+    },
+    "total_liked_tracks": 33
+  },
+  "Dosem": {
+    "name": "Dosem",
+    "soundcloud": "dosem",
+    "soundcloud_url": "https://soundcloud.com/dosem",
+    "city": "Girona",
+    "curated_genres": [
+      "techno",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "techno": 24.6,
+      "progressive house": 11.6,
+      "electronic": 11.6,
+      "electrónica": 5.8,
+      "melodic techno": 4.3,
+      "deep house": 2.9,
+      "houstrike": 2.9,
+      "house\\ techno": 2.9,
+      "techno / tech house": 2.9,
+      "tech-house": 2.9,
+      "acid house": 1.4,
+      "breaks": 1.4,
+      "ambient": 1.4,
+      "house": 1.4,
+      "dosem": 1.4,
+      "progressive": 1.4,
+      "tech house": 1.4,
+      "melodic techno & house": 1.4,
+      "bandas sonoras": 1.4,
+      "deep tech house": 1.4,
+      "house tech house techno": 1.4,
+      "chicago meets french": 1.4,
+      "dub house techno": 1.4,
+      "electronica": 1.4,
+      "rr": 1.4,
+      "down dark deep dub dope": 1.4,
+      "detroit technix": 1.4,
+      "crappy dub techno": 1.4,
+      "house/electro/techno": 1.4
+    },
+    "total_liked_tracks": 81
+  },
+  "Marlon Hoffstadt": {
+    "name": "Marlon Hoffstadt",
+    "soundcloud": "marlonhoffstadt",
+    "soundcloud_url": "https://soundcloud.com/marlonhoffstadt",
+    "city": "Dusseldorf",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "trance": 25.0,
+      "techno": 15.5,
+      "house": 10.8,
+      "electronic": 8.1,
+      "dance & edm": 6.1,
+      "dance": 6.1,
+      "hard house": 5.4,
+      "speed garage": 2.7,
+      "pop": 1.4,
+      "paul": 0.7,
+      "organ house": 0.7,
+      "david": 0.7,
+      "hard dance": 0.7,
+      "hardhouse": 0.7,
+      "1992": 0.7,
+      "club latin": 0.7,
+      "mashup": 0.7,
+      "breaks": 0.7,
+      "hip hop": 0.7,
+      "hip hop/rap - alternative": 0.7,
+      "hip-hop & rap": 0.7,
+      "ukg": 0.7,
+      "hip hop y rap": 0.7,
+      "trance techno": 0.7,
+      "euro trance": 0.7,
+      "donk": 0.7,
+      "hardgroove": 0.7,
+      "chavvy house": 0.7,
+      "soundbwoy!": 0.7,
+      "hard trance": 0.7,
+      "speed tech": 0.7,
+      "daddy house": 0.7,
+      "speed house": 0.7,
+      "tech house": 0.7,
+      "trap": 0.7,
+      "hip hop/rap - german hip hop": 0.7,
+      "sped up": 0.7
+    },
+    "total_liked_tracks": 192
+  },
+  "Slam": {
+    "name": "Slam",
+    "soundcloud": "slam_djs",
+    "soundcloud_url": "https://soundcloud.com/slam_djs",
+    "city": "Glasgow",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 95.4,
+      "electro": 1.0,
+      "psyche xmas": 0.5,
+      "electronic": 0.5,
+      "deep house": 0.5,
+      "techno house": 0.5,
+      "domenic": 0.5,
+      "acid": 0.5,
+      "ambient": 0.5
+    },
+    "total_liked_tracks": 199
+  },
+  "Surgeon": {
+    "name": "Surgeon",
+    "soundcloud": "dynamic-tension",
+    "soundcloud_url": "https://soundcloud.com/dynamic-tension",
+    "city": "Birmingham",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 34.2,
+      "house": 10.5,
+      "ambient": 10.5,
+      "outsider music": 10.5,
+      "incorrect": 5.3,
+      "electronic": 5.3,
+      "disco": 2.6,
+      "electronica": 2.6,
+      "dj mix": 2.6,
+      "interview": 2.6,
+      "techo": 2.6,
+      "bass": 2.6,
+      "dance & edm": 2.6,
+      "soundclash": 2.6,
+      "dommune": 2.6
+    },
+    "total_liked_tracks": 55
+  },
+  "Call Super": {
+    "name": "Call Super",
+    "soundcloud": "call-super",
+    "soundcloud_url": "https://soundcloud.com/call-super",
+    "city": "Berlin",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 10.1,
+      "electronic": 10.1,
+      "call super": 5.8,
+      "trushmix": 4.3,
+      "ttt017": 4.3,
+      "house": 4.3,
+      "ttt": 2.9,
+      "butw": 2.9,
+      "boiler room": 2.9,
+      "ukg": 1.4,
+      "pan": 1.4,
+      "rock": 1.4,
+      "basement q": 1.4,
+      "wood block": 1.4,
+      "experimental": 1.4,
+      "rinse fm": 1.4,
+      "learning": 1.4,
+      "cosmin trg x call super": 1.4,
+      "eclectic": 1.4,
+      "dkmntl": 1.4,
+      "modyfier": 1.4,
+      "nts": 1.4,
+      "metasplice, _bruxist, philadelphia, electronic": 1.4,
+      "vectors 2": 1.4,
+      "2000": 1.4,
+      "bintus": 1.4,
+      "vanished_database": 1.4,
+      "lakrimo": 1.4,
+      "rinsefm": 1.4,
+      "joefarr": 1.4,
+      "mark broom": 1.4,
+      "tttape": 1.4,
+      "acid chalice": 1.4,
+      "space opera": 1.4,
+      "heatsick reworked": 1.4,
+      "futuristic": 1.4,
+      "exotica via resonant hole": 1.4,
+      "techno\\ house": 1.4,
+      "jungle, drum and bass": 1.4,
+      "bent": 1.4,
+      "live electronic": 1.4,
+      "autistic techno": 1.4,
+      "house, techno": 1.4,
+      "acid electro techno": 1.4,
+      "acid": 1.4
+    },
+    "total_liked_tracks": 109
+  },
+  "Rufus Du Sol": {
+    "name": "Rufus Du Sol",
+    "soundcloud": "rufusdusol",
+    "soundcloud_url": "https://soundcloud.com/rufusdusol",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "house",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "electronic": 24.8,
+      "house": 10.3,
+      "alternative": 6.0,
+      "deep house": 3.4,
+      "melodic house & techno": 2.6,
+      "dance": 2.6,
+      "chillwave": 2.6,
+      "cassian": 2.6,
+      "alternative rock": 2.6,
+      "rüfüs": 2.6,
+      "motez": 2.6,
+      "disco": 1.7,
+      "dirtybird": 1.7,
+      "ambient": 0.9,
+      "techno": 0.9,
+      "mix": 0.9,
+      "playa tech": 0.9,
+      "dgtl": 0.9,
+      "scfirst": 0.9,
+      "electronica": 0.9,
+      "indie pop": 0.9,
+      "lastlings": 0.9,
+      "fun shit": 0.9,
+      "leø": 0.9,
+      "jungle time": 0.9,
+      "sunshine": 0.9,
+      "sweetness": 0.9,
+      "wsn4eva": 0.9,
+      "club": 0.9,
+      "odesza": 0.9,
+      "exclusive": 0.9,
+      "poppin": 0.9,
+      "mk": 0.9,
+      "rolandtings": 0.9,
+      "rüfüs du sol": 0.9,
+      "ffxmso": 0.9,
+      "miguel": 0.9,
+      "dantze": 0.9,
+      "rufus": 0.9,
+      "howling": 0.9,
+      "summer mixtape": 0.9,
+      "jordan padilla": 0.9,
+      "nora en pure": 0.9,
+      "catzndogz": 0.9,
+      "indie": 0.9,
+      "sweat it out": 0.9,
+      "golden features": 0.9,
+      "weareyumax": 0.9,
+      "wheelie": 0.9,
+      "caribou": 0.9,
+      "juan du sol": 0.9,
+      "lntg": 0.9,
+      "flightfacilities": 0.9
+    },
+    "total_liked_tracks": 180
+  },
+  "David Guetta": {
+    "name": "David Guetta",
+    "soundcloud": "davidguetta",
+    "soundcloud_url": "https://soundcloud.com/davidguetta",
+    "city": "Paris",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Martin Garrix": {
+    "name": "Martin Garrix",
+    "soundcloud": "martingarrix",
+    "soundcloud_url": "https://soundcloud.com/martingarrix",
+    "city": "Amsterdam",
+    "curated_genres": [
+      "progressive",
+      "house"
+    ],
+    "genre_distribution": {
+      "dance & edm": 85.7,
+      "pop": 3.6,
+      "dance": 1.8,
+      "drum & bass": 1.8,
+      "afro house": 1.8,
+      "melodic techno": 1.8,
+      "electronic": 1.8,
+      "house": 1.8
+    },
+    "total_liked_tracks": 80
+  },
+  "Calvin Harris": {
+    "name": "Calvin Harris",
+    "soundcloud": "calvinharris",
+    "soundcloud_url": "https://soundcloud.com/calvinharris",
+    "city": "London",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Afrojack": {
+    "name": "Afrojack",
+    "soundcloud": "afrojack",
+    "soundcloud_url": "https://soundcloud.com/afrojack",
+    "city": "Spijkenisse",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "wall recordings": 34.9,
+      "jacked radio": 24.6,
+      "dance & edm": 15.9,
+      "dance": 6.3,
+      "wall": 5.6,
+      "fight clvb": 2.4,
+      "tech house": 1.6,
+      "electronic": 0.8,
+      "dance/house": 0.8,
+      "mixtape": 0.8,
+      "take u": 0.8,
+      "daft ragga": 0.8,
+      "yeah": 0.8,
+      "disconnect": 0.8,
+      "reez": 0.8,
+      "jacked": 0.8,
+      "modus": 0.8,
+      "rokysopp": 0.8
+    },
+    "total_liked_tracks": 155
+  },
+  "Hardwell": {
+    "name": "Hardwell",
+    "soundcloud": "hardwell",
+    "soundcloud_url": "https://soundcloud.com/hardwell",
+    "city": "Breda",
+    "curated_genres": [
+      "house",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "dance": 79.4,
+      "dance & edm": 1.6,
+      "gems035": 1.6,
+      "bigroom techno": 0.8,
+      "techno": 0.8,
+      "house": 0.8,
+      "gems039": 0.8,
+      "gems034": 0.8,
+      "gems033": 0.8,
+      "gems032": 0.8,
+      "gems030": 0.8,
+      "gems029": 0.8,
+      "gems028": 0.8,
+      "gems027": 0.8,
+      "gems026": 0.8,
+      "gems025": 0.8,
+      "gems024": 0.8,
+      "gems023": 0.8,
+      "gems022": 0.8,
+      "gems018": 0.8,
+      "gems017": 0.8,
+      "gems016": 0.8,
+      "gems015": 0.8,
+      "gems014": 0.8,
+      "gems013": 0.8
+    },
+    "total_liked_tracks": 127
+  },
+  "Don Diablo": {
+    "name": "Don Diablo",
+    "soundcloud": "dondiablo",
+    "soundcloud_url": "https://soundcloud.com/dondiablo",
+    "city": "Coevorden",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 64.6,
+      "future house": 26.5,
+      "tech house": 1.6,
+      "electro house": 1.1,
+      "drum & bass": 0.5,
+      "afrohouse": 0.5,
+      "house music": 0.5,
+      "pop": 0.5,
+      "chill": 0.5,
+      "future": 0.5,
+      "electronic": 0.5,
+      "night owl radio": 0.5,
+      "dance & edm": 0.5,
+      "remix": 0.5,
+      "loosid": 0.5,
+      "dance": 0.5
+    },
+    "total_liked_tracks": 190
+  },
+  "Steve Aoki": {
+    "name": "Steve Aoki",
+    "soundcloud": "steveaoki",
+    "soundcloud_url": "https://soundcloud.com/steveaoki",
+    "city": "Las Vegas",
+    "curated_genres": [
+      "house",
+      "bass"
+    ],
+    "genre_distribution": {
+      "house": 44.4,
+      "electronic": 11.1,
+      "rock": 11.1,
+      "hip-hop & rap": 11.1,
+      "dance & edm": 11.1,
+      "howelse": 11.1
+    },
+    "total_liked_tracks": 10
+  },
+  "Marshmello": {
+    "name": "Marshmello",
+    "soundcloud": "marshmellomusic",
+    "soundcloud_url": "https://soundcloud.com/marshmellomusic",
+    "city": "Philadelphia",
+    "curated_genres": [
+      "bass",
+      "house"
+    ],
+    "genre_distribution": {
+      "dance & edm": 25.0,
+      "hip-hop & rap": 14.3,
+      "dubstep": 10.7,
+      "electronic": 7.1,
+      "dance": 7.1,
+      "pop": 7.1,
+      "hip hop": 3.6,
+      "alternative": 3.6,
+      "r&b": 3.6,
+      "tech house": 3.6,
+      "lil dusty g": 3.6,
+      "hip-hop": 3.6,
+      "jauz": 3.6,
+      "marshmello": 3.6
+    },
+    "total_liked_tracks": 28
+  },
+  "Zedd": {
+    "name": "Zedd",
+    "soundcloud": "zedd",
+    "soundcloud_url": "https://soundcloud.com/zedd",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "progressive",
+      "electro"
+    ],
+    "genre_distribution": {
+      "dance & edm": 40.0,
+      "electronic": 20.0,
+      "house": 10.0,
+      "trap": 10.0,
+      "dance": 10.0,
+      "zedd": 10.0
+    },
+    "total_liked_tracks": 12
+  },
+  "DJ Snake": {
+    "name": "DJ Snake",
+    "soundcloud": "djsnake",
+    "soundcloud_url": "https://soundcloud.com/djsnake",
+    "city": "Paris",
+    "curated_genres": [
+      "bass",
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Timmy Trumpet": {
+    "name": "Timmy Trumpet",
+    "soundcloud": "timmytrumpet",
+    "soundcloud_url": "https://soundcloud.com/timmytrumpet",
+    "city": "Sydney",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "dance & edm": 63.3,
+      "dance": 16.7,
+      "hard dance": 1.7,
+      "pop": 1.7,
+      "latin": 1.7,
+      "electronic": 1.7,
+      "hard house": 1.7,
+      "hardstyle": 1.7,
+      "trance": 1.7,
+      "night owl radio": 1.7,
+      "reverse bass": 1.7,
+      "bricks": 1.7,
+      "freaks": 1.7,
+      "bounce": 1.7
+    },
+    "total_liked_tracks": 67
+  },
+  "Alan Walker": {
+    "name": "Alan Walker",
+    "soundcloud": "alanwalker",
+    "soundcloud_url": "https://soundcloud.com/alanwalker",
+    "city": "Bergen",
+    "curated_genres": [
+      "electro"
+    ],
+    "genre_distribution": {
+      "dance & edm": 19.5,
+      "house": 8.0,
+      "pop": 6.2,
+      "electro house": 5.3,
+      "piano": 4.4,
+      "dance": 3.5,
+      "electronic": 3.5,
+      "progressive house": 2.7,
+      "melodic house": 2.7,
+      "dance/house/techno": 1.8,
+      "bounce": 1.8,
+      "tropical house": 1.8,
+      "phante": 1.8,
+      "bedifferent": 1.8,
+      "electro": 1.8,
+      "chill": 1.8,
+      "electro\\ house": 1.8,
+      "future house": 0.9,
+      "makina frenchcore": 0.9,
+      "future bounce": 0.9,
+      "trap": 0.9,
+      "future balkan bass stuff": 0.9,
+      "dubstep": 0.9,
+      "future bass": 0.9,
+      "indie": 0.9,
+      "trance": 0.9,
+      "melbourne bounce": 0.9,
+      "mendum": 0.9,
+      "makemefeelep": 0.9,
+      "album": 0.9,
+      "deep house": 0.9,
+      "broiler": 0.9,
+      "lunar": 0.9,
+      "codeko": 0.9,
+      "hands up": 0.9,
+      "dde": 0.9,
+      "sparks": 0.9,
+      "mr003": 0.9,
+      "superhuman": 0.9,
+      "coldplay": 0.9,
+      "zaxx": 0.9,
+      "free download": 0.9,
+      "galantis": 0.9,
+      "steerner": 0.9,
+      "help": 0.9,
+      "futurefreqs": 0.9,
+      "k391": 0.9,
+      "brostep": 0.9,
+      "size": 0.9,
+      "progressive trance": 0.9,
+      "years": 0.9
+    },
+    "total_liked_tracks": 115
+  },
+  "Dimitri Vegas & Like Mike": {
+    "name": "Dimitri Vegas & Like Mike",
+    "soundcloud": "dimitrivegasandlikemike",
+    "soundcloud_url": "https://soundcloud.com/dimitrivegasandlikemike",
+    "city": "Willebroek",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "dance en edm": 41.9,
+      "dance & edm": 20.3,
+      "techno": 8.1,
+      "electronic": 5.4,
+      "hard techno": 2.7,
+      "hardstyle": 2.7,
+      "house": 2.7,
+      "electro house": 2.7,
+      "progressive house": 2.7,
+      "frenchcore": 1.4,
+      "hardcore techno": 1.4,
+      "halloween special": 1.4,
+      "trap": 1.4,
+      "pop": 1.4,
+      "future bass": 1.4,
+      "deep house": 1.4,
+      "tomorrowland house": 1.4
+    },
+    "total_liked_tracks": 83
+  },
+  "The Chainsmokers": {
+    "name": "The Chainsmokers",
+    "soundcloud": "thechainsmokers",
+    "soundcloud_url": "https://soundcloud.com/thechainsmokers",
+    "city": "New York",
+    "curated_genres": [
+      "progressive",
+      "house"
+    ],
+    "genre_distribution": {
+      "dance & edm": 22.2,
+      "electronic": 19.6,
+      "trap": 19.0,
+      "house": 7.0,
+      "sanctuary sound": 3.2,
+      "dubstep": 1.9,
+      "tech house": 1.9,
+      "dance": 1.9,
+      "pop": 1.9,
+      "trance": 1.3,
+      "hip-hop & rap": 1.3,
+      "gill chang": 1.3,
+      "hybrid trap": 1.3,
+      "hardpsy": 1.3,
+      "wrathofgld": 1.3,
+      "melodic techno": 0.6,
+      "melodic house": 0.6,
+      "afro house": 0.6,
+      "sports": 0.6,
+      "hard psy": 0.6,
+      "progressive house": 0.6,
+      "bass": 0.6,
+      "pop-bass": 0.6,
+      "latu": 0.6,
+      "news & politics": 0.6,
+      "plump": 0.6,
+      "deep house": 0.6,
+      "lilpump": 0.6,
+      "rawstyle": 0.6,
+      ">": 0.6,
+      "words unspoken": 0.6,
+      "bubbling": 0.6,
+      "hardtrap": 0.6,
+      "freestyle": 0.6,
+      "dimitri vegas": 0.6,
+      "trey songz": 0.6,
+      "matrodasound": 0.6
+    },
+    "total_liked_tracks": 170
+  },
+  "Joel Corry": {
+    "name": "Joel Corry",
+    "soundcloud": "joelcorry",
+    "soundcloud_url": "https://soundcloud.com/joelcorry",
+    "city": "London",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 2
+  },
+  "MEDUZA": {
+    "name": "MEDUZA",
+    "soundcloud": "meduzamusic",
+    "soundcloud_url": "https://soundcloud.com/meduzamusic",
+    "city": "Milan",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "melodic house & techno": 29.4,
+      "electronic": 23.5,
+      "house": 17.6,
+      "tech house": 5.9,
+      "dance": 5.9,
+      "electro house": 2.9,
+      "melodic house and techno": 2.9,
+      "dance & edm": 2.9,
+      "escape halloween": 2.9,
+      "pop": 2.9,
+      "deep house": 2.9
+    },
+    "total_liked_tracks": 37
+  },
+  "Chris Stussy": {
+    "name": "Chris Stussy",
+    "soundcloud": "chrisstussy",
+    "soundcloud_url": "https://soundcloud.com/chrisstussy",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Mau P": {
+    "name": "Mau P",
+    "soundcloud": "maupmusic",
+    "soundcloud_url": "https://soundcloud.com/maupmusic",
+    "city": "Milan",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "rock": 33.3,
+      "alternative rock": 16.7,
+      "r&b & soul": 16.7,
+      "folk & singer-songwriter": 16.7,
+      "jazz fusion": 16.7
+    },
+    "total_liked_tracks": 7
+  },
+  "Fantasm": {
+    "name": "Fantasm",
+    "soundcloud": "fantasm",
+    "soundcloud_url": "https://soundcloud.com/fantasm",
+    "city": "Paris",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Ferry Corsten": {
+    "name": "Ferry Corsten",
+    "soundcloud": "ferrycorsten",
+    "soundcloud_url": "https://soundcloud.com/ferrycorsten",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Giuseppe Ottaviani": {
+    "name": "Giuseppe Ottaviani",
+    "soundcloud": "giuseppeottaviani",
+    "soundcloud_url": "https://soundcloud.com/giuseppeottaviani",
+    "city": "Rome",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {
+      "trance": 91.5,
+      "dance": 3.4,
+      "tech-trance": 1.7,
+      "degeneration": 1.7,
+      "eoyc2015": 1.7
+    },
+    "total_liked_tracks": 59
+  },
+  "Vini Vici": {
+    "name": "Vini Vici",
+    "soundcloud": "vinivicimusic",
+    "soundcloud_url": "https://soundcloud.com/vinivicimusic",
+    "city": "Tel Aviv",
+    "curated_genres": [
+      "trance"
+    ],
+    "genre_distribution": {
+      "trance": 37.6,
+      "psytrance": 19.4,
+      "progressive trance": 8.6,
+      "electronic": 7.5,
+      "progressive psytrance": 7.5,
+      "psy trance": 3.2,
+      "psy-trance": 2.7,
+      "major7 album - like no other": 2.7,
+      "psychedelic trance": 1.1,
+      "dance & edm": 1.1,
+      "x7m records": 1.1,
+      "progressivetrance": 0.5,
+      "hitech": 0.5,
+      "trance psyberia": 0.5,
+      "progressive/psytrance": 0.5,
+      "set": 0.5,
+      "psychedelic": 0.5,
+      "soundpack preview": 0.5,
+      "x7m blaze": 0.5,
+      "progressive psy trance": 0.5,
+      "brazilian dubhouse": 0.5,
+      "psytrance gtr": 0.5,
+      "off limits": 0.5,
+      "live": 0.5,
+      "psy techno": 0.5
+    },
+    "total_liked_tracks": 199
+  },
+  "Shanti Celeste": {
+    "name": "Shanti Celeste",
+    "soundcloud": "shanticeleste",
+    "soundcloud_url": "https://soundcloud.com/shanticeleste",
+    "city": "Bristol",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 6.9,
+      "house": 6.9,
+      "music": 6.9,
+      "alternative": 6.9,
+      "dance & edm": 3.4,
+      "r&b & soul": 3.4,
+      "sinistarr": 3.4,
+      "jay´s soothing spa": 3.4,
+      "cosmic": 3.4,
+      "deep house": 3.4,
+      "butw": 3.4,
+      "biology": 3.4,
+      "mike servito": 3.4,
+      "finn johannsen": 3.4,
+      "◯０o。(ー。ー)y": 3.4,
+      "pete bbe": 3.4,
+      "new disco": 3.4,
+      "funk": 3.4,
+      "andrew ashong": 3.4,
+      "gilles peterson": 3.4,
+      "soulection": 3.4,
+      "livity sound": 3.4,
+      "featured on the circle single!": 3.4,
+      "techno": 3.4,
+      "sdjr": 3.4
+    },
+    "total_liked_tracks": 36
+  },
+  "Ramon Tapia": {
+    "name": "Ramon Tapia",
+    "soundcloud": "ramon-tapia",
+    "soundcloud_url": "https://soundcloud.com/ramon-tapia",
+    "city": "Valencia",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 95.4,
+      "electronic": 2.6,
+      "ramon tapia": 1.3,
+      "eg techno": 0.7
+    },
+    "total_liked_tracks": 198
+  },
+  "Joris Voorn": {
+    "name": "Joris Voorn",
+    "soundcloud": "jorisvoorn",
+    "soundcloud_url": "https://soundcloud.com/jorisvoorn",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "techno",
+      "house"
+    ],
+    "genre_distribution": {
+      "experimental, minimal, electronic": 20.0,
+      "rubbsurr": 20.0,
+      "house": 20.0,
+      "techno": 20.0,
+      "medicine": 20.0
+    },
+    "total_liked_tracks": 6
+  },
+  "Dubfire": {
+    "name": "Dubfire",
+    "soundcloud": "dubfire",
+    "soundcloud_url": "https://soundcloud.com/dubfire",
+    "city": "Washington DC",
+    "curated_genres": [
+      "techno",
+      "minimal"
+    ],
+    "genre_distribution": {
+      "techno": 65.2,
+      "electronic": 10.9,
+      "tech house": 4.3,
+      "indie dance": 4.3,
+      "house": 2.2,
+      "dance": 2.2,
+      "techno (raw / deep / hypnotic)": 2.2,
+      "progressive house": 2.2,
+      "electronic groove": 2.2,
+      "dub techno": 2.2,
+      "deep house": 2.2
+    },
+    "total_liked_tracks": 63
+  },
+  "Marco Carola": {
+    "name": "Marco Carola",
+    "soundcloud": "marcocarola",
+    "soundcloud_url": "https://soundcloud.com/marcocarola",
+    "city": "Naples",
+    "curated_genres": [
+      "techno",
+      "minimal"
+    ],
+    "genre_distribution": {
+      "house": 50.0,
+      "afro house": 25.0,
+      "techhouse": 25.0
+    },
+    "total_liked_tracks": 5
+  },
+  "Seth Troxler": {
+    "name": "Seth Troxler",
+    "soundcloud": "sethtroxler",
+    "soundcloud_url": "https://soundcloud.com/sethtroxler",
+    "city": "Detroit",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 53.6,
+      "electronic": 13.0,
+      "rework": 4.3,
+      "techno": 2.9,
+      "electronica": 2.9,
+      "podcast": 1.4,
+      "dance": 1.4,
+      "dance/electronic": 1.4,
+      "as if": 1.4,
+      "subb-an": 1.4,
+      "dreamy": 1.4,
+      "music to...": 1.4,
+      "music to": 1.4,
+      "brisno": 1.4,
+      "soft touch": 1.4,
+      "eats": 1.4,
+      "eatseverything": 1.4,
+      "jackmaster": 1.4,
+      "deep house": 1.4,
+      "basssss": 1.4,
+      "ambient electronic": 1.4
+    },
+    "total_liked_tracks": 77
+  },
+  "Adam Port": {
+    "name": "Adam Port",
+    "soundcloud": "adam-port",
+    "soundcloud_url": "https://soundcloud.com/adam-port",
+    "city": "Berlin",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 39.1,
+      "house": 17.8,
+      "deep house": 9.5,
+      "afro house": 1.8,
+      "melodic house & techno": 1.2,
+      "\"dance & electronic\" (dance/techno/disco)": 1.2,
+      "cosmic": 1.2,
+      "techno": 1.2,
+      "elektro": 1.2,
+      "radio show": 1.2,
+      "turbo recordings": 0.6,
+      "pop": 0.6,
+      "razor-n-tape": 0.6,
+      "afro-house": 0.6,
+      "amapiano": 0.6,
+      "dance": 0.6,
+      "hotmix": 0.6,
+      "world": 0.6,
+      "exclusive": 0.6,
+      "discoteca": 0.6,
+      "soundtrack": 0.6,
+      "los santos": 0.6,
+      "momentum mix": 0.6,
+      "km radio": 0.6,
+      "dance & edm": 0.6,
+      "wild pitch": 0.6,
+      "unkle": 0.6,
+      "essential mix": 0.6,
+      "summer": 0.6,
+      "afro": 0.6,
+      "radio": 0.6,
+      "dark disco": 0.6,
+      "live stream": 0.6,
+      "balearic": 0.6,
+      "home dance": 0.6,
+      "spring": 0.6,
+      "live-set": 0.6,
+      "electronic groove": 0.6,
+      "electro dream-cabin": 0.6,
+      "keinemusik radio": 0.6,
+      "rhythmic interplay": 0.6,
+      "islandvibes": 0.6,
+      "noir": 0.6,
+      "heat": 0.6,
+      "fusion": 0.6,
+      "anjunadeep": 0.6,
+      "10x10": 0.6,
+      "live set": 0.6,
+      "religion & spiritualität": 0.6,
+      "samplepack": 0.6,
+      "keinemusik radio show": 0.6,
+      "jamz": 0.6
+    },
+    "total_liked_tracks": 195
+  },
+  "&ME": {
+    "name": "&ME",
+    "soundcloud": "andme-music",
+    "soundcloud_url": "https://soundcloud.com/andme-music",
+    "city": "Berlin",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Rampa": {
+    "name": "Rampa",
+    "soundcloud": "rampa",
+    "soundcloud_url": "https://soundcloud.com/rampa",
+    "city": "Berlin",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 24.9,
+      "electronic": 24.3,
+      "deep house": 10.7,
+      "afro house": 2.4,
+      "disco": 1.8,
+      "techno": 1.8,
+      "elektro": 1.8,
+      "afro": 1.2,
+      "keinemusik radio": 1.2,
+      "radio show": 1.2,
+      "religion & spiritualität": 1.2,
+      "dance": 0.6,
+      "dance & edm": 0.6,
+      "nts radio ノノ": 0.6,
+      "dance/electronic": 0.6,
+      "world": 0.6,
+      "hotmix": 0.6,
+      "exclusive": 0.6,
+      "discoteca": 0.6,
+      "soundtrack": 0.6,
+      "km radio": 0.6,
+      "wild pitch": 0.6,
+      "unkle": 0.6,
+      "sven väth": 0.6,
+      "hot": 0.6,
+      "essential mix": 0.6,
+      "summer": 0.6,
+      "hellagoodenergy": 0.6,
+      "radio": 0.6,
+      "dark disco": 0.6,
+      "live stream": 0.6,
+      "entertainment": 0.6,
+      "home dance": 0.6,
+      "afro-house": 0.6,
+      "spring": 0.6,
+      "live-set": 0.6,
+      "electronic groove": 0.6,
+      "electro dream-cabin": 0.6,
+      "rhythmic interplay": 0.6,
+      "drums": 0.6,
+      "islandvibes": 0.6,
+      "heat": 0.6,
+      "noir": 0.6,
+      "fusion": 0.6,
+      "10x10": 0.6,
+      "live set": 0.6,
+      "samplepack": 0.6,
+      "keinemusik radio show": 0.6,
+      "groove": 0.6,
+      "cosmic": 0.6,
+      "sameheads": 0.6,
+      "scfirst": 0.6,
+      "more cowbell": 0.6,
+      "weltmusik": 0.6,
+      "vibe": 0.6,
+      "calypso": 0.6,
+      "deep-house": 0.6,
+      "jamz": 0.6
+    },
+    "total_liked_tracks": 194
+  },
+  "Kevin Saunderson": {
+    "name": "Kevin Saunderson",
+    "soundcloud": "kevinsaunderson",
+    "soundcloud_url": "https://soundcloud.com/kevinsaunderson",
+    "city": "Detroit",
+    "curated_genres": [
+      "techno",
+      "house"
+    ],
+    "genre_distribution": {
+      "techno": 21.7,
+      "house": 13.3,
+      "deep": 10.0,
+      "tech": 8.3,
+      "electronic": 6.7,
+      "deep house": 6.7,
+      "dance": 3.3,
+      "rinse fm podcast": 3.3,
+      "tech house": 3.3,
+      "floorplan": 1.7,
+      "sanpachosound": 1.7,
+      "rinse fm": 1.7,
+      "real house music": 1.7,
+      "kevin saunderson": 1.7,
+      "tech / house": 1.7,
+      "joe brunning": 1.7,
+      "spacehouse": 1.7,
+      "movementdetroit": 1.7,
+      "dantiez saunderson": 1.7,
+      "kmsrecords": 1.7,
+      "preview": 1.7,
+      "dogblood": 1.7,
+      "deep space radio": 1.7
+    },
+    "total_liked_tracks": 67
+  },
+  "Green Velvet": {
+    "name": "Green Velvet",
+    "soundcloud": "greenvelvet",
+    "soundcloud_url": "https://soundcloud.com/greenvelvet",
+    "city": "Chicago",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 21.1,
+      "electronic": 10.5,
+      "robag  -  lieferservice": 5.3,
+      "light and darkness": 5.3,
+      "electro pop": 5.3,
+      "lexer": 5.3,
+      "alternative": 5.3,
+      "dream pop": 5.3,
+      "deep disco": 5.3,
+      "techhousedeephouse": 5.3,
+      "melodic deephouse": 5.3,
+      "tech-house": 5.3,
+      "tech\\ house": 5.3,
+      "halle-saale-house": 5.3,
+      "pop": 5.3
+    },
+    "total_liked_tracks": 20
+  },
+  "Hunee": {
+    "name": "Hunee",
+    "soundcloud": "hunee",
+    "soundcloud_url": "https://soundcloud.com/hunee",
+    "city": "Amsterdam",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {
+      "disco": 6.7,
+      "electronic": 6.7,
+      "house": 6.0,
+      "ambient": 3.4,
+      "techno": 3.4,
+      "world": 2.7,
+      "trushmix": 2.7,
+      "mix": 2.7,
+      "religion & spirituality": 2.0,
+      "hunee": 2.0,
+      "dkmntl": 2.0,
+      "theo parrish dj mix": 2.0,
+      "zouk": 1.3,
+      "brazil": 1.3,
+      "dj mix": 1.3,
+      "anythingoes": 1.3,
+      "lullabiesforinsomniacs": 1.3,
+      "nation": 1.3,
+      "soulful": 0.7,
+      "downtempo": 0.7,
+      "indie": 0.7,
+      "no way back": 0.7,
+      "daydream": 0.7,
+      "balearic": 0.7,
+      "soul/soca/reggae/kwaito": 0.7,
+      "tsubakifm": 0.7,
+      "chris duckenfield": 0.7,
+      "italo-disco": 0.7,
+      "afrobeat": 0.7,
+      "deep house": 0.7,
+      "papina in love mix": 0.7,
+      "dj gioumanne": 0.7,
+      "diggers session": 0.7,
+      "folk & singer-songwriter": 0.7,
+      "jazz": 0.7,
+      "spiritual": 0.7,
+      "west indies electronic / ambient": 0.7,
+      "electronica": 0.7,
+      "jazz mash": 0.7,
+      "personal": 0.7,
+      "robert hood": 0.7,
+      "production mix": 0.7,
+      "ambient/disco/synth": 0.7,
+      "zouk caribbean funk disco biguine soul": 0.7,
+      "radioshow": 0.7,
+      "digi-only": 0.7,
+      "basement q": 0.7,
+      "ambient #chill #synthpop #dub #baya": 0.7,
+      "fll": 0.7,
+      "oscillating tunes": 0.7,
+      "chambrenoire": 0.7,
+      "lullabies for insomniacs": 0.7,
+      "r&b & soul": 0.7,
+      "vulkandance": 0.7,
+      "jackmaster": 0.7,
+      "caribou": 0.7,
+      "dimensions2016": 0.7,
+      "antal": 0.7,
+      "entertainment": 0.7,
+      "listening session": 0.7,
+      "reggae": 0.7,
+      "synth funk afro": 0.7,
+      "risin": 0.7,
+      "jams": 0.7,
+      "organicmusic": 0.7,
+      "music from memory": 0.7,
+      "deep": 0.7,
+      "parkway": 0.7,
+      "truancy": 0.7,
+      "red light radio": 0.7,
+      "berlin community radio": 0.7,
+      "redlight records": 0.7,
+      "future": 0.7,
+      "monday mix": 0.7,
+      "fact": 0.7,
+      "future times": 0.7,
+      "ostgut ton": 0.7,
+      "john gomez": 0.7,
+      "bordello a parigi": 0.7,
+      "afro": 0.7,
+      "far east recording": 0.7,
+      "ethiopiyawi electronic": 0.7,
+      "essential": 0.7,
+      "mark seven": 0.7,
+      "music": 0.7,
+      "baikal": 0.7,
+      "psytrance": 0.7,
+      "live": 0.7,
+      "the broadest beats": 0.7,
+      "mike servito": 0.7,
+      "in bed store mix": 0.7,
+      "stop": 0.7
+    },
+    "total_liked_tracks": 187
+  },
+  "Midland": {
+    "name": "Midland",
+    "soundcloud": "midlandofficial",
+    "soundcloud_url": "https://soundcloud.com/midlandofficial",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Joy Orbison": {
+    "name": "Joy Orbison",
+    "soundcloud": "joyorbison",
+    "soundcloud_url": "https://soundcloud.com/joyorbison",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "bass"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Floating Points": {
+    "name": "Floating Points",
+    "soundcloud": "floatingpoints",
+    "soundcloud_url": "https://soundcloud.com/floatingpoints",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "ambient"
+    ],
+    "genre_distribution": {
+      "electronic": 33.3,
+      "ukg": 16.7,
+      "sososo": 16.7,
+      "all that remains": 16.7,
+      "lockdown": 16.7
+    },
+    "total_liked_tracks": 11
+  },
+  "Mall Grab": {
+    "name": "Mall Grab",
+    "soundcloud": "mallgrab",
+    "soundcloud_url": "https://soundcloud.com/mallgrab",
+    "city": "Sydney",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "DJ Harvey": {
+    "name": "DJ Harvey",
+    "soundcloud": "dj-harvey",
+    "soundcloud_url": "https://soundcloud.com/dj-harvey",
+    "city": "Los Angeles",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {
+      "dreampop": 100.0
+    },
+    "total_liked_tracks": 2
+  },
+  "Disclosure": {
+    "name": "Disclosure",
+    "soundcloud": "disclosure",
+    "soundcloud_url": "https://soundcloud.com/disclosure",
+    "city": "London",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Caribou": {
+    "name": "Caribou",
+    "soundcloud": "caribouband",
+    "soundcloud_url": "https://soundcloud.com/caribouband",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "ambient"
+    ],
+    "genre_distribution": {
+      "les sins": 25.0,
+      "house": 12.5,
+      "electronic": 12.5,
+      "garage": 12.5,
+      "mars": 12.5,
+      "human music": 12.5,
+      "electronica": 12.5
+    },
+    "total_liked_tracks": 16
+  },
+  "Floorplan": {
+    "name": "Floorplan",
+    "soundcloud": "floorplanmusic",
+    "soundcloud_url": "https://soundcloud.com/floorplanmusic",
+    "city": "Detroit",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "wedding march": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Robert Hood": {
+    "name": "Robert Hood",
+    "soundcloud": "roberthood",
+    "soundcloud_url": "https://soundcloud.com/roberthood",
+    "city": "Detroit",
+    "curated_genres": [
+      "techno",
+      "minimal"
+    ],
+    "genre_distribution": {
+      "techno": 57.9,
+      "rekids": 5.3,
+      "electronic": 5.3,
+      "detroit techno": 5.3,
+      "dance": 5.3,
+      "house": 5.3,
+      "broken beat": 5.3,
+      "deep house": 5.3,
+      "robotnick": 5.3
+    },
+    "total_liked_tracks": 29
+  },
+  "DVS1": {
+    "name": "DVS1",
+    "soundcloud": "dvs1",
+    "soundcloud_url": "https://soundcloud.com/dvs1",
+    "city": "Minneapolis",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "beat": 33.3,
+      "techno": 33.3,
+      "dub techno": 33.3
+    },
+    "total_liked_tracks": 3
+  },
+  "Marcel Fengler": {
+    "name": "Marcel Fengler",
+    "soundcloud": "marcel-fengler",
+    "soundcloud_url": "https://soundcloud.com/marcel-fengler",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 93.7,
+      "electronic": 2.5,
+      "dubstep": 1.3,
+      "house": 1.3,
+      "entertainment": 1.3
+    },
+    "total_liked_tracks": 96
+  },
+  "Etapp Kyle": {
+    "name": "Etapp Kyle",
+    "soundcloud": "etappkyle",
+    "soundcloud_url": "https://soundcloud.com/etappkyle",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "FJAAK": {
+    "name": "FJAAK",
+    "soundcloud": "fjaak",
+    "soundcloud_url": "https://soundcloud.com/fjaak",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 82.5,
+      "electronic": 9.5,
+      "house": 2.6,
+      "hip-hop & rap": 1.1,
+      "dance - breakbeat / drum & bass": 1.1,
+      "dance - techno": 1.1,
+      "podcast": 0.5,
+      "dance - electro": 0.5,
+      "acid": 0.5,
+      "bass": 0.5
+    },
+    "total_liked_tracks": 195
+  },
+  "999999999": {
+    "name": "999999999",
+    "soundcloud": "999999999",
+    "soundcloud_url": "https://soundcloud.com/999999999",
+    "city": "Naples",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "alternative rock": 8.3,
+      "sharmoofers": 8.3,
+      "classical": 8.3,
+      "pop": 8.3,
+      "مهرجان": 8.3,
+      "شعبي": 8.3,
+      "شعبى": 8.3,
+      "felo": 8.3,
+      "memo bondok": 8.3,
+      "bogii": 8.3,
+      "filo": 8.3,
+      "cairokee": 8.3
+    },
+    "total_liked_tracks": 15
+  },
+  "ANNA": {
+    "name": "ANNA",
+    "soundcloud": "annamusic",
+    "soundcloud_url": "https://soundcloud.com/annamusic",
+    "city": "Sao Paulo",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "klezmer fusion": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Sama' Abdulhadi": {
+    "name": "Sama' Abdulhadi",
+    "soundcloud": "samaabdulhadi",
+    "soundcloud_url": "https://soundcloud.com/samaabdulhadi",
+    "city": "Ramallah",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "HAAi": {
+    "name": "HAAi",
+    "soundcloud": "haai",
+    "soundcloud_url": "https://soundcloud.com/haai",
+    "city": "London",
+    "curated_genres": [
+      "techno",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "rap": 28.6,
+      "skrillex": 28.6,
+      "electronic": 14.3,
+      "sevyn": 14.3,
+      "dubstep electronic": 14.3
+    },
+    "total_liked_tracks": 10
+  },
+  "Avalon Emerson": {
+    "name": "Avalon Emerson",
+    "soundcloud": "avalonemerson",
+    "soundcloud_url": "https://soundcloud.com/avalonemerson",
+    "city": "Berlin",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "house": 13.5,
+      "techno": 8.7,
+      "electronic": 7.7,
+      "dance": 1.9,
+      "javascript": 1.9,
+      "mix": 1.9,
+      "honey soundsystem": 1.9,
+      "club": 1.0,
+      "mixtape": 1.0,
+      "samo dj": 1.0,
+      "dance & edm": 1.0,
+      "winter": 1.0,
+      "fort romeau": 1.0,
+      "the broadest beats": 1.0,
+      "jacques renault": 1.0,
+      "cosmin trg": 1.0,
+      "uk": 1.0,
+      "rinktone": 1.0,
+      "hnytrx": 1.0,
+      "peter van hoesen": 1.0,
+      "keita": 1.0,
+      "cherushii": 1.0,
+      "foraging": 1.0,
+      "dancemania": 1.0,
+      "physical therapy": 1.0,
+      "vapor": 1.0,
+      "edit": 1.0,
+      "scraps": 1.0,
+      "acid house": 1.0,
+      "house music": 1.0,
+      "hi-nrg": 1.0,
+      "mondaymix": 1.0,
+      "metropolis": 1.0,
+      "ghosts on tape": 1.0,
+      "untitled gear": 1.0,
+      "spring": 1.0,
+      "someember": 1.0,
+      "dj mix": 1.0,
+      "ema": 1.0,
+      "magic touch": 1.0,
+      "albrecht wassersleben": 1.0,
+      "music for listening": 1.0,
+      "some ember": 1.0,
+      "frank booker": 1.0,
+      "electronica": 1.0,
+      "truancy": 1.0,
+      "tech trance": 1.0,
+      "exactly": 1.0,
+      "darkwave techno": 1.0,
+      "guitar bliss": 1.0,
+      "raw detroit house tapes": 1.0,
+      "sweatbox techno": 1.0,
+      "houze": 1.0,
+      "pure house": 1.0,
+      "newyearsmix": 1.0,
+      "kmfh": 1.0,
+      "dark italo and new beat mix": 1.0,
+      "killing time": 1.0,
+      "soul": 1.0,
+      "ヘ(^_^ヘ)(ノ^_^)ノ": 1.0,
+      "free": 1.0,
+      "funk / rock / indie pop": 1.0,
+      "hydro-ghetto": 1.0,
+      "astral": 1.0,
+      "italo megamix": 1.0,
+      "electronic pop": 1.0,
+      "rnb": 1.0,
+      "italo mix": 1.0,
+      "deep house": 1.0,
+      "the-dream": 1.0,
+      "adult swim": 1.0,
+      "radio mix": 1.0
+    },
+    "total_liked_tracks": 127
+  },
+  "The Blessed Madonna": {
+    "name": "The Blessed Madonna",
+    "soundcloud": "theblessedmadonna",
+    "soundcloud_url": "https://soundcloud.com/theblessedmadonna",
+    "city": "London",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {
+      "house": 18.2,
+      "dance": 17.4,
+      "disco": 8.3,
+      "electronic": 5.8,
+      "techno": 5.0,
+      "the black madonna": 3.3,
+      "bnr 118": 3.3,
+      "rinse fm": 1.7,
+      "alternative": 1.7,
+      "nick höppner": 1.7,
+      "brianring": 1.7,
+      "dkmntl": 1.7,
+      "ambient/chill out": 0.8,
+      "podcast": 0.8,
+      "jungle": 0.8,
+      "resident advisor": 0.8,
+      "edit": 0.8,
+      "hip hop": 0.8,
+      "a-side made 1985 / aa-side made 2015": 0.8,
+      "ultramajic": 0.8,
+      "boiler room debuts": 0.8,
+      "disco edit": 0.8,
+      "deep club": 0.8,
+      "dkmntl024": 0.8,
+      "bnr134": 0.8,
+      "future times": 0.8,
+      "paul goodyear": 0.8,
+      "paula temple": 0.8,
+      "smart bar": 0.8,
+      "sub club": 0.8,
+      "deviants 2014": 0.8,
+      "tuff trax": 0.8,
+      "1984": 0.8,
+      "mix": 0.8,
+      "fact": 0.8,
+      "deep house": 0.8,
+      "trap": 0.8,
+      "\"boiler room\"": 0.8,
+      "midnight": 0.8,
+      "chicago": 0.8,
+      "chillout": 0.8,
+      "house and techno": 0.8,
+      "ambient flights": 0.8,
+      "minimal synth": 0.8,
+      "mixtape": 0.8,
+      "deep detroit": 0.8,
+      "gamelan techno": 0.8,
+      "re-edit": 0.8,
+      "slow burner disco": 0.8
+    },
+    "total_liked_tracks": 181
+  },
+  "Palms Trax": {
+    "name": "Palms Trax",
+    "soundcloud": "palmstrax",
+    "soundcloud_url": "https://soundcloud.com/palmstrax",
+    "city": "Berlin",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "electronic": 22.9,
+      "house": 16.5,
+      "disco": 11.0,
+      "world": 3.7,
+      "r&b & soul": 2.8,
+      "folk & singer-songwriter": 1.8,
+      "kwaito": 1.8,
+      "italo-disco": 0.9,
+      "techno": 0.9,
+      "balearic": 0.9,
+      "bass": 0.9,
+      "ra": 0.9,
+      "entertainment": 0.9,
+      "tangent": 0.9,
+      "pistolero": 0.9,
+      "aprilrain": 0.9,
+      "pop electronic": 0.9,
+      "drum & bass": 0.9,
+      "brazil": 0.9,
+      "transporrrt": 0.9,
+      "mariposa": 0.9,
+      "k&m": 0.9,
+      "podcast": 0.9,
+      "lockdown": 0.9,
+      "hardgroove": 0.9,
+      "dance": 0.9,
+      "nowadays": 0.9,
+      "very heavy shit": 0.9,
+      "afro house": 0.9,
+      "garage": 0.9,
+      "rakim under": 0.9,
+      "speedy g": 0.9,
+      "balearic dynamite": 0.9,
+      "funk": 0.9,
+      "bailectro": 0.9,
+      "dancing": 0.9,
+      "pop": 0.9,
+      "science": 0.9,
+      "neapolitan funk": 0.9,
+      "intergalacticgary": 0.9,
+      "antal": 0.9,
+      "sassy": 0.9,
+      "stud": 0.9,
+      "arabi heat": 0.9,
+      "trushmix": 0.9,
+      "theo parrish dj mix": 0.9,
+      "religie en spiritualiteit": 0.9,
+      "loveroom": 0.9,
+      "previews": 0.9,
+      "personal": 0.9
+    },
+    "total_liked_tracks": 196
+  },
+  "Hector Oaks": {
+    "name": "Hector Oaks",
+    "soundcloud": "hectoroaks",
+    "soundcloud_url": "https://soundcloud.com/hectoroaks",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 57.8,
+      "electronic": 10.9,
+      "electro": 3.1,
+      "fuego universal": 1.6,
+      "podcast series": 1.6,
+      "∄": 1.6,
+      "kaos": 1.6,
+      "tafkamp": 1.6,
+      "new beat": 1.6,
+      "hardgroove": 1.6,
+      "rinse fm": 1.6,
+      "traxx": 1.6,
+      "rave": 1.6,
+      "premiere": 1.6,
+      "wave": 1.6,
+      "#techno #beats #rhythms": 1.6,
+      "metal beat": 1.6,
+      "entertainment": 1.6,
+      "warning": 1.6,
+      "ambient": 1.6,
+      "alessandrocortini": 1.6
+    },
+    "total_liked_tracks": 84
+  },
+  "CamelPhat": {
+    "name": "CamelPhat",
+    "soundcloud": "camelphat",
+    "soundcloud_url": "https://soundcloud.com/camelphat",
+    "city": "Liverpool",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 20.8,
+      "deep house": 20.8,
+      "axtone": 12.5,
+      "world": 4.2,
+      "dance & edm": 4.2,
+      "afrohouse": 4.2,
+      "afro house": 4.2,
+      "techno": 4.2,
+      "electronic": 4.2,
+      "tech house": 4.2,
+      ".": 4.2,
+      "edits/reworks": 4.2,
+      "camelphat": 4.2,
+      "toolroom": 4.2
+    },
+    "total_liked_tracks": 26
+  },
+  "Kevin de Vries": {
+    "name": "Kevin de Vries",
+    "soundcloud": "kevindevries",
+    "soundcloud_url": "https://soundcloud.com/kevindevries",
+    "city": "Dusseldorf",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 82.3,
+      "electronic": 7.5,
+      "dance": 1.4,
+      "kevin de vries": 1.4,
+      "folk & singer-songwriter": 0.7,
+      "melodic techno": 0.7,
+      "phurther out there": 0.7,
+      "electronica": 0.7,
+      "melodic": 0.7,
+      "youandewan": 0.7,
+      "rave or die": 0.7,
+      "trance & progressive": 0.7,
+      "watb006": 0.7,
+      "house": 0.7,
+      "track of the day": 0.7
+    },
+    "total_liked_tracks": 187
+  },
+  "Mind Against": {
+    "name": "Mind Against",
+    "soundcloud": "mind-against",
+    "soundcloud_url": "https://soundcloud.com/mind-against",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "techno": 40.7,
+      "electronic": 11.1,
+      "deep house": 11.1,
+      "cattaneo": 3.7,
+      "adriatique": 3.7,
+      "innervisions": 3.7,
+      "deep tech": 3.7,
+      "wehbba": 3.7,
+      "dannydaze": 3.7,
+      "dark/minimal techno": 3.7,
+      "dixon": 3.7,
+      "minimal": 3.7,
+      "disco": 3.7
+    },
+    "total_liked_tracks": 32
+  },
+  "WhoMadeWho": {
+    "name": "WhoMadeWho",
+    "soundcloud": "whomadewho",
+    "soundcloud_url": "https://soundcloud.com/whomadewho",
+    "city": "Copenhagen",
+    "curated_genres": [
+      "house",
+      "progressive"
+    ],
+    "genre_distribution": {
+      "electronic": 55.0,
+      "ambient": 7.5,
+      "techno": 5.0,
+      "deep house": 5.0,
+      "melodic house & techno": 5.0,
+      "eg spotlight": 2.5,
+      "electronic groove": 2.5,
+      "home dance": 2.5,
+      "house": 2.5,
+      "disco": 2.5,
+      "selftitledpremiere": 2.5,
+      "markrae": 2.5,
+      "bobby womack": 2.5,
+      "bbc radio1": 2.5
+    },
+    "total_liked_tracks": 48
+  },
+  "Chris Liebing": {
+    "name": "Chris Liebing",
+    "soundcloud": "chrisliebing",
+    "soundcloud_url": "https://soundcloud.com/chrisliebing",
+    "city": "Frankfurt",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 50.0,
+      "techno!": 50.0
+    },
+    "total_liked_tracks": 5
+  },
+  "UMEK": {
+    "name": "UMEK",
+    "soundcloud": "umek",
+    "soundcloud_url": "https://soundcloud.com/umek",
+    "city": "Ljubljana",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 96.4,
+      "electronic": 3.6
+    },
+    "total_liked_tracks": 28
+  },
+  "Sam Paganini": {
+    "name": "Sam Paganini",
+    "soundcloud": "sampaganini",
+    "soundcloud_url": "https://soundcloud.com/sampaganini",
+    "city": "Treviso",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Ilario Alicante": {
+    "name": "Ilario Alicante",
+    "soundcloud": "ilarioalicante",
+    "soundcloud_url": "https://soundcloud.com/ilarioalicante",
+    "city": "Turin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Matador": {
+    "name": "Matador",
+    "soundcloud": "matadormusic",
+    "soundcloud_url": "https://soundcloud.com/matadormusic",
+    "city": "Dublin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "indie rock": 100.0
+    },
+    "total_liked_tracks": 2
+  },
+  "DJ Tennis": {
+    "name": "DJ Tennis",
+    "soundcloud": "djtennis",
+    "soundcloud_url": "https://soundcloud.com/djtennis",
+    "city": "Milan",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Denis Sulta": {
+    "name": "Denis Sulta",
+    "soundcloud": "denissulta",
+    "soundcloud_url": "https://soundcloud.com/denissulta",
+    "city": "Glasgow",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 15.4,
+      "techno": 9.8,
+      "electronic": 8.9,
+      "denis sulta": 4.9,
+      "boiler room": 4.1,
+      "dabj": 3.3,
+      "jackmaster": 1.6,
+      "numbers": 1.6,
+      "boiler room debuts": 1.6,
+      "adesse versions": 1.6,
+      "duke": 1.6,
+      "bass": 1.6,
+      "dance & edm": 0.8,
+      "ostgut ton": 0.8,
+      "high nrg": 0.8,
+      "soundtrack": 0.8,
+      "rinse fm podcast": 0.8,
+      "sleepless floor": 0.8,
+      "various electronic": 0.8,
+      "disco": 0.8,
+      "world": 0.8,
+      "indie": 0.8,
+      "underground old skool house 1993": 0.8,
+      "daudi matsiko": 0.8,
+      "djmag": 0.8,
+      "joeychicago": 0.8,
+      "poly kicks": 0.8,
+      "skatebård": 0.8,
+      "it's only real": 0.8,
+      "springtheory": 0.8,
+      "cratebug": 0.8,
+      "stay fresh": 0.8,
+      "dixonavenuebasementjams": 0.8,
+      "numbers.": 0.8,
+      "domenic": 0.8,
+      "awfs15": 0.8,
+      "disco hits": 0.8,
+      "essential mix": 0.8,
+      "hammer hits": 0.8,
+      "black booby": 0.8,
+      "'radio koko'": 0.8,
+      "telfort": 0.8,
+      "gh1": 0.8,
+      "rinse": 0.8,
+      "pool": 0.8,
+      "ttt029": 0.8,
+      "bessa": 0.8,
+      "piano": 0.8,
+      "debuts": 0.8,
+      "hudson mohawke": 0.8,
+      "slow-it-down": 0.8,
+      "game": 0.8,
+      "olsensound": 0.8,
+      "uk funky": 0.8,
+      "redinho": 0.8,
+      "funk": 0.8,
+      "grime": 0.8,
+      "house & techno": 0.8,
+      "soul": 0.8,
+      "indie\\ alternative": 0.8,
+      "techno/ house/bass": 0.8,
+      "house music": 0.8,
+      "acid house": 0.8,
+      "r&s": 0.8,
+      "warfare electronics": 0.8,
+      "js flip": 0.8
+    },
+    "total_liked_tracks": 158
+  },
+  "Patrick Topping": {
+    "name": "Patrick Topping",
+    "soundcloud": "patricktopping",
+    "soundcloud_url": "https://soundcloud.com/patricktopping",
+    "city": "Newcastle",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 59.4,
+      "techno": 18.8,
+      "deep house": 6.2,
+      "deep tech": 3.1,
+      "disco": 3.1,
+      "infinity": 3.1,
+      "gouranga": 3.1,
+      "bass": 3.1
+    },
+    "total_liked_tracks": 35
+  },
+  "Eli Brown": {
+    "name": "Eli Brown",
+    "soundcloud": "elibrown",
+    "soundcloud_url": "https://soundcloud.com/elibrown",
+    "city": "Bristol",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Franky Wah": {
+    "name": "Franky Wah",
+    "soundcloud": "frankywah",
+    "soundcloud_url": "https://soundcloud.com/frankywah",
+    "city": "Leeds",
+    "curated_genres": [
+      "progressive",
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 25.5,
+      "dance": 11.8,
+      "hip-hop & rap": 9.8,
+      "tech house": 7.8,
+      "electronic": 5.9,
+      "deep house": 5.9,
+      "dance & edm": 3.9,
+      "rap": 3.9,
+      "palbajonaso": 2.0,
+      "hip hop": 2.0,
+      "classic": 2.0,
+      "disco disco disco": 2.0,
+      "soundtrack": 2.0,
+      "rap/hip hop": 2.0,
+      "hip-hop": 2.0,
+      "future house": 2.0,
+      "live-set": 2.0,
+      "studio acapella": 2.0,
+      "weird house": 2.0,
+      "dance en edm": 2.0,
+      "tech-house": 2.0
+    },
+    "total_liked_tracks": 60
+  },
+  "Speedy J": {
+    "name": "Speedy J",
+    "soundcloud": "speedyj",
+    "soundcloud_url": "https://soundcloud.com/speedyj",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Dave Clarke": {
+    "name": "Dave Clarke",
+    "soundcloud": "daveclarke",
+    "soundcloud_url": "https://soundcloud.com/daveclarke",
+    "city": "Amsterdam",
+    "curated_genres": [
+      "techno",
+      "electro"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Planetary Assault Systems": {
+    "name": "Planetary Assault Systems",
+    "soundcloud": "planetaryassaultsystems",
+    "soundcloud_url": "https://soundcloud.com/planetaryassaultsystems",
+    "city": "London",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Dj Pepo": {
+    "name": "Dj Pepo",
+    "soundcloud": "djpepoofficial",
+    "soundcloud_url": "https://soundcloud.com/djpepoofficial",
+    "city": "Madrid",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Hector Couto": {
+    "name": "Hector Couto",
+    "soundcloud": "hectorcouto",
+    "soundcloud_url": "https://soundcloud.com/hectorcouto",
+    "city": "Madrid",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 30.0,
+      "tech house": 27.5,
+      "electronic": 10.0,
+      "roush": 10.0,
+      "techhouse": 5.0,
+      "techno": 5.0,
+      "tmngtools": 2.5,
+      "rendher edits": 2.5,
+      "minimal tech": 2.5,
+      "acid house": 2.5,
+      "mhrs": 2.5
+    },
+    "total_liked_tracks": 46
+  },
+  "Cuartero": {
+    "name": "Cuartero",
+    "soundcloud": "cuartero",
+    "soundcloud_url": "https://soundcloud.com/cuartero",
+    "city": "Malaga",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 36.4,
+      "tech house": 18.2,
+      "desolat": 18.2,
+      "deep house": 9.1,
+      "techno": 9.1,
+      "material": 9.1
+    },
+    "total_liked_tracks": 11
+  },
+  "Andres Campo": {
+    "name": "Andres Campo",
+    "soundcloud": "andrescampo",
+    "soundcloud_url": "https://soundcloud.com/andrescampo",
+    "city": "Zaragoza",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 74.5,
+      "electronic": 4.8,
+      "house": 2.1,
+      "tech-house": 2.1,
+      "premiere": 1.4,
+      "makina": 0.7,
+      "dance": 0.7,
+      "face 2 face": 0.7,
+      "dance & edm": 0.7,
+      "ambient": 0.7,
+      "techno / minimal techno / banging techno": 0.7,
+      "dance - techno": 0.7,
+      "disco": 0.7,
+      "tribal techno": 0.7,
+      "deep house": 0.7,
+      "deep tech": 0.7,
+      "noticias y política": 0.7,
+      "techno minimal house": 0.7,
+      "matt minimal": 0.7,
+      "elrow": 0.7,
+      "toolroom": 0.7,
+      "gravity": 0.7,
+      "techouse": 0.7,
+      "atmosfera sonora": 0.7,
+      "andres campo": 0.7,
+      "techno/ tech house": 0.7,
+      "electro rock": 0.7
+    },
+    "total_liked_tracks": 163
+  },
+  "Unkle Fon": {
+    "name": "Unkle Fon",
+    "soundcloud": "unklefon",
+    "soundcloud_url": "https://soundcloud.com/unklefon",
+    "city": "Madrid",
+    "curated_genres": [
+      "house",
+      "disco"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "DJ Fra": {
+    "name": "DJ Fra",
+    "soundcloud": "djfra",
+    "soundcloud_url": "https://soundcloud.com/djfra",
+    "city": "Madrid",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Angel Molina": {
+    "name": "Angel Molina",
+    "soundcloud": "angelmolina",
+    "soundcloud_url": "https://soundcloud.com/angelmolina",
+    "city": "Barcelona",
+    "curated_genres": [
+      "techno",
+      "ambient"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Matrixxman": {
+    "name": "Matrixxman",
+    "soundcloud": "matrixxman",
+    "soundcloud_url": "https://soundcloud.com/matrixxman",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 22.2,
+      "house": 15.6,
+      "matrixxman": 6.7,
+      "electronic": 6.7,
+      "sublow": 4.4,
+      "infernal": 2.2,
+      "sonic magick & mythology": 2.2,
+      "reggae": 2.2,
+      "industrial": 2.2,
+      "exchange": 2.2,
+      "dancemania": 2.2,
+      "i-dj": 2.2,
+      "victor": 2.2,
+      "soo wavey": 2.2,
+      "techno- house": 2.2,
+      "marcel": 2.2,
+      "techno?": 2.2,
+      "acid house": 2.2,
+      "dance mania": 2.2,
+      "italo megamix": 2.2,
+      "truth": 2.2,
+      "wavey": 2.2,
+      "disco edits": 2.2,
+      "progressive house": 2.2,
+      "house music": 2.2
+    },
+    "total_liked_tracks": 57
+  },
+  "Ancient Methods": {
+    "name": "Ancient Methods",
+    "soundcloud": "ancientmethods",
+    "soundcloud_url": "https://soundcloud.com/ancientmethods",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Randomer": {
+    "name": "Randomer",
+    "soundcloud": "randomer",
+    "soundcloud_url": "https://soundcloud.com/randomer",
+    "city": "London",
+    "curated_genres": [
+      "techno",
+      "electro"
+    ],
+    "genre_distribution": {
+      "techno": 100.0
+    },
+    "total_liked_tracks": 6
+  },
+  "Special Request": {
+    "name": "Special Request",
+    "soundcloud": "specialrequest",
+    "soundcloud_url": "https://soundcloud.com/specialrequest",
+    "city": "London",
+    "curated_genres": [
+      "techno",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "electronic": 33.3,
+      "house": 33.3,
+      "ghetto house": 33.3
+    },
+    "total_liked_tracks": 7
+  },
+  "Eris Drew": {
+    "name": "Eris Drew",
+    "soundcloud": "erisdrew",
+    "soundcloud_url": "https://soundcloud.com/erisdrew",
+    "city": "Chicago",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Octo Octa": {
+    "name": "Octo Octa",
+    "soundcloud": "octoocta",
+    "soundcloud_url": "https://soundcloud.com/octoocta",
+    "city": "New Hampshire",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "house": 21.8,
+      "electronic": 20.8,
+      "techno": 8.9,
+      "deep house": 3.0,
+      "motherbeat": 3.0,
+      "soundtrack": 2.0,
+      "uk garage": 2.0,
+      "drum & bass": 2.0,
+      "astro black": 2.0,
+      "elettronica": 1.0,
+      "raving disco breaks": 1.0,
+      "1984": 1.0,
+      "the mystery": 1.0,
+      "dubstep": 1.0,
+      "podcast": 1.0,
+      "brooklyn rave": 1.0,
+      "goddess trance": 1.0,
+      "storytelling": 1.0,
+      "insanely stoned": 1.0,
+      "dancefloor euphoria": 1.0,
+      "rinse fm": 1.0,
+      "disentangle": 1.0,
+      "pastoral breaks": 1.0,
+      "breaks": 1.0,
+      "transgenre dnb": 1.0,
+      "outofbodyexperience": 1.0,
+      "smokers delight": 1.0,
+      "weihnachten/christmas": 1.0,
+      "dance & edm": 1.0,
+      "guest mix": 1.0,
+      "mystic dub": 1.0,
+      "love hypnosis": 1.0,
+      "resistance": 1.0,
+      "bored lord": 1.0,
+      "kiernan laveaux": 1.0,
+      "oldskool hardcore": 1.0,
+      "wah wah": 1.0,
+      "eo/v001": 1.0,
+      "radioshow": 1.0,
+      "black lodge": 1.0,
+      "still music": 1.0,
+      "jungle": 1.0,
+      "isnisnt": 1.0,
+      "electronics": 1.0
+    },
+    "total_liked_tracks": 144
+  },
+  "Violet": {
+    "name": "Violet",
+    "soundcloud": "djviolet",
+    "soundcloud_url": "https://soundcloud.com/djviolet",
+    "city": "Dublin",
+    "curated_genres": [
+      "electro",
+      "techno"
+    ],
+    "genre_distribution": {
+      "hip-hop & rap": 31.8,
+      "alternative rock": 9.1,
+      "trap": 9.1,
+      "dance & edm": 9.1,
+      "piano": 9.1,
+      "latin": 4.5,
+      "jallal": 4.5,
+      "rdgldgrn": 4.5,
+      "house'n'b": 4.5,
+      "rap": 4.5,
+      "soundtrack": 4.5,
+      "hip-hop e rap": 4.5
+    },
+    "total_liked_tracks": 24
+  },
+  "Cassy": {
+    "name": "Cassy",
+    "soundcloud": "djcassy",
+    "soundcloud_url": "https://soundcloud.com/djcassy",
+    "city": "Vienna",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 100.0
+    },
+    "total_liked_tracks": 1
+  },
+  "Prospa": {
+    "name": "Prospa",
+    "soundcloud": "prospauk",
+    "soundcloud_url": "https://soundcloud.com/prospauk",
+    "city": "Leeds",
+    "curated_genres": [
+      "house",
+      "breakbeat"
+    ],
+    "genre_distribution": {
+      "house": 32.3,
+      "tech house": 19.4,
+      "electronic": 9.7,
+      "deep tech": 5.6,
+      "deep house": 4.8,
+      "hip-hop & rap": 3.2,
+      "dance & edm": 2.4,
+      "tech house - deep tech": 2.4,
+      "dance": 1.6,
+      "minimal": 1.6,
+      "techno": 1.6,
+      "minimal / deep tech": 1.6,
+      "minimal house": 1.6,
+      "dubstep": 1.6,
+      "dirtybird": 0.8,
+      "bass music": 0.8,
+      "garage": 0.8,
+      "maximal": 0.8,
+      "tech house - deep": 0.8,
+      "minimal deep tech": 0.8,
+      "minimal tech": 0.8,
+      "jazz & blues": 0.8,
+      "caposile music": 0.8,
+      "miscreant": 0.8,
+      "afro house": 0.8,
+      "rock": 0.8,
+      "hip-house": 0.8
+    },
+    "total_liked_tracks": 189
+  },
+  "Sammy Virji": {
+    "name": "Sammy Virji",
+    "soundcloud": "sammyvirji",
+    "soundcloud_url": "https://soundcloud.com/sammyvirji",
+    "city": "Bristol",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "ukg": 11.3,
+      "house": 7.5,
+      "garage": 7.5,
+      "dubstep": 6.9,
+      "uk garage": 6.9,
+      "bass": 6.9,
+      "bassline": 3.8,
+      "electronic": 2.5,
+      "dance & edm": 1.9,
+      "speed garage": 1.9,
+      "nukg": 1.9,
+      "dance": 1.9,
+      "ukb": 1.9,
+      "drum & bass": 1.9,
+      "jungle": 1.3,
+      "breaks": 1.3,
+      "knock": 1.3,
+      "4x4": 1.3,
+      "uk bass": 1.3,
+      "wubstep": 1.3,
+      "lengoland": 1.3,
+      "hiphop": 0.6,
+      "trap": 0.6,
+      "tag:": 0.6,
+      "drb21": 0.6,
+      "future beats": 0.6,
+      "ec2a": 0.6,
+      "dubstep / wonky": 0.6,
+      "noir sound": 0.6,
+      "nosa": 0.6,
+      "dancehall": 0.6,
+      "fooroll": 0.6,
+      "fun": 0.6,
+      "dub": 0.6,
+      "hip-hop & rap": 0.6,
+      "hip hop": 0.6,
+      "latin funk": 0.6,
+      "r&b & soul": 0.6,
+      "latin jazz pop": 0.6,
+      "world": 0.6,
+      "jazz funk": 0.6,
+      "2step": 0.6,
+      "130-175bpm": 0.6,
+      "grime": 0.6,
+      "house music": 0.6,
+      "uk808": 0.6,
+      "free download": 0.6,
+      "ravey": 0.6,
+      "kontentxjoedan": 0.6,
+      "uk bassline": 0.6,
+      "sports": 0.6,
+      "chokez": 0.6,
+      "tech house": 0.6,
+      "garage / house": 0.6,
+      "mix": 0.6,
+      "140": 0.6,
+      "ukg / uk bass": 0.6,
+      "underground": 0.6,
+      "underground garage": 0.6,
+      "champion sound": 0.6,
+      "bass house": 0.6,
+      "carnival": 0.6,
+      "redlight": 0.6
+    },
+    "total_liked_tracks": 190
+  },
+  "Overmono": {
+    "name": "Overmono",
+    "soundcloud": "overmono",
+    "soundcloud_url": "https://soundcloud.com/overmono",
+    "city": "London",
+    "curated_genres": [
+      "breakbeat",
+      "bass"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "VTSS": {
+    "name": "VTSS",
+    "soundcloud": "vtss",
+    "soundcloud_url": "https://soundcloud.com/vtss",
+    "city": "Berlin",
+    "curated_genres": [
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 45.2,
+      "electronic": 22.6,
+      "dance": 1.7,
+      "electro": 1.7,
+      "dance & edm": 1.7,
+      "jungle techno": 0.9,
+      "r & b": 0.9,
+      "house": 0.9,
+      "deep house": 0.9,
+      "technology": 0.9,
+      "donk": 0.9,
+      "uk bass": 0.9,
+      "breaks": 0.9,
+      "free dl": 0.9,
+      "mall music": 0.9,
+      "uk funky": 0.9,
+      "dubstep": 0.9,
+      "pop": 0.9,
+      "trance": 0.9,
+      "rona angst": 0.9,
+      "premiere": 0.9,
+      "pan": 0.9,
+      "guest mix": 0.9,
+      "brutaż": 0.9,
+      "waves of synths": 0.9,
+      "ukg": 0.9,
+      "gek": 0.9,
+      "kaos": 0.9,
+      "broken dreams": 0.9,
+      "flexxseal": 0.9,
+      "hard dance": 0.9,
+      "hard club": 0.9,
+      "rinse fm": 0.9,
+      "ebm rave": 0.9,
+      "muzyka elektroniczna": 0.9,
+      "moyaitechno": 0.9
+    },
+    "total_liked_tracks": 167
+  },
+  "Tiga": {
+    "name": "Tiga",
+    "soundcloud": "taborite",
+    "soundcloud_url": "https://soundcloud.com/taborite",
+    "city": "Montreal",
+    "curated_genres": [
+      "techno",
+      "electro"
+    ],
+    "genre_distribution": {
+      "pop": 7.1,
+      "alternative rock": 7.1,
+      "metal": 6.3,
+      "dance & edm": 4.8,
+      "drum & bass": 4.8,
+      "electronic": 4.0,
+      "techno": 2.4,
+      "soundtrack": 2.4,
+      "disco": 2.4,
+      "ambient": 2.4,
+      "house": 1.6,
+      "trance": 1.6,
+      "artcore": 1.6,
+      "drill soul": 1.6,
+      "rock": 1.6,
+      "r&b & soul": 1.6,
+      "world": 1.6,
+      "classical": 1.6,
+      "mili": 1.6,
+      "suicide": 0.8,
+      "glitch hop": 0.8,
+      "tech house": 0.8,
+      "dance e edm": 0.8,
+      "schranz": 0.8,
+      "emo": 0.8,
+      "arcaea": 0.8,
+      "cover": 0.8,
+      "dubstep": 0.8,
+      "electronic rock": 0.8,
+      "reggae": 0.8,
+      "emo core": 0.8,
+      "xi vs sakuzyo": 0.8,
+      "classic": 0.8,
+      "festival future bass": 0.8,
+      "trap": 0.8,
+      "arrange": 0.8,
+      "very old entrance": 0.8,
+      "punk rock": 0.8,
+      "mix": 0.8,
+      "8-bit": 0.8,
+      "nostalgic synthpop": 0.8,
+      "hardstyle": 0.8,
+      "early hardcore": 0.8,
+      "assholeband": 0.8,
+      "ngsb": 0.8,
+      "funk": 0.8,
+      "heavy artillery": 0.8,
+      "frenchcore": 0.8,
+      "piano": 0.8,
+      "breakcore": 0.8,
+      "new age": 0.8,
+      "country": 0.8,
+      "harmonic schranz": 0.8,
+      "hybrid orchestral": 0.8,
+      "persona": 0.8,
+      "chiptune": 0.8,
+      "crunkcore": 0.8,
+      "nightcore": 0.8,
+      "hardtek to acid": 0.8,
+      "djperception91": 0.8,
+      "kpop": 0.8,
+      "synthwave": 0.8,
+      "thesecretsauce": 0.8,
+      "indie": 0.8,
+      "classical gothic": 0.8,
+      "กอดไม่ได้": 0.8,
+      "j-pop": 0.8,
+      "hip-hop & rap": 0.8,
+      "jumpstyle": 0.8,
+      "hiphop/rap": 0.8,
+      "uk hardcore": 0.8,
+      "alternative, pop": 0.8
+    },
+    "total_liked_tracks": 198
+  },
+  "Mathame": {
+    "name": "Mathame",
+    "soundcloud": "mathame",
+    "soundcloud_url": "https://soundcloud.com/mathame",
+    "city": "Catania",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "techno": 38.3,
+      "electronic": 10.5,
+      "house": 3.7,
+      "deep house": 2.5,
+      "souvenir": 2.5,
+      "mathame": 2.5,
+      "dance": 1.9,
+      "ostgut ton": 1.9,
+      "trance": 1.2,
+      "dance & edm": 1.2,
+      "hardgroove": 1.2,
+      "blawan": 1.2,
+      "r&s": 1.2,
+      "tech house": 0.6,
+      "hard techno": 0.6,
+      "hard house": 0.6,
+      "progressive house": 0.6,
+      "burial": 0.6,
+      "new": 0.6,
+      "talismann": 0.6,
+      "fur coat": 0.6,
+      "pop": 0.6,
+      "slam dunk": 0.6,
+      "dotwav": 0.6,
+      "ambient": 0.6,
+      "sophie": 0.6,
+      "science": 0.6,
+      "techno ceremony": 0.6,
+      "eva001": 0.6,
+      "lettrecords": 0.6,
+      "sei a": 0.6,
+      "caldera": 0.6,
+      "boiler room debuts": 0.6,
+      "meshell": 0.6,
+      "agoria": 0.6,
+      "cmd q": 0.6,
+      "paula temple": 0.6,
+      "the broadest beats": 0.6,
+      "dtrlp3": 0.6,
+      "synth": 0.6,
+      "tim hecker": 0.6,
+      "g.o.d": 0.6,
+      "tundra": 0.6,
+      "47": 0.6,
+      "boiler room": 0.6,
+      "afx": 0.6,
+      "ra podcast": 0.6,
+      "50weapons": 0.6,
+      "benjamin damage": 0.6,
+      "dub": 0.6,
+      "dkmntl": 0.6,
+      "lastnightonearth": 0.6,
+      "alternative": 0.6,
+      "fjaak": 0.6,
+      "christianloeffler": 0.6,
+      "cassegrain & tin man": 0.6,
+      "ardor": 0.6,
+      "club autonomica": 0.6,
+      "tale of us": 0.6,
+      "circo": 0.6,
+      "lakker": 0.6,
+      "electronica": 0.6
+    },
+    "total_liked_tracks": 181
+  },
+  "Township Rebellion": {
+    "name": "Township Rebellion",
+    "soundcloud": "townshiprebellion",
+    "soundcloud_url": "https://soundcloud.com/townshiprebellion",
+    "city": "Frankfurt",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "Fideles": {
+    "name": "Fideles",
+    "soundcloud": "fideles",
+    "soundcloud_url": "https://soundcloud.com/fideles",
+    "city": "Milan",
+    "curated_genres": [
+      "progressive",
+      "techno"
+    ],
+    "genre_distribution": {
+      "tech house": 12.6,
+      "deep house": 11.6,
+      "house": 10.5,
+      "melodic house & techno": 9.5,
+      "fideles": 9.5,
+      "electronic": 7.4,
+      "little helpers": 7.4,
+      "dance": 5.3,
+      "melodic techno": 4.2,
+      "hangover": 4.2,
+      "dance & edm": 2.1,
+      "indie dance": 2.1,
+      "techno": 2.1,
+      "afro house": 1.1,
+      "hip-hop & rap": 1.1,
+      "deep tech": 1.1,
+      "techouse": 1.1,
+      "vomvo": 1.1,
+      "danny serrano": 1.1,
+      "podcast": 1.1,
+      "techhouse": 1.1,
+      "deep tech house": 1.1,
+      "elettronica": 1.1,
+      "chillout": 1.1
+    },
+    "total_liked_tracks": 124
+  },
+  "Dennis Cruz": {
+    "name": "Dennis Cruz",
+    "soundcloud": "denniscruz",
+    "soundcloud_url": "https://soundcloud.com/denniscruz",
+    "city": "Madrid",
+    "curated_genres": [
+      "house",
+      "techno"
+    ],
+    "genre_distribution": {
+      "house": 27.2,
+      "tech house": 15.2,
+      "deep house": 10.4,
+      "electronic": 10.4,
+      "tech house - deep tech": 6.4,
+      "golfostyle": 5.6,
+      "golfos": 4.8,
+      "deep tech": 4.0,
+      "minimal / deep tech": 4.0,
+      "techno": 4.0,
+      "electrónica": 1.6,
+      "dance & edm": 0.8,
+      "premiere tbx": 0.8,
+      "edit": 0.8,
+      "lemon-aid music": 0.8,
+      "afro house": 0.8,
+      "dj tools": 0.8,
+      "afrohouse": 0.8,
+      "denniscruz": 0.8
+    },
+    "total_liked_tracks": 186
+  },
+  "Pional": {
+    "name": "Pional",
+    "soundcloud": "pional",
+    "soundcloud_url": "https://soundcloud.com/pional",
+    "city": "Madrid",
+    "curated_genres": [
+      "house",
+      "electro"
+    ],
+    "genre_distribution": {},
+    "total_liked_tracks": 0
+  },
+  "ANOTR": {
+    "name": "ANOTR",
+    "soundcloud": "anotr",
+    "soundcloud_url": "https://soundcloud.com/anotr",
+    "city": "Rotterdam",
+    "curated_genres": [
+      "house"
+    ],
+    "genre_distribution": {
+      "house": 27.6,
+      "tech house": 16.0,
+      "techno": 7.1,
+      "deep house": 5.8,
+      "electronic": 3.8,
+      "anotr": 1.9,
+      "disco": 1.3,
+      "tech house - deep tech": 1.3,
+      "kuo climax": 1.3,
+      "premiere": 1.3,
+      "leftwing & kody": 1.3,
+      "two and a half cats": 0.6,
+      "poppy": 0.6,
+      "music": 0.6,
+      "elettronica": 0.6,
+      "deep tech": 0.6,
+      "garage": 0.6,
+      "premiere tbx": 0.6,
+      "boiler room": 0.6,
+      "minimal": 0.6,
+      "dubfire": 0.6,
+      "funk": 0.6,
+      "hip hop/rap": 0.6,
+      "r&b & soul": 0.6,
+      "tech-house": 0.6,
+      "viva music": 0.6,
+      "marmite": 0.6,
+      "dreamz": 0.6,
+      "anotr's world": 0.6,
+      "exclusive": 0.6,
+      "krlvk": 0.6,
+      "genre": 0.6,
+      "monkiandfriendsep": 0.6,
+      "sgt09": 0.6,
+      "jagger botchway": 0.6,
+      "noir": 0.6,
+      "funk rework": 0.6,
+      "certain circles": 0.6,
+      "this ain't bristol": 0.6,
+      "latmun": 0.6,
+      "warehouse": 0.6,
+      "blackmusic ep": 0.6,
+      "adambeyer": 0.6,
+      "majesty": 0.6,
+      "low steppa": 0.6,
+      "claptone": 0.6,
+      "love": 0.6,
+      "francisco allendes": 0.6,
+      "hot creations": 0.6,
+      "incorrect": 0.6,
+      "rich wakley": 0.6,
+      "sense": 0.6,
+      "gerd": 0.6,
+      "traxsource": 0.6,
+      "hot since 82": 0.6,
+      "rudimental": 0.6,
+      "kneedeepinsound": 0.6,
+      "mat.joe": 0.6,
+      "rinse fm": 0.6,
+      "thump exclusive stream": 0.6
+    },
+    "total_liked_tracks": 181
+  }
+}
