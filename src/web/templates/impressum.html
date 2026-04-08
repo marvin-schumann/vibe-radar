@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequenz — Impressum</title>
+  <!-- Fonts (self-hosted for DSGVO compliance) -->
+  <style>
+    @font-face { font-family: 'Bebas Neue'; font-style: normal; font-weight: 400; font-display: swap; src: url('/static/fonts/bebas-neue-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 300 600; font-display: swap; src: url('/static/fonts/dm-sans-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/static/fonts/space-mono-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('/static/fonts/space-mono-bold.woff2') format('woff2'); }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0c; --border: #1e1e1e; --lime: #c4f135;
+      --text: #ede8dd; --text-dim: #6a6a6a; --text-faint: #303030;
+      --font-display: 'Bebas Neue', 'Impact', sans-serif;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+    .container { max-width: 640px; margin: 0 auto; padding: 4rem 1.5rem 2rem; flex: 1; }
+    h1 { font-family: var(--font-display); font-size: 3rem; letter-spacing: 0.04em; color: var(--lime); margin-bottom: 2rem; }
+    h2 { font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 2rem; margin-bottom: 0.5rem; }
+    p { margin-bottom: 0.4rem; font-size: 0.95rem; }
+    a { color: var(--lime); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 2rem; }
+    .back-link:hover { color: var(--lime); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.06em; color: var(--text-faint); }
+    footer a { color: var(--text-dim); text-decoration: none; }
+    footer a:hover { color: var(--lime); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">&larr; Zurück</a>
+    <h1>Impressum</h1>
+
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <p>Marvin Schumann</p>
+    <p>Zwerchklamm 27</p>
+    <p>66453 Gersheim</p>
+    <p>Deutschland</p>
+
+    <h2>Kontakt</h2>
+    <p>E-Mail: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a></p>
+    <p>Telefon: +49 15223242283</p>
+
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+    <p>Marvin Schumann</p>
+    <p>Zwerchklamm 27</p>
+    <p>66453 Gersheim</p>
+  </div>
+
+  <footer>
+    <p>Frequenz &copy; 2026 &nbsp;&middot;&nbsp; <a href="/impressum">Impressum</a> &nbsp;&middot;&nbsp; <a href="/datenschutz">Datenschutz</a></p>
+  </footer>
+</body>
+</html>

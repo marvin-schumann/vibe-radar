@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequenz — Datenschutzerklärung</title>
+  <!-- Fonts (self-hosted for DSGVO compliance) -->
+  <style>
+    @font-face { font-family: 'Bebas Neue'; font-style: normal; font-weight: 400; font-display: swap; src: url('/static/fonts/bebas-neue-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 300 600; font-display: swap; src: url('/static/fonts/dm-sans-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/static/fonts/space-mono-regular.woff2') format('woff2'); }
+    @font-face { font-family: 'Space Mono'; font-style: normal; font-weight: 700; font-display: swap; src: url('/static/fonts/space-mono-bold.woff2') format('woff2'); }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0c0c; --border: #1e1e1e; --lime: #c4f135;
+      --text: #ede8dd; --text-dim: #6a6a6a; --text-faint: #303030;
+      --font-display: 'Bebas Neue', 'Impact', sans-serif;
+      --font-mono: 'Space Mono', 'Courier New', monospace;
+      --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+    .container { max-width: 640px; margin: 0 auto; padding: 4rem 1.5rem 2rem; flex: 1; }
+    h1 { font-family: var(--font-display); font-size: 3rem; letter-spacing: 0.04em; color: var(--lime); margin-bottom: 2rem; }
+    h2 { font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 2.5rem; margin-bottom: 0.75rem; }
+    h3 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; color: var(--text); margin-top: 1.5rem; margin-bottom: 0.4rem; }
+    p, li { margin-bottom: 0.4rem; font-size: 0.95rem; }
+    ul { list-style: none; padding-left: 0; }
+    ul li::before { content: "— "; color: var(--text-dim); }
+    a { color: var(--lime); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-block; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 2rem; }
+    .back-link:hover { color: var(--lime); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.06em; color: var(--text-faint); }
+    footer a { color: var(--text-dim); text-decoration: none; }
+    footer a:hover { color: var(--lime); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">&larr; Zurück</a>
+    <h1>Datenschutzerklärung</h1>
+
+    <h2>1. Verantwortlicher</h2>
+    <p>Marvin Schumann</p>
+    <p>Zwerchklamm 27</p>
+    <p>66453 Gersheim, Deutschland</p>
+    <p>E-Mail: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a></p>
+
+    <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
+
+    <h3>E-Mail-Adressen (Warteliste)</h3>
+    <p>Wenn Sie sich für unsere Warteliste anmelden, erheben wir Ihre E-Mail-Adresse. Diese wird ausschließlich verwendet, um Sie über den Start von Frequenz zu informieren.</p>
+    <p>Rechtsgrundlage: Ihre Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO.</p>
+
+    <h3>Server-Logdateien</h3>
+    <p>Bei jedem Zugriff auf unsere Website werden automatisch Informationen durch den Hosting-Provider erfasst (sog. Server-Logfiles). Dazu gehören:</p>
+    <ul>
+      <li>IP-Adresse des anfragenden Rechners</li>
+      <li>Datum und Uhrzeit des Zugriffs</li>
+      <li>Aufgerufene URL</li>
+      <li>Browsertyp und -version</li>
+    </ul>
+    <p>Rechtsgrundlage: Berechtigtes Interesse gemäß Art. 6 Abs. 1 lit. f DSGVO (Sicherstellung eines störungsfreien Betriebs).</p>
+
+    <h2>3. Auftragsverarbeiter und Drittanbieter</h2>
+
+    <h3>Vercel Inc. (Hosting)</h3>
+    <p>Unsere Website wird bei Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA gehostet. Vercel ist unter dem EU-US Data Privacy Framework zertifiziert.</p>
+
+    <h3>Formspree (Formularbearbeitung)</h3>
+    <p>Das Wartelisten-Formular wird über Formspree, Inc. (USA) verarbeitet. Formspree empfängt Ihre E-Mail-Adresse zum Zweck der Formularweiterleitung.</p>
+
+    <h3>Supabase (Datenbank &amp; Authentifizierung)</h3>
+    <p>Für die App-Funktionalität nutzen wir Supabase, Inc. (USA) als Datenbank- und Authentifizierungsanbieter.</p>
+
+    <h2>4. Cookies</h2>
+    <p>Wir verwenden ausschließlich technisch notwendige Cookies (Supabase-Authentifizierung). Es werden keine Tracking- oder Analyse-Cookies eingesetzt.</p>
+
+    <h2>5. Schriftarten</h2>
+    <p>Alle Schriftarten (Bebas Neue, DM Sans, Space Mono) werden lokal von unserem Server bereitgestellt. Es findet keine Datenübertragung an Google oder andere Drittanbieter statt.</p>
+
+    <h2>6. Ihre Rechte</h2>
+    <p>Gemäß Art. 15–21 DSGVO haben Sie folgende Rechte:</p>
+    <ul>
+      <li>Auskunftsrecht (Art. 15 DSGVO)</li>
+      <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
+      <li>Recht auf Löschung (Art. 17 DSGVO)</li>
+      <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+      <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
+      <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
+    </ul>
+    <p>Zur Ausübung Ihrer Rechte wenden Sie sich an: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a></p>
+
+    <h2>7. Aufsichtsbehörde</h2>
+    <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Die für uns zuständige Aufsichtsbehörde ist:</p>
+    <p>Unabhängiges Datenschutzzentrum Saarland<br>
+    Die Landesbeauftragte für Datenschutz und Informationsfreiheit<br>
+    Fritz-Dobisch-Straße 12<br>
+    66111 Saarbrücken</p>
+
+    <h2>8. Speicherdauer</h2>
+    <p>E-Mail-Adressen der Warteliste werden bis zum Launch des Dienstes oder bis zu Ihrem Löschungswunsch gespeichert. Server-Logdateien werden nach 30 Tagen automatisch gelöscht.</p>
+
+    <p style="margin-top: 2.5rem; color: var(--text-dim); font-size: 0.8rem;">Stand: April 2026</p>
+  </div>
+
+  <footer>
+    <p>Frequenz &copy; 2026 &nbsp;&middot;&nbsp; <a href="/impressum">Impressum</a> &nbsp;&middot;&nbsp; <a href="/datenschutz">Datenschutz</a></p>
+  </footer>
+</body>
+</html>

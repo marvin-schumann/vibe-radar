@@ -452,6 +452,21 @@ def _serialize_match(match: Match) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Routes: Legal pages (DSGVO compliance)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/impressum", response_class=HTMLResponse)
+async def impressum(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(request, "impressum.html")
+
+
+@app.get("/datenschutz", response_class=HTMLResponse)
+async def datenschutz(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(request, "datenschutz.html")
+
+
+# ---------------------------------------------------------------------------
 # Routes: Pages
 # ---------------------------------------------------------------------------
 

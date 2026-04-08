@@ -4,9 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frequenz — Sign In</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Bebas Neue';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/static/fonts/bebas-neue-regular.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: normal;
+      font-weight: 300 600;
+      font-display: swap;
+      src: url('/static/fonts/dm-sans-regular.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/static/fonts/dm-sans-italic.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/static/fonts/space-mono-regular.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Space Mono';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('/static/fonts/space-mono-bold.woff2') format('woff2');
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg: #0c0c0c;
@@ -197,5 +230,8 @@
     // Auto-switch to signup if signing up
     if (window.location.search.includes('signup')) switchTab('signup', document.querySelectorAll('.tab')[1]);
   </script>
+  <footer style="border-top:1px solid #1e1e1e;padding:1.5rem 0;text-align:center;font-family:'Space Mono','Courier New',monospace;font-size:0.6rem;letter-spacing:0.06em;color:#303030;">
+    <a href="/impressum" style="color:#6a6a6a;text-decoration:none;">Impressum</a> &nbsp;&middot;&nbsp; <a href="/datenschutz" style="color:#6a6a6a;text-decoration:none;">Datenschutz</a>
+  </footer>
 </body>
 </html>
