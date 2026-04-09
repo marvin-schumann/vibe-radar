@@ -189,6 +189,8 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     from src.collectors.spotify import SpotifyCollector
     from src.matching.exact import ExactMatcher
     from src.matching.vibe import VibeMatcher, build_taste_profile
+    from src.matching.dj_event import match_events_via_dj_profiles
+    from src.matching.dj_twin import get_user_genre_distribution
 
     cache = _user_cache(user_id) if user_id else _cache
 
@@ -351,8 +353,23 @@ async def _run_pipeline(user_id: str | None = None) -> None:
     )
     logger.info("Vibe matches found: {}", len(vibe_matches))
 
-    # -- 6. Combine and cache --
-    all_matches = exact_matches + vibe_matches
+    # -- 6. Run DJ-profile-based event matching --
+    matched_so_far = {
+        m.event.url for m in exact_matches + vibe_matches if m.event.url
+    }
+    user_genres = get_user_genre_distribution(
+        artists=cache.get("artist_objects"),
+        taste_profile=taste_profile,
+    )
+    dj_event_matches = match_events_via_dj_profiles(
+        user_genres,
+        all_events,
+        exclude_event_urls=matched_so_far,
+    )
+    logger.info("DJ-profile event matches found: {}", len(dj_event_matches))
+
+    # -- 7. Combine and cache --
+    all_matches = exact_matches + vibe_matches + dj_event_matches
     all_matches.sort(key=lambda m: m.sort_key)
 
     cache["matches"] = all_matches
@@ -368,10 +385,11 @@ async def _run_pipeline(user_id: str | None = None) -> None:
             logger.warning("Could not set first_match_at for user {}: {}", user_id, exc)
 
     logger.info(
-        "Pipeline complete: {} total matches ({} exact, {} vibe)",
+        "Pipeline complete: {} total matches ({} exact, {} vibe, {} dj-profile)",
         len(all_matches),
         len(exact_matches),
         len(vibe_matches),
+        len(dj_event_matches),
     )
 
 
