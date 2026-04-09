@@ -822,7 +822,7 @@ async def get_events(
             "event_artist_name": m.get("event_artist", ""),
             "match_type": "exact" if m.get("score", 0) >= 95 else "vibe",
             "confidence": m.get("score", 0) / 100.0,
-            "match_reason": f"{'Exact' if m.get('score', 0) >= 95 else 'Close'} match ({m.get('score', 0)}%): {m.get('your_artist', '')} on your {artist_source_tag.title()}",
+            "match_reason": f"{'Exact' if m.get('score', 0) >= 95 else 'Close'} match ({m.get('score', 0)}%): {m.get('your_artist', '')} in your library",
         }
         if match_type == "all" or match_type is None or entry["match_type"] == match_type:
             results.append(entry)

@@ -130,6 +130,7 @@
             background: rgba(12,12,12,0.96);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
+            overflow: hidden;
         }
 
         .logo-container {
@@ -1121,17 +1122,6 @@
         ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
-        /* ============================================================
-           GLOBAL PLATFORM TOGGLE (header)
-           ============================================================ */
-        .global-platform {
-            display: flex;
-            gap: 2px;
-            background: var(--border);
-            border-radius: 3px;
-            padding: 1px;
-        }
-
         .gp-btn {
             font-family: var(--font-mono);
             font-size: 0.55rem;
@@ -1146,6 +1136,8 @@
             cursor: pointer;
             transition: all 0.15s;
             text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .gp-btn:hover { color: var(--text); border-color: var(--lime); }
@@ -1224,7 +1216,6 @@
             vertical-align: middle;
         }
 
-        .platform-dot.spotify { background: var(--lime); }
         .platform-dot.soundcloud { background: var(--orange); }
 
         /* ============================================================
@@ -1467,13 +1458,6 @@
             </a>
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
-            <!-- Global platform filter -->
-            <div class="global-platform" id="globalPlatform">
-                <button class="gp-btn active" data-gp="all">All</button>
-                <button class="gp-btn" data-gp="spotify">Spotify</button>
-                <button class="gp-btn" data-gp="soundcloud">SC</button>
-            </div>
-            <span style="color:var(--border-bright);margin:0 0.3rem;">|</span>
             <!-- Artists toggle -->
             <button class="gp-btn" id="toggleArtistsBtn" onclick="toggleArtistsSection()">Artists</button>
             <span class="gp-btn active">Dashboard</span>
@@ -1673,8 +1657,6 @@
         let featuresChart = null;
         let sourceChart = null;
         let currentFilter = 'all';
-        let currentPlatformFilter = 'all';
-        let currentArtistPlatform = 'all';
 
         // ============================================================
         // Chart.js global defaults
@@ -1726,7 +1708,7 @@
                 'resident_advisor': 'Resident Advisor',
                 'bandsintown': 'Bandsintown',
                 'songkick': 'Songkick',
-                'spotify': 'Spotify',
+                'spotify': 'Your Library',
                 'soundcloud': 'SoundCloud',
             };
             return map[src] || src;
@@ -1747,11 +1729,6 @@
                 renderGenreChart(tasteProfile.top_genres);
                 renderFeaturesChart(tasteProfile.avg_features, data.features_estimated);
                 renderSourceBreakdown(tasteProfile.sources, tasteProfile.total_artists);
-                // Show/hide Spotify filter button based on whether user has Spotify data
-                const spotifyBtn = document.querySelector('#globalPlatform .gp-btn[data-gp="spotify"]');
-                if (spotifyBtn) {
-                    spotifyBtn.style.display = (tasteProfile.sources && tasteProfile.sources.spotify) ? '' : 'none';
-                }
             } catch (err) {
                 console.error('Failed to load taste profile:', err);
             }
@@ -1814,7 +1791,7 @@
                     const img = a.image_url
                         ? `<img src="${escapeHtml(a.image_url)}" alt="" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid var(--border-bright);flex-shrink:0;">`
                         : `<div style="width:24px;height:24px;border-radius:50%;background:var(--border);flex-shrink:0;"></div>`;
-                    // Show Spotify popularity if available, else SoundCloud play_count
+                    // Show popularity if available, else play_count
                     let badge = '';
                     if (a.popularity != null) {
                         badge = `pop ${a.popularity}`;
@@ -2003,7 +1980,7 @@
                 const data = await resp.json();
                 allArtists = data.artists || [];
                 document.getElementById('artistTotal').textContent = allArtists.length ? `${allArtists.length} artists` : '';
-                renderArtists(currentArtistPlatform);
+                renderArtists('all');
             } catch (err) {
                 console.error('Failed to load artists:', err);
             }
@@ -2026,7 +2003,7 @@
                     ? `<img src="${escapeHtml(a.image_url)}" alt="${escapeHtml(a.name)}" loading="lazy">`
                     : `<div class="placeholder-img">${escapeHtml(a.name.charAt(0).toUpperCase())}</div>`;
                 const platform = a.source || 'unknown';
-                const platformLabel = platform === 'spotify' ? 'Spotify' : platform === 'soundcloud' ? 'SoundCloud' : platform;
+                const platformLabel = platform === 'soundcloud' ? 'SoundCloud' : platform === 'spotify' ? 'Your Library' : platform;
                 return `
                     <div class="artist-card">
                         ${imgHtml}
@@ -2048,18 +2025,6 @@
             btn.classList.toggle('active', !visible);
         }
 
-        // Global platform filter (header)
-        document.getElementById('globalPlatform').addEventListener('click', (e) => {
-            const btn = e.target.closest('.gp-btn');
-            if (!btn) return;
-            document.querySelectorAll('#globalPlatform .gp-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentPlatformFilter = btn.dataset.gp;
-            currentArtistPlatform = btn.dataset.gp;
-            renderArtists(currentArtistPlatform);
-            renderEvents(currentFilter);
-            updateCounts();
-        });
 
         function updateCounts() {
             document.getElementById('countAll').textContent = countUniqueEvents(allMatches);
@@ -2227,19 +2192,53 @@
         // Source Breakdown (Pie + Stats)
         // ============================================================
         function renderSourceBreakdown(sources, totalArtists) {
-            const statsContainer = document.getElementById('statsContainer');
+            const statsEl = document.getElementById('statsContainer');
             const canvas = document.getElementById('sourceChart');
 
             if (!sources || Object.keys(sources).length === 0) {
                 canvas.style.display = 'none';
-                statsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No source data yet.</p>';
+                statsEl.textContent = 'No source data yet.';
+                statsEl.style.cssText = 'color:var(--text-muted);font-size:0.85rem;text-align:center;padding:1rem 0;';
                 return;
             }
 
-            // Doughnut — neutral palette matching new design
-            const labels = Object.keys(sources).map(formatSource);
+            const sourceKeys = Object.keys(sources);
+
+            // Single source (SC-only): skip pie chart, show clean label
+            if (sourceKeys.length === 1) {
+                canvas.style.display = 'none';
+                const src = sourceKeys[0];
+
+                // Build DOM nodes safely
+                statsEl.replaceChildren();
+                const hero = document.createElement('div');
+                hero.style.cssText = 'text-align:center;padding:1.5rem 0 1rem;';
+                const pct = document.createElement('div');
+                pct.style.cssText = 'font-family:var(--font-display);font-size:2.2rem;letter-spacing:0.04em;color:var(--orange);';
+                pct.textContent = '100%';
+                const lbl = document.createElement('div');
+                lbl.style.cssText = 'font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-top:0.25rem;';
+                lbl.textContent = formatSource(src);
+                hero.append(pct, lbl);
+
+                const row = document.createElement('div');
+                row.className = 'stat-row';
+                const slbl = document.createElement('span');
+                slbl.className = 'stat-label';
+                slbl.textContent = 'Total Artists';
+                const sval = document.createElement('span');
+                sval.className = 'stat-value';
+                sval.textContent = totalArtists;
+                row.append(slbl, sval);
+
+                statsEl.append(hero, row);
+                return;
+            }
+
+            // Multiple sources: show doughnut
+            const labels = sourceKeys.map(formatSource);
             const values = Object.values(sources);
-            const colors = ['#c4f135', '#ff5c35', '#ede8dd', '#6a6a6a'];
+            const colors = ['#ff5c35', '#c4f135', '#ede8dd', '#6a6a6a'];
 
             sourceChart = new Chart(canvas.getContext('2d'), {
                 type: 'doughnut',
@@ -2283,19 +2282,32 @@
                 }
             });
 
-            // Stats
-            statsContainer.innerHTML = `
-                <div class="stat-row">
-                    <span class="stat-label">Total Artists</span>
-                    <span class="stat-value">${totalArtists}</span>
-                </div>
-                ${Object.entries(sources).map(([src, count]) => `
-                    <div class="stat-row">
-                        <span class="stat-label">${formatSource(src)}</span>
-                        <span class="stat-value" style="font-size: 1.1rem;">${count}</span>
-                    </div>
-                `).join('')}
-            `;
+            // Stats — built with DOM methods
+            statsEl.replaceChildren();
+            const totalRow = document.createElement('div');
+            totalRow.className = 'stat-row';
+            const tl = document.createElement('span');
+            tl.className = 'stat-label';
+            tl.textContent = 'Total Artists';
+            const tv = document.createElement('span');
+            tv.className = 'stat-value';
+            tv.textContent = totalArtists;
+            totalRow.append(tl, tv);
+            statsEl.append(totalRow);
+
+            Object.entries(sources).forEach(([src, count]) => {
+                const r = document.createElement('div');
+                r.className = 'stat-row';
+                const l = document.createElement('span');
+                l.className = 'stat-label';
+                l.textContent = formatSource(src);
+                const v = document.createElement('span');
+                v.className = 'stat-value';
+                v.style.fontSize = '1.1rem';
+                v.textContent = count;
+                r.append(l, v);
+                statsEl.append(r);
+            });
         }
 
         // ============================================================
@@ -2311,10 +2323,6 @@
                 matches = allMatches.filter(m => m.match_type === 'vibe');
             }
 
-            // Platform filter
-            if (currentPlatformFilter && currentPlatformFilter !== 'all') {
-                matches = matches.filter(m => m.matched_artist.source === currentPlatformFilter);
-            }
 
             if (matches.length === 0) {
                 grid.innerHTML = `
@@ -2331,7 +2339,7 @@
 
             // Group matches by event URL so one event = one card,
             // deduplicating matched artists by name (same artist from
-            // both Spotify and SoundCloud should appear only once).
+            // multiple sources should appear only once).
             const eventMap = new Map();
             matches.forEach(match => {
                 const key = match.event.url || (match.event.name + '|' + match.event.date);
