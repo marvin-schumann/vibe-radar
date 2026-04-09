@@ -539,8 +539,43 @@
             transition: width 0.6s ease-out;
         }
 
-        .confidence-fill.exact { background: var(--lime); }
-        .confidence-fill.vibe  { background: var(--orange); }
+        .confidence-fill.tier-perfect { background: var(--lime); }
+        .confidence-fill.tier-strong  { background: var(--orange); }
+        .confidence-fill.tier-worth   { background: #d4c44a; }
+        .confidence-fill.tier-might   { background: #555; }
+
+        .tier-badge {
+            flex-shrink: 0;
+            font-family: var(--font-mono);
+            font-size: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.15rem 0.45rem;
+            border-radius: 2px;
+            border: none;
+            line-height: 1;
+        }
+
+        .tier-badge.tier-perfect {
+            background: var(--lime);
+            color: #0c0c0c;
+        }
+
+        .tier-badge.tier-strong {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .tier-badge.tier-worth {
+            background: #d4c44a;
+            color: #0c0c0c;
+        }
+
+        .tier-badge.tier-might {
+            background: #444;
+            color: #999;
+        }
 
         .match-reason {
             font-family: var(--font-body);
@@ -1614,6 +1649,8 @@
                 <button class="filter-tab active" data-filter="all">All <span class="count" id="countAll">0</span></button>
                 <button class="filter-tab" data-filter="exact">Exact <span class="count" id="countExact">0</span></button>
                 <button class="filter-tab" data-filter="vibe">Vibe <span class="count" id="countVibe">0</span></button>
+                <button class="filter-tab" data-filter="perfect">Perfect <span class="count" id="countPerfect">0</span></button>
+                <button class="filter-tab" data-filter="strong">Strong <span class="count" id="countStrong">0</span></button>
             </div>
 
             <div class="events-grid" id="eventsGrid">
@@ -2030,6 +2067,8 @@
             document.getElementById('countAll').textContent = countUniqueEvents(allMatches);
             document.getElementById('countExact').textContent = countUniqueEvents(allMatches.filter(m => m.match_type === 'exact'));
             document.getElementById('countVibe').textContent = countUniqueEvents(allMatches.filter(m => m.match_type === 'vibe'));
+            document.getElementById('countPerfect').textContent = countUniqueEvents(allMatches.filter(m => Math.round(m.confidence * 100) >= 80));
+            document.getElementById('countStrong').textContent = countUniqueEvents(allMatches.filter(m => { const c = Math.round(m.confidence * 100); return c >= 60 && c < 80; }));
         }
 
         // ============================================================
@@ -2321,6 +2360,10 @@
                 matches = allMatches.filter(m => m.match_type === 'exact');
             } else if (filter === 'vibe') {
                 matches = allMatches.filter(m => m.match_type === 'vibe');
+            } else if (filter === 'perfect') {
+                matches = allMatches.filter(m => Math.round(m.confidence * 100) >= 80);
+            } else if (filter === 'strong') {
+                matches = allMatches.filter(m => { const c = Math.round(m.confidence * 100); return c >= 60 && c < 80; });
             }
 
 
@@ -2363,6 +2406,13 @@
                 const badgeClass = isExact ? 'exact' : 'vibe';
                 const badgeText = isExact ? 'Exact' : 'Vibe';
                 const confidence = Math.round(match.confidence * 100);
+
+                // Confidence tier
+                let tierClass, tierLabel;
+                if (confidence >= 80)      { tierClass = 'tier-perfect'; tierLabel = 'Perfect Match'; }
+                else if (confidence >= 60)  { tierClass = 'tier-strong';  tierLabel = 'Strong Match'; }
+                else if (confidence >= 40)  { tierClass = 'tier-worth';   tierLabel = 'Worth Checking Out'; }
+                else                        { tierClass = 'tier-might';   tierLabel = 'You Might Like'; }
 
                 // Artist avatars — show up to 3, then "+N more"
                 const artists = match.matched_artists;
@@ -2407,12 +2457,12 @@
                         </div>
 
                         <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <span style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;color: var(--text-muted);">Confidence</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span class="tier-badge ${tierClass}">${tierLabel}</span>
                                 <span style="font-family:'Space Mono',monospace;font-size:0.6rem;color: var(--text-dim); font-weight: 700;">${confidence}%</span>
                             </div>
                             <div class="confidence-bar">
-                                <div class="confidence-fill ${badgeClass}" style="width: ${confidence}%;"></div>
+                                <div class="confidence-fill ${tierClass}" style="width: ${confidence}%;"></div>
                             </div>
                         </div>
 
