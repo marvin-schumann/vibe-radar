@@ -1715,6 +1715,12 @@
             return d.toLocaleDateString('en-GB', options);
         }
 
+        function formatPlayCount(n) {
+            if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+            if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+            return String(n);
+        }
+
         function formatSource(src) {
             const map = {
                 'resident_advisor': 'Resident Advisor',
@@ -1808,11 +1814,21 @@
                     const img = a.image_url
                         ? `<img src="${escapeHtml(a.image_url)}" alt="" style="width:24px;height:24px;border-radius:50%;object-fit:cover;border:1px solid var(--border-bright);flex-shrink:0;">`
                         : `<div style="width:24px;height:24px;border-radius:50%;background:var(--border);flex-shrink:0;"></div>`;
+                    // Show Spotify popularity if available, else SoundCloud play_count
+                    let badge = '';
+                    if (a.popularity != null) {
+                        badge = `pop ${a.popularity}`;
+                    } else if (a.play_count != null) {
+                        badge = `plays ${formatPlayCount(a.play_count)}`;
+                    }
+                    const badgeHtml = badge
+                        ? `<div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.04em;">${badge}</div>`
+                        : '';
                     return `
                         <div style="display:flex;align-items:center;gap:0.6rem;">
                             ${img}
                             <div style="font-family:var(--font-body);font-size:0.78rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(a.name)}</div>
-                            <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);letter-spacing:0.04em;">pop ${a.popularity}</div>
+                            ${badgeHtml}
                         </div>
                     `;
                 }).join('');

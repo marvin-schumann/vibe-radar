@@ -590,17 +590,54 @@ async def debug_events(user=Depends(get_session_user)) -> JSONResponse:
 async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
     """Compute the Underground Depth Score from artist popularity data.
 
-    Formula: 100 - avg(popularity). Lower Spotify popularity = more
-    underground = higher depth score.
+    Primary: 100 - avg(Spotify popularity).
+    Fallback: SoundCloud play_count percentile (lower plays = more underground).
     """
     cache = _user_cache(user["id"]) if user else _cache
     artists = cache.get("artist_objects") or []
-    pops = [a["popularity"] for a in artists if a.get("popularity") is not None]
-    if not pops:
-        return JSONResponse(content={"score": None, "sample_size": 0})
 
-    avg_pop = sum(pops) / len(pops)
-    score = round(100 - avg_pop)
+    # Try Spotify popularity first
+    pops = [a["popularity"] for a in artists if a.get("popularity") is not None]
+
+    if pops:
+        avg_pop = sum(pops) / len(pops)
+        score = round(100 - avg_pop)
+        source_label = "spotify"
+        sample_size = len(pops)
+        # Top 5 most underground by lowest popularity
+        underground_artists = sorted(
+            [a for a in artists if a.get("popularity") is not None],
+            key=lambda a: a["popularity"],
+        )[:5]
+        deepest = [
+            {"name": a["name"], "popularity": a["popularity"], "image_url": a.get("image_url")}
+            for a in underground_artists
+        ]
+    else:
+        # Fallback: SoundCloud play_count percentile
+        artists_with_plays = [
+            a for a in artists if a.get("play_count") is not None and a["play_count"] > 0
+        ]
+        if not artists_with_plays:
+            return JSONResponse(content={"score": None, "sample_size": 0})
+
+        play_counts = sorted(a["play_count"] for a in artists_with_plays)
+        n = len(play_counts)
+        avg_play = sum(play_counts) / n
+
+        # Percentile rank of avg play_count: what fraction of artists have fewer plays
+        rank = sum(1 for pc in play_counts if pc <= avg_play) / n
+        # Lower play_count = more underground = higher score
+        score = round(100 - rank * 100)
+
+        source_label = "soundcloud"
+        sample_size = n
+        # Top 5 most underground by lowest play_count
+        underground_artists = sorted(artists_with_plays, key=lambda a: a["play_count"])[:5]
+        deepest = [
+            {"name": a["name"], "play_count": a["play_count"], "image_url": a.get("image_url")}
+            for a in underground_artists
+        ]
 
     # Descriptive label
     if score >= 80:
@@ -619,22 +656,13 @@ async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
         label = "Mainstream"
         blurb = "Your taste is right in the cultural center."
 
-    # Top 5 most underground artists
-    underground_artists = sorted(
-        [a for a in artists if a.get("popularity") is not None],
-        key=lambda a: a["popularity"],
-    )[:5]
-
     return JSONResponse(content={
         "score": score,
         "label": label,
         "blurb": blurb,
-        "avg_popularity": round(avg_pop, 1),
-        "sample_size": len(pops),
-        "deepest_artists": [
-            {"name": a["name"], "popularity": a["popularity"], "image_url": a.get("image_url")}
-            for a in underground_artists
-        ],
+        "sample_size": sample_size,
+        "source": source_label,
+        "deepest_artists": deepest,
     })
 
 

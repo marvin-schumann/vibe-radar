@@ -45,7 +45,16 @@ _GENRE_AUDIO_ESTIMATES: dict[str, dict[str, float]] = {
     "electronic":       dict(energy=0.76, danceability=0.75, valence=0.52, acousticness=0.05, instrumentalness=0.70, liveness=0.14, speechiness=0.05, tempo=125),
     "dance & edm":      dict(energy=0.84, danceability=0.82, valence=0.64, acousticness=0.03, instrumentalness=0.65, liveness=0.16, speechiness=0.05, tempo=128),
     "acid":             dict(energy=0.86, danceability=0.80, valence=0.36, acousticness=0.02, instrumentalness=0.85, liveness=0.15, speechiness=0.04, tempo=135),
+    "acid techno":      dict(energy=0.90, danceability=0.82, valence=0.30, acousticness=0.01, instrumentalness=0.88, liveness=0.15, speechiness=0.04, tempo=140),
     "minimal":          dict(energy=0.72, danceability=0.78, valence=0.35, acousticness=0.03, instrumentalness=0.88, liveness=0.13, speechiness=0.04, tempo=128),
+    "minimal techno":   dict(energy=0.70, danceability=0.78, valence=0.32, acousticness=0.03, instrumentalness=0.90, liveness=0.12, speechiness=0.04, tempo=130),
+    "dub techno":       dict(energy=0.55, danceability=0.72, valence=0.30, acousticness=0.08, instrumentalness=0.92, liveness=0.10, speechiness=0.03, tempo=125),
+    "melodic techno":   dict(energy=0.82, danceability=0.80, valence=0.50, acousticness=0.04, instrumentalness=0.85, liveness=0.14, speechiness=0.04, tempo=128),
+    "progressive house": dict(energy=0.78, danceability=0.82, valence=0.60, acousticness=0.04, instrumentalness=0.72, liveness=0.15, speechiness=0.04, tempo=126),
+    "afro house":       dict(energy=0.82, danceability=0.88, valence=0.72, acousticness=0.06, instrumentalness=0.60, liveness=0.18, speechiness=0.05, tempo=122),
+    "uk bass":          dict(energy=0.85, danceability=0.83, valence=0.42, acousticness=0.02, instrumentalness=0.70, liveness=0.15, speechiness=0.08, tempo=140),
+    "jungle":           dict(energy=0.89, danceability=0.85, valence=0.48, acousticness=0.02, instrumentalness=0.78, liveness=0.17, speechiness=0.05, tempo=168),
+    "breakbeat":        dict(energy=0.84, danceability=0.82, valence=0.50, acousticness=0.03, instrumentalness=0.72, liveness=0.16, speechiness=0.05, tempo=135),
     "ambient":          dict(energy=0.20, danceability=0.35, valence=0.45, acousticness=0.55, instrumentalness=0.88, liveness=0.10, speechiness=0.03, tempo=80),
     "hip hop":          dict(energy=0.65, danceability=0.80, valence=0.55, acousticness=0.10, instrumentalness=0.12, liveness=0.16, speechiness=0.22, tempo=90),
     "rap":              dict(energy=0.65, danceability=0.80, valence=0.50, acousticness=0.08, instrumentalness=0.08, liveness=0.16, speechiness=0.28, tempo=88),
@@ -236,6 +245,10 @@ class VibeMatcher:
                 confidence = 0.6 * genre_sim + 0.4 * audio_sim
             else:
                 confidence = genre_sim
+                # Compensate for missing audio features: strong genre overlap
+                # deserves a confidence boost (replaces the 40% audio weight)
+                if genre_sim > 0.5:
+                    confidence = min(confidence + 0.15, 1.0)
 
             if confidence < self.threshold:
                 continue

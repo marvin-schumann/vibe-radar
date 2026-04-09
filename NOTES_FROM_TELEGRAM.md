@@ -9,6 +9,18 @@
 
 ---
 
+## Done
+
+### 2026-04-09 — SoundCloud-only fallbacks for Spotify-dependent features
+Implemented SoundCloud-only alternatives for the 4 Spotify-dependent features from audit:
+1. **Underground Depth Score** — falls back to SoundCloud play_count percentile when no Spotify popularity
+2. **Audio Features Radar** — expanded genre-to-audio-features mapping with 9 electronic sub-genres (acid techno, minimal techno, dub techno, melodic techno, progressive house, afro house, UK bass, jungle, breakbeat)
+3. **Popularity display** — artist cards now show "plays 12.3K" from SoundCloud when no Spotify popularity; hidden if neither exists
+4. **Exact match reason** — already source-agnostic ("in your library"), confirmed no change needed
+5. **Vibe matching boost** — +15% confidence when genre Jaccard > 0.5 (compensates for missing audio features), threshold lowered 0.6 → 0.45
+
+---
+
 ## SoundCloud-Only Audit (2026-04-09)
 
 Full audit of which features depend on Spotify data and what breaks if Spotify is removed.

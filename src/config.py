@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     event_scrape_interval_hours: int = 6
     city: str = "Madrid"
     country: str = "Spain"
-    match_threshold: float = 0.6  # Minimum confidence for vibe matches
+    match_threshold: float = 0.45  # Minimum confidence for vibe matches
     fuzzy_match_threshold: int = 85  # Minimum fuzz ratio for exact matches
     days_ahead: int = 90  # How far ahead to look for events
 
