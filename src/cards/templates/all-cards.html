@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300..600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SHARED FOUNDATION
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: #000; }
+body {
+  width: 1080px;
+  margin: 0 auto;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.card {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  background: #0c0c0c;
+  overflow: hidden;
+}
+
+/* Gradient border — shared */
+.card-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-image: linear-gradient(135deg, #c4f135, #ff5c35) 1;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Grain overlay — shared */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.grain svg { width: 100%; height: 100%; }
+
+/* Rarity badge — shared */
+.rarity-badge {
+  position: absolute;
+  top: 42px;
+  right: 42px;
+  z-index: 50;
+  padding: 8px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.rarity-common { background: rgba(160,160,160,0.15); color: #a0a0a0; border: 1px solid rgba(160,160,160,0.3); }
+.rarity-uncommon { background: rgba(196,241,53,0.1); color: #c4f135; border: 1px solid rgba(196,241,53,0.3); }
+.rarity-rare { background: rgba(255,92,53,0.12); color: #ff5c35; border: 1px solid rgba(255,92,53,0.35); }
+.rarity-legendary { background: linear-gradient(135deg, rgba(196,241,53,0.15), rgba(255,92,53,0.15)); color: #f5f5f5; border: 1px solid rgba(255,200,50,0.5); box-shadow: 0 0 20px rgba(255,200,50,0.15); }
+
+/* Card number + branding — shared */
+.card-number {
+  position: absolute;
+  bottom: 42px;
+  right: 48px;
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.5);
+  letter-spacing: 1px;
+}
+
+.branding {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(160,160,160,0.45);
+  letter-spacing: 1px;
+}
+
+/* Content safe zone — shared */
+.content {
+  position: relative;
+  z-index: 10;
+  padding: 280px 72px 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glass panel — shared */
+.glass-panel {
+  background: rgba(245,245,245,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245,245,245,0.08);
+  border-radius: 16px;
+  padding: 28px 36px;
+}
+
+/* ============================================================
+   CARD 1 — TASTE DNA
+   ============================================================ */
+#card-1 .glow-1 {
+  position: absolute;
+  width: 900px; height: 900px;
+  top: 25%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(196,241,53,0.18) 0%, rgba(196,241,53,0.05) 40%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+#card-1 .glow-2 {
+  position: absolute;
+  width: 600px; height: 600px;
+  bottom: 15%; right: -10%;
+  background: radial-gradient(circle, rgba(255,92,53,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+#card-1 .label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+#card-1 .title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 96px;
+  color: #f5f5f5;
+  line-height: 1;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+#card-1 .hero-number {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 120px;
+  line-height: 1;
+  background: linear-gradient(135deg, #c4f135, #ff5c35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+#card-1 .hero-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  color: #a0a0a0;
+  margin-bottom: 48px;
+}
+
+/* Genre bars */
+.genre-bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+.genre-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.genre-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.genre-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px;
+  color: #f5f5f5;
+  letter-spacing: 2px;
+}
+.genre-pct {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  color: #f5f5f5;
+}
+.genre-bar-track {
+  width: 100%;
+  height: 32px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.genre-bar-fill {
+  height: 100%;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0 0 20px var(--bar-glow);
+}
+.genre-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+
+#card-1 .bottom-section { margin-top: auto; }
+#card-1 .tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 26px;
+  color: #a0a0a0;
+  margin-bottom: 6px;
+}
+#card-1 .depth-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  color: #c4f135;
+  margin-bottom: 6px;
+}
+#card-1 .twin-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: #ff5c35;
+}
+
+/* ============================================================
+   CARD 2 — SCENE CITY
+   ============================================================ */
+#card-2 .diagonal-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(196,241,53,0.04) 60%, rgba(196,241,53,0.08) 100%);
+  z-index: 1;
+}
+#card-2 .city-glow {
+  position: absolute;
+  width: 1000px; height: 500px;
+  top: 30%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(196,241,53,0.12) 0%, rgba(196,241,53,0.04) 45%, transparent 70%);
+  z-index: 1;
+}
+#card-2 .skyline-glow {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1200px; height: 500px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(196,241,53,0.10) 0%, rgba(196,241,53,0.04) 40%, transparent 70%);
+  z-index: 2;
+  pointer-events: none;
+}
+#card-2 .skyline-container {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 1080px; height: 420px;
+  z-index: 3;
+  pointer-events: none;
+}
+#card-2 .content {
+  padding: 260px 72px 280px;
+}
+
+.sonic-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  text-align: center;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.city-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 140px;
+  color: #c4f135;
+  text-align: center;
+  line-height: 0.9;
+  letter-spacing: 10px;
+  text-shadow: 0 0 60px rgba(196,241,53,0.35), 0 0 120px rgba(196,241,53,0.15);
+  margin-bottom: 48px;
+}
+
+.breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  max-width: 750px;
+  margin: 0 auto;
+  width: 100%;
+}
+.city-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.city-pct {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 32px;
+  text-align: right;
+}
+.city-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.city-detail-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 24px;
+}
+.city-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.city-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+.primary .city-pct { color: #c4f135; }
+.primary .city-detail-name { color: #f5f5f5; font-weight: 700; }
+.primary .city-bar-fill {
+  background: linear-gradient(90deg, #c4f135, #e8f77a);
+  box-shadow: 0 0 12px rgba(196,241,53,0.4);
+}
+.secondary .city-pct { color: rgba(245,245,245,0.5); }
+.secondary .city-detail-name { color: #a0a0a0; }
+.secondary .city-bar-fill { background: rgba(245,245,245,0.12); }
+
+#card-2 .hashtag {
+  font-family: 'Space Mono', monospace;
+  font-size: 24px;
+  color: #c4f135;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* ============================================================
+   CARD 3 — TASTE TRIBE
+   ============================================================ */
+#card-3 .tribe-glow {
+  position: absolute;
+  width: 1100px; height: 1100px;
+  top: 32%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(196,241,53,0.16) 0%, rgba(196,241,53,0.05) 35%, transparent 65%);
+  border-radius: 50%;
+  z-index: 1;
+}
+#card-3 .tribe-glow-2 {
+  position: absolute;
+  width: 500px; height: 500px;
+  top: 60%; right: -5%;
+  background: radial-gradient(circle, rgba(255,92,53,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.tribe-header {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.tribe-icon {
+  font-size: 80px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 30px rgba(196,241,53,0.4));
+}
+.tribe-name {
+  font-family: 'Bebas Neue', sans-serif;
+  line-height: 0.88;
+  letter-spacing: 4px;
+  margin-bottom: 36px;
+}
+.tribe-name .word {
+  display: block;
+  font-size: 175px;
+}
+.tribe-name .word:first-child { color: #f5f5f5; }
+.tribe-name .word:nth-child(2) {
+  color: #c4f135;
+  text-shadow: 0 0 60px rgba(196,241,53,0.3), 0 0 120px rgba(196,241,53,0.1);
+}
+
+.tribe-tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 34px;
+  color: #a0a0a0;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+.confidence-section { margin-bottom: 36px; }
+.confidence-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: #a0a0a0;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.confidence-track {
+  width: 100%;
+  height: 16px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.confidence-fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #c4f135, #c4f135);
+  box-shadow: 0 0 16px rgba(196,241,53,0.4);
+  position: relative;
+}
+.confidence-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 60%);
+}
+.confidence-value {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c4f135;
+  margin-top: 8px;
+}
+
+.rarity-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: rgba(196,241,53,0.7);
+  margin-bottom: 24px;
+}
+
+.flex-grow { flex: 1; }
+
+.secondary-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.secondary-tribe {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  color: #ff5c35;
+  letter-spacing: 2px;
+}
+
+/* ============================================================
+   CARD 4 — CROSS-GENRE BRIDGE
+   ============================================================ */
+#card-4 .bridge-glow-left {
+  position: absolute;
+  width: 600px; height: 600px;
+  top: 35%; left: 5%;
+  background: radial-gradient(circle, rgba(196,241,53,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+#card-4 .bridge-glow-right {
+  position: absolute;
+  width: 600px; height: 600px;
+  top: 35%; right: 5%;
+  background: radial-gradient(circle, rgba(255,92,53,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.bridge-header {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.bridge-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: #f5f5f5;
+  letter-spacing: 3px;
+  line-height: 1;
+  margin-bottom: 48px;
+}
+
+/* Venn diagram */
+.venn-container {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.venn-circle {
+  position: absolute;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.venn-left {
+  left: 100px;
+  border-color: rgba(196,241,53,0.5);
+  background: radial-gradient(circle, rgba(196,241,53,0.08) 0%, transparent 70%);
+  box-shadow: 0 0 60px rgba(196,241,53,0.1), inset 0 0 60px rgba(196,241,53,0.05);
+}
+.venn-right {
+  right: 100px;
+  border-color: rgba(255,92,53,0.5);
+  background: radial-gradient(circle, rgba(255,92,53,0.08) 0%, transparent 70%);
+  box-shadow: 0 0 60px rgba(255,92,53,0.1), inset 0 0 60px rgba(255,92,53,0.05);
+}
+.venn-genre-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 1.1;
+}
+.venn-left .venn-genre-label { color: #c4f135; margin-left: -80px; }
+.venn-right .venn-genre-label { color: #ff5c35; margin-right: -80px; }
+
+.venn-overlap {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 15;
+}
+.overlap-glow {
+  position: absolute;
+  width: 200px; height: 200px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(225,166,43,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+.overlap-pct {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 60px;
+  color: #f5f5f5;
+  text-shadow: 0 0 30px rgba(225,166,43,0.4);
+  line-height: 1;
+}
+.overlap-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  color: #a0a0a0;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+.bridge-explanation {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 26px;
+  color: #a0a0a0;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 48px;
+}
+
+.other-bridges {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+}
+.other-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px;
+  color: #a0a0a0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.bridge-item {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(245,245,245,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.bridge-genres {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #f5f5f5;
+}
+.bridge-genres .x-mark {
+  color: #a0a0a0;
+  margin: 0 8px;
+  font-size: 22px;
+}
+.bridge-rarity {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c4f135;
+}
+
+#card-4 .glass-panel {
+  text-align: center;
+  margin-top: auto;
+}
+.glass-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  color: #a0a0a0;
+}
+.glass-text strong {
+  color: #c4f135;
+  font-weight: 700;
+}
+
+/* ============================================================
+   CARD 5 — DANCEFLOOR
+   ============================================================ */
+#card-5 .split-bg-left {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: linear-gradient(180deg, rgba(255,92,53,0.08) 0%, rgba(255,92,53,0.04) 50%, transparent 100%);
+  z-index: 1;
+}
+#card-5 .split-bg-right {
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: linear-gradient(180deg, rgba(196,241,53,0.06) 0%, rgba(196,241,53,0.03) 50%, transparent 100%);
+  z-index: 1;
+}
+#card-5 .center-line {
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(245,245,245,0.06) 30%, rgba(245,245,245,0.06) 70%, transparent);
+  z-index: 2;
+}
+#card-5 .glow-orange {
+  position: absolute;
+  width: 600px; height: 600px;
+  top: 25%; left: 10%;
+  background: radial-gradient(circle, rgba(255,92,53,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+#card-5 .glow-lime {
+  position: absolute;
+  width: 600px; height: 600px;
+  top: 25%; right: 10%;
+  background: radial-gradient(circle, rgba(196,241,53,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+#card-5 .content { align-items: center; }
+
+.header-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  color: #a0a0a0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 64px;
+}
+
+.vs-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 64px;
+}
+.big-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  letter-spacing: 6px;
+  line-height: 1;
+}
+.word-dance { color: #ff5c35; text-shadow: 0 0 50px rgba(255,92,53,0.25); }
+.word-vs {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 40px;
+  color: #a0a0a0;
+  margin: 16px 0;
+  letter-spacing: 2px;
+}
+.word-head { color: #c4f135; text-shadow: 0 0 50px rgba(196,241,53,0.2); }
+
+.pct-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+.pct-big {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 110px;
+  line-height: 1;
+}
+.pct-orange { color: #ff5c35; text-shadow: 0 0 40px rgba(255,92,53,0.25); }
+.pct-lime { color: #c4f135; text-shadow: 0 0 40px rgba(196,241,53,0.2); }
+
+.pct-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.pct-label-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+  margin-bottom: 36px;
+}
+
+/* Gauge bar */
+.gauge-container { width: 100%; margin-bottom: 64px; }
+.gauge-track {
+  width: 100%;
+  height: 48px;
+  background: rgba(245,245,245,0.06);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+.gauge-orange {
+  height: 100%;
+  background: linear-gradient(90deg, #ff5c35, #ff7a55);
+  border-radius: 24px 0 0 24px;
+  position: relative;
+  box-shadow: 0 0 24px rgba(255,92,53,0.3);
+}
+.gauge-orange::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 24px 0 0 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+.gauge-lime {
+  height: 100%;
+  background: linear-gradient(90deg, #a8d92e, #c4f135);
+  border-radius: 0 24px 24px 0;
+  position: relative;
+  box-shadow: 0 0 24px rgba(196,241,53,0.25);
+}
+.gauge-lime::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 0 24px 24px 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+}
+
+.verdict-section {
+  text-align: center;
+  margin-top: auto;
+}
+.verdict-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  letter-spacing: 4px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.verdict-orange { color: #ff5c35; }
+.verdict-lime { color: #c4f135; }
+.verdict-white { color: #f5f5f5; }
+
+.verdict-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-size: 24px;
+  color: #a0a0a0;
+}
+
+#card-5 .glass-panel {
+  text-align: center;
+  width: 100%;
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     CARD 1 — TASTE DNA
+     ============================================================ -->
+<section class="card" id="card-1">
+  <div class="card-border"></div>
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain-1"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain-1)"/>
+    </svg>
+  </div>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+  <div class="rarity-badge rarity-rare">RARE</div>
+
+  <div class="content">
+    <div class="label">YOUR MUSIC FINGERPRINT</div>
+    <div class="title">TASTE DNA</div>
+    <div style="display: flex; align-items: baseline; gap: 24px; margin-bottom: 8px;">
+      <div class="hero-number">155</div>
+    </div>
+    <div class="hero-label">artists analysed</div>
+
+    <div class="genre-bars">
+      <!-- Trance 34% -->
+      <div class="genre-row">
+        <div class="genre-header">
+          <span class="genre-name">TRANCE</span>
+          <span class="genre-pct">34%</span>
+        </div>
+        <div class="genre-bar-track">
+          <div class="genre-bar-fill" style="width: 100%; background: linear-gradient(90deg, #c4f135, #cae235); --bar-glow: #c4f135;"></div>
+        </div>
+      </div>
+      <!-- House 22% -->
+      <div class="genre-row">
+        <div class="genre-header">
+          <span class="genre-name">HOUSE</span>
+          <span class="genre-pct">22%</span>
+        </div>
+        <div class="genre-bar-track">
+          <div class="genre-bar-fill" style="width: 65%; background: linear-gradient(90deg, #cddb35, #d9bd35); --bar-glow: #cddb35;"></div>
+        </div>
+      </div>
+      <!-- Techno 18% -->
+      <div class="genre-row">
+        <div class="genre-header">
+          <span class="genre-name">TECHNO</span>
+          <span class="genre-pct">18%</span>
+        </div>
+        <div class="genre-bar-track">
+          <div class="genre-bar-fill" style="width: 53%; background: linear-gradient(90deg, #dcb535, #e79835); --bar-glow: #dcb535;"></div>
+        </div>
+      </div>
+      <!-- Bass 14% -->
+      <div class="genre-row">
+        <div class="genre-header">
+          <span class="genre-name">BASS</span>
+          <span class="genre-pct">14%</span>
+        </div>
+        <div class="genre-bar-track">
+          <div class="genre-bar-fill" style="width: 41%; background: linear-gradient(90deg, #ea9035, #f67235); --bar-glow: #ea9035;"></div>
+        </div>
+      </div>
+      <!-- Ambient 12% -->
+      <div class="genre-row">
+        <div class="genre-header">
+          <span class="genre-name">AMBIENT</span>
+          <span class="genre-pct">12%</span>
+        </div>
+        <div class="genre-bar-track">
+          <div class="genre-bar-fill" style="width: 35%; background: linear-gradient(90deg, #f96b35, #ff5c35); --bar-glow: #f96b35;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="glass-panel" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div class="tagline">Your music fingerprint, decoded.</div>
+          <div class="depth-line">DJ Twin: 5euroGoldi (97%)</div>
+          <div class="twin-line">Runner-up: Mischluft (94%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">1/5</div>
+</section>
+
+<!-- ============================================================
+     CARD 2 — SCENE CITY
+     ============================================================ -->
+<section class="card" id="card-2">
+  <div class="card-border"></div>
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain-2"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain-2)"/>
+    </svg>
+  </div>
+  <div class="diagonal-wash"></div>
+  <div class="city-glow"></div>
+  <div class="skyline-glow"></div>
+
+  <!-- Amsterdam skyline SVG -->
+  <div class="skyline-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="1080" height="420">
+      <defs>
+        <linearGradient id="reflectFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" stop-opacity="1"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="reflectMask">
+          <rect x="0" y="385" width="1080" height="35" fill="url(#reflectFade)"/>
+        </mask>
+      </defs>
+      <path d="M0,385 L0,295 L8,295 L8,275 L15,275 L15,258 L25,245 L33,232 L41,245 L48,258 L48,275 L55,275 L55,295 L65,295 L65,320 L72,320 L72,285 L78,270 Q103,218 128,270 L135,285 L135,320 L142,320 L142,265 L150,265 L173,205 L196,265 L205,265 L205,320 L212,320 L212,260 L228,260 L228,248 L235,232 L243,218 L251,232 L258,248 L258,260 L275,260 L275,320 L282,320 L282,300 L290,300 L290,280 L297,280 L297,262 L307,248 L315,235 L323,248 L330,262 L330,280 L337,280 L337,300 L345,300 L345,320 L352,320 L352,290 L358,272 Q383,220 408,272 L415,290 L415,320 L422,320 L422,270 L430,270 L453,212 L476,270 L485,270 L485,320 L492,320 L492,262 L508,262 L508,250 L515,235 L523,220 L531,235 L538,250 L538,262 L555,262 L555,320 L562,320 L562,295 L570,295 L570,275 L577,275 L577,258 L587,245 L595,232 L603,245 L610,258 L610,275 L617,275 L617,295 L625,295 L625,320 L632,320 L632,285 L638,268 Q663,215 688,268 L695,285 L695,320 L702,320 L702,268 L710,268 L733,210 L756,268 L765,268 L765,320 L772,320 L772,265 L788,265 L788,252 L795,238 L803,225 L811,238 L818,252 L818,265 L835,265 L835,320 L842,320 L842,300 L850,300 L850,282 L857,282 L857,265 L867,252 L875,240 L883,252 L890,265 L890,282 L897,282 L897,300 L905,300 L905,320 L912,320 L912,295 L918,278 Q943,228 968,278 L975,295 L975,320 L982,320 L982,285 L990,285 L1013,240 L1036,285 L1045,285 L1045,320 L1080,335 L1080,385 Z" fill="#1a1a1a"/>
+      <path d="M0,385 L0,295 L8,295 L8,275 L15,275 L15,258 L25,245 L33,232 L41,245 L48,258 L48,275 L55,275 L55,295 L65,295 L65,320 L72,320 L72,285 L78,270 Q103,218 128,270 L135,285 L135,320 L142,320 L142,265 L150,265 L173,205 L196,265 L205,265 L205,320 L212,320 L212,260 L228,260 L228,248 L235,232 L243,218 L251,232 L258,248 L258,260 L275,260 L275,320 L282,320 L282,300 L290,300 L290,280 L297,280 L297,262 L307,248 L315,235 L323,248 L330,262 L330,280 L337,280 L337,300 L345,300 L345,320 L352,320 L352,290 L358,272 Q383,220 408,272 L415,290 L415,320 L422,320 L422,270 L430,270 L453,212 L476,270 L485,270 L485,320 L492,320 L492,262 L508,262 L508,250 L515,235 L523,220 L531,235 L538,250 L538,262 L555,262 L555,320 L562,320 L562,295 L570,295 L570,275 L577,275 L577,258 L587,245 L595,232 L603,245 L610,258 L610,275 L617,275 L617,295 L625,295 L625,320 L632,320 L632,285 L638,268 Q663,215 688,268 L695,285 L695,320 L702,320 L702,268 L710,268 L733,210 L756,268 L765,268 L765,320 L772,320 L772,265 L788,265 L788,252 L795,238 L803,225 L811,238 L818,252 L818,265 L835,265 L835,320 L842,320 L842,300 L850,300 L850,282 L857,282 L857,265 L867,252 L875,240 L883,252 L890,265 L890,282 L897,282 L897,300 L905,300 L905,320 L912,320 L912,295 L918,278 Q943,228 968,278 L975,295 L975,320 L982,320 L982,285 L990,285 L1013,240 L1036,285 L1045,285 L1045,320 L1080,335 L1080,385 Z" fill="#1a1a1a" transform="translate(0,385) scale(1,-0.08) translate(0,-385)" mask="url(#reflectMask)" opacity="0.08"/>
+    </svg>
+  </div>
+
+  <div class="rarity-badge rarity-rare">RARE</div>
+
+  <div class="content">
+    <div class="sonic-label">Your Sonic Home</div>
+    <div class="city-name">AMSTERDAM</div>
+
+    <div class="breakdown">
+      <div class="city-row primary">
+        <div class="city-pct">58%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">Amsterdam</div>
+          <div class="city-bar-track"><div class="city-bar-fill" style="width: 100%;"></div></div>
+        </div>
+      </div>
+      <div class="city-row secondary">
+        <div class="city-pct">20%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">Berlin</div>
+          <div class="city-bar-track"><div class="city-bar-fill" style="width: 34%;"></div></div>
+        </div>
+      </div>
+      <div class="city-row secondary">
+        <div class="city-pct">10%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">Detroit</div>
+          <div class="city-bar-track"><div class="city-bar-fill" style="width: 17%;"></div></div>
+        </div>
+      </div>
+      <div class="city-row secondary">
+        <div class="city-pct">9%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">London</div>
+          <div class="city-bar-track"><div class="city-bar-fill" style="width: 16%;"></div></div>
+        </div>
+      </div>
+      <div class="city-row secondary">
+        <div class="city-pct">3%</div>
+        <div class="city-detail">
+          <div class="city-detail-name">Ibiza</div>
+          <div class="city-bar-track"><div class="city-bar-fill" style="width: 5%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-panel" style="text-align: center; margin-top: auto;">
+      <div class="hashtag">#FrequenzAmsterdam</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">2/5</div>
+</section>
+
+<!-- ============================================================
+     CARD 3 — TASTE TRIBE
+     ============================================================ -->
+<section class="card" id="card-3">
+  <div class="card-border"></div>
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain-3"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain-3)"/>
+    </svg>
+  </div>
+  <div class="tribe-glow"></div>
+  <div class="tribe-glow-2"></div>
+  <div class="rarity-badge rarity-rare">RARE</div>
+
+  <div class="content">
+    <div class="tribe-header">Your Taste Tribe</div>
+    <div class="tribe-icon">&#x1f52e;</div>
+
+    <div class="tribe-name">
+      <span class="word">STROBE</span>
+      <span class="word">NOMAD</span>
+    </div>
+
+    <div class="tribe-tagline">"Chasing frequencies across borders, one strobe light at a time"</div>
+
+    <div class="confidence-section">
+      <div class="confidence-label">Tribe Confidence</div>
+      <div class="confidence-track">
+        <div class="confidence-fill" style="width: 47%;"></div>
+      </div>
+      <div class="confidence-value">47%</div>
+    </div>
+
+    <div class="rarity-line">30% of Frequenz users share this tribe</div>
+
+    <div class="flex-grow"></div>
+
+    <div class="glass-panel" style="margin-top: auto;">
+      <div class="secondary-label">Secondary Tribe</div>
+      <div class="secondary-tribe">BASS TEMPLAR</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">3/5</div>
+</section>
+
+<!-- ============================================================
+     CARD 4 — CROSS-GENRE BRIDGE
+     ============================================================ -->
+<section class="card" id="card-4">
+  <div class="card-border"></div>
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain-4"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain-4)"/>
+    </svg>
+  </div>
+  <div class="bridge-glow-left"></div>
+  <div class="bridge-glow-right"></div>
+  <div class="rarity-badge rarity-rare">RARE</div>
+
+  <div class="content">
+    <div class="bridge-header">Genre Crossover</div>
+    <div class="bridge-title">CROSS-GENRE<br>BRIDGE</div>
+
+    <div class="venn-container">
+      <div class="venn-circle venn-left">
+        <div class="venn-genre-label">HARD<br>TECHNO</div>
+      </div>
+      <div class="venn-circle venn-right">
+        <div class="venn-genre-label">AMBIENT</div>
+      </div>
+      <div class="venn-overlap">
+        <div class="overlap-glow"></div>
+        <div class="overlap-pct">4%</div>
+        <div class="overlap-label">of listeners bridge these</div>
+      </div>
+    </div>
+
+    <div class="bridge-explanation">You live in the overlap between<br>hard techno and ambient</div>
+
+    <div class="other-bridges">
+      <div class="other-label">Other Bridges</div>
+      <div class="bridge-item">
+        <div class="bridge-genres">Trance <span class="x-mark">&times;</span> Minimal Techno</div>
+        <div class="bridge-rarity">8%</div>
+      </div>
+      <div class="bridge-item">
+        <div class="bridge-genres">Psytrance <span class="x-mark">&times;</span> Deep House</div>
+        <div class="bridge-rarity">6%</div>
+      </div>
+    </div>
+
+    <div class="glass-panel">
+      <div class="glass-text">Genre borders are for other people.</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">4/5</div>
+</section>
+
+<!-- ============================================================
+     CARD 5 — DANCEFLOOR
+     ============================================================ -->
+<section class="card" id="card-5">
+  <div class="card-border"></div>
+  <div class="grain">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="grain-5"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#grain-5)"/>
+    </svg>
+  </div>
+  <div class="split-bg-left"></div>
+  <div class="split-bg-right"></div>
+  <div class="center-line"></div>
+  <div class="glow-orange"></div>
+  <div class="glow-lime"></div>
+  <div class="rarity-badge rarity-rare">RARE</div>
+
+  <div class="content">
+    <div class="header-label">The Verdict</div>
+
+    <div class="vs-section">
+      <div class="big-word word-dance">DANCEFLOOR</div>
+      <div class="word-vs">vs</div>
+      <div class="big-word word-head">HEADPHONES</div>
+    </div>
+
+    <div class="pct-row">
+      <div class="pct-big pct-orange">89%</div>
+      <div class="pct-big pct-lime">11%</div>
+    </div>
+    <div class="pct-label-row">
+      <div class="pct-label">Dancefloor</div>
+      <div class="pct-label">Headphones</div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="gauge-track">
+        <div class="gauge-orange" style="width: 89%;"></div>
+        <div class="gauge-lime" style="width: 11%;"></div>
+      </div>
+    </div>
+
+    <div class="flex-grow"></div>
+
+    <div class="verdict-section">
+      <div class="verdict-text verdict-orange">BORN FOR THE FLOOR</div>
+      <div class="verdict-sub">The speakers are your soulmate</div>
+    </div>
+
+    <div class="glass-panel">
+      <div class="verdict-sub">Where the music takes you</div>
+    </div>
+  </div>
+
+  <div class="branding">frequenz.live</div>
+  <div class="card-number">5/5</div>
+</section>
+
+</body>
+</html>
