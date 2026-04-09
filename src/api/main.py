@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -632,21 +633,65 @@ async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
             for a in underground_artists
         ]
     else:
-        # Fallback: SoundCloud play_count percentile
+        # Fallback: SoundCloud — combine play_count scaling with genre underground weight
         artists_with_plays = [
             a for a in artists if a.get("play_count") is not None and a["play_count"] > 0
         ]
         if not artists_with_plays:
             return JSONResponse(content={"score": None, "sample_size": 0})
 
+        # --- Genre-based underground weight ---
+        # SC play counts don't map to mainstream/underground well.
+        # A trance DJ with 1M plays is still underground compared to pop.
+        _UNDERGROUND_GENRES = {
+            "trance", "psytrance", "progressive trance", "uplifting trance", "goa trance",
+            "techno", "minimal techno", "dub techno", "acid techno", "industrial techno",
+            "industrial", "minimal", "ambient", "dark ambient",
+            "drone", "noise", "experimental", "idm",
+            "jungle", "breakcore", "gabber", "hardcore",
+            "dub", "dubstep",
+        }
+        _NEUTRAL_GENRES = {
+            "house", "deep house", "tech house", "progressive house", "afro house",
+            "disco", "nu-disco", "electro", "electronica",
+            "drum and bass", "dnb", "uk bass", "breakbeat", "garage",
+        }
+        # Everything else (pop, hip-hop, r&b, latin, reggaeton, etc.) = mainstream
+
+        genre_counts = {"underground": 0, "neutral": 0, "mainstream": 0}
+        for a in artists:
+            for g in a.get("genres") or []:
+                gl = g.lower().strip()
+                if any(ug in gl for ug in _UNDERGROUND_GENRES):
+                    genre_counts["underground"] += 1
+                elif any(ng in gl for ng in _NEUTRAL_GENRES):
+                    genre_counts["neutral"] += 1
+                else:
+                    genre_counts["mainstream"] += 1
+
+        total_genre_tags = sum(genre_counts.values()) or 1
+        underground_frac = genre_counts["underground"] / total_genre_tags
+        mainstream_frac = genre_counts["mainstream"] / total_genre_tags
+        # Genre weight: -20 (all mainstream) to +20 (all underground)
+        genre_weight = round((underground_frac - mainstream_frac) * 20)
+
+        # --- Play count component ---
+        # Use median instead of mean to resist outlier skew
         play_counts = sorted(a["play_count"] for a in artists_with_plays)
         n = len(play_counts)
-        avg_play = sum(play_counts) / n
+        median_play = play_counts[n // 2] if n % 2 else (play_counts[n // 2 - 1] + play_counts[n // 2]) / 2
 
-        # Percentile rank of avg play_count: what fraction of artists have fewer plays
-        rank = sum(1 for pc in play_counts if pc <= avg_play) / n
-        # Lower play_count = more underground = higher score
-        score = round(100 - rank * 100)
+        # Log-scale mapping: median plays → base score
+        # <1K → 70, ~10K → 55, ~100K → 40, ~1M → 25, >10M → 10
+        if median_play <= 0:
+            play_score = 70
+        else:
+            log_play = math.log10(median_play)
+            # Linear map: log10(1000)=3 → 70, log10(10_000_000)=7 → 10
+            play_score = max(10, min(70, round(70 - (log_play - 3) * 15)))
+
+        # Combine: play_count base + genre weight, clamped to 1-99
+        score = max(1, min(99, play_score + genre_weight))
 
         source_label = "soundcloud"
         sample_size = n
@@ -659,16 +704,19 @@ async def get_depth_score(user=Depends(get_session_user)) -> JSONResponse:
 
     # Descriptive label
     if score >= 80:
-        label = "Deep underground"
+        label = "Deep Underground"
         blurb = "Your taste lives in the shadows. Most people have never heard your artists."
     elif score >= 65:
-        label = "Underground"
-        blurb = "You're ahead of the curve. Your taste is credible but not obscure."
+        label = "Underground Explorer"
+        blurb = "You dig deep. Your library is packed with artists the mainstream hasn't discovered."
     elif score >= 50:
-        label = "Emerging"
-        blurb = "You mix underground with familiar. Good balance."
+        label = "Underground-Leaning"
+        blurb = "You're ahead of the curve. Your taste is credible but not obscure."
     elif score >= 35:
-        label = "Mainstream-leaning"
+        label = "Balanced"
+        blurb = "You mix underground with familiar. Good balance."
+    elif score >= 20:
+        label = "Mainstream-Leaning"
         blurb = "You know the hits but keep an eye on what's next."
     else:
         label = "Mainstream"
