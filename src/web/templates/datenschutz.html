@@ -42,68 +42,204 @@
     <a href="/" class="back-link">&larr; Zurück</a>
     <h1>Datenschutzerklärung</h1>
 
-    <h2>1. Verantwortlicher</h2>
+    <h2>1. Verantwortlicher (Art. 4 Nr. 7 DSGVO)</h2>
     <p>Marvin Schumann</p>
     <p>Zwerchklamm 27</p>
     <p>66453 Gersheim, Deutschland</p>
     <p>E-Mail: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a></p>
+    <p>Telefon: +49 15223242283</p>
+    <p>Ein externer Datenschutzbeauftragter ist gemäß § 38 BDSG nicht erforderlich (Kleinstunternehmen ohne Kerngeschäfts-Profiling im Sinne der Norm).</p>
 
-    <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
+    <h2>2. Überblick über die Verarbeitung</h2>
+    <p>Frequenz ist ein personalisierter Event-Empfehlungsdienst. Um Ihnen passende Musikveranstaltungen in Ihrer Stadt zu empfehlen, verknüpfen wir Ihr Musikgeschmacksprofil (basierend auf SoundCloud und optional Spotify) mit einem von uns gepflegten Katalog von Events. Die wesentlichen Datenkategorien sind im Folgenden einzeln aufgeführt.</p>
 
-    <h3>E-Mail-Adressen (Warteliste)</h3>
-    <p>Wenn Sie sich für unsere Warteliste anmelden, erheben wir Ihre E-Mail-Adresse. Diese wird ausschließlich verwendet, um Sie über den Start von Frequenz zu informieren.</p>
-    <p>Rechtsgrundlage: Ihre Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO.</p>
+    <h2>3. Erhebung und Verarbeitung personenbezogener Daten</h2>
 
-    <h3>Server-Logdateien</h3>
-    <p>Bei jedem Zugriff auf unsere Website werden automatisch Informationen durch den Hosting-Provider erfasst (sog. Server-Logfiles). Dazu gehören:</p>
+    <h3>3.1 Kontoerstellung (E-Mail &amp; Passwort)</h3>
+    <p>Bei der Registrierung erheben wir:</p>
     <ul>
-      <li>IP-Adresse des anfragenden Rechners</li>
+      <li>E-Mail-Adresse</li>
+      <li>Passwort (ausschließlich als kryptografischer Hash bei Supabase gespeichert, niemals im Klartext)</li>
+      <li>Zeitpunkt der Registrierung</li>
+    </ul>
+    <p>Zweck: Authentifizierung, Zugangskontrolle zum Dienst.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung / vorvertragliche Maßnahmen).</p>
+    <p>Speicherdauer: Bis zur Kontolöschung durch Sie bzw. bis 90 Tage nach letzter Anmeldung bei nicht verifizierten Konten.</p>
+    <p>Double-Opt-In: Nach der Registrierung erhalten Sie eine Bestätigungs-E-Mail über Supabase Auth. Ihr Konto wird erst nach Bestätigung freigeschaltet.</p>
+
+    <h3>3.2 SoundCloud-Verknüpfung</h3>
+    <p>Wenn Sie Ihren SoundCloud-Benutzernamen eingeben, ruft Frequenz serverseitig über die öffentliche SoundCloud-API (api-v2.soundcloud.com) die folgenden öffentlich sichtbaren Daten Ihres Profils ab:</p>
+    <ul>
+      <li>Liste Ihrer „Likes" (favorisierte Tracks)</li>
+      <li>Liste Ihrer „Reposts"</li>
+      <li>Liste der von Ihnen gefolgten Künstler („Followings")</li>
+      <li>Daraus abgeleitet: Liste der Künstler, Anzahl der Interaktionen, zeitliches Aktivitätsmuster</li>
+    </ul>
+    <p>Passwort, private Nachrichten oder nicht-öffentliche Inhalte werden nicht abgerufen. Es wird kein OAuth-Token gespeichert — lediglich Ihr Benutzername.</p>
+    <p>Zweck: Erstellung Ihres Musikgeschmacksprofils zur Ermittlung passender Event-Empfehlungen.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).</p>
+    <p>Speicherdauer: Bis zur Trennung der Verknüpfung bzw. Kontolöschung.</p>
+
+    <h3>3.3 Spotify-Verknüpfung (optional)</h3>
+    <p>Verbinden Sie optional Ihr Spotify-Konto, erfolgt dies über den offiziellen OAuth-2.0-Flow von Spotify AB. Frequenz erhält nach Ihrer Freigabe ein Access-Token mit den folgenden Scopes:</p>
+    <ul>
+      <li><code>user-top-read</code> — Ihre Top-Künstler und Top-Tracks</li>
+      <li><code>user-library-read</code> — Ihre gespeicherten Titel</li>
+      <li><code>user-follow-read</code> — Ihre gefolgten Künstler</li>
+    </ul>
+    <p>Folgende Daten werden aus Spotify abgerufen und verarbeitet:</p>
+    <ul>
+      <li>Künstlernamen, Genres und Bilder</li>
+      <li>Song-IDs und Metadaten</li>
+      <li>Audio-Features (Tempo, Energie, Tanzbarkeit) zur Geschmacksanalyse</li>
+    </ul>
+    <p>Das Access-Token und Refresh-Token werden verschlüsselt in unserer Supabase-Datenbank gespeichert, um die Daten periodisch aktualisieren zu können. Sie können die Verbindung jederzeit in den Spotify-Einstellungen (<a href="https://www.spotify.com/account/apps/" target="_blank" rel="noopener">https://www.spotify.com/account/apps/</a>) widerrufen.</p>
+    <p>Zweck: Erweiterung des Musikgeschmacksprofils.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung auf Ihren Wunsch).</p>
+    <p>Speicherdauer: Bis zur Trennung der Verknüpfung bzw. Kontolöschung.</p>
+
+    <h3>3.4 Abgeleitete Daten (Taste-Profil &amp; Matches)</h3>
+    <p>Aus den unter 3.2 und 3.3 beschriebenen Quellen berechnet Frequenz folgende abgeleitete Daten und speichert sie in Ihrem Konto:</p>
+    <ul>
+      <li>Top-Genres (aggregiert)</li>
+      <li>Genre-Vektoren (numerische Gewichtungen)</li>
+      <li>Audio-Feature-Durchschnittswerte</li>
+      <li>Liste Ihrer zugeordneten Event-Matches mit Konfidenzwert und Begründung</li>
+      <li>NPS-Antworten (nur, wenn Sie aktiv abstimmen)</li>
+    </ul>
+    <p>Zweck: Personalisierte Event-Empfehlungen, Verbesserung des Matchings.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p>Speicherdauer: Bis zur Kontolöschung.</p>
+
+    <h3>3.5 Authentifizierungs-Cookies</h3>
+    <p>Zur Aufrechterhaltung Ihrer Login-Sitzung setzt Frequenz zwei technisch notwendige Cookies:</p>
+    <ul>
+      <li><code>session_token</code> — kurzlebiges JWT-Access-Token (HttpOnly, Secure, SameSite=Lax, Laufzeit: 7 Tage)</li>
+      <li><code>refresh_token</code> — Supabase-Refresh-Token (HttpOnly, Secure, SameSite=Lax, Laufzeit: 30 Tage)</li>
+      <li><code>oauth_state</code> — temporärer CSRF-Schutz während des Spotify-OAuth-Flows (HttpOnly, Max-Age: 5 Minuten)</li>
+    </ul>
+    <p>Zweck: Anmeldesitzung, CSRF-Schutz.</p>
+    <p>Rechtsgrundlage: § 25 Abs. 2 Nr. 2 TTDSG (unbedingt erforderlich) sowie Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p>Ein Cookie-Banner ist nicht erforderlich, da ausschließlich unbedingt erforderliche Cookies eingesetzt werden.</p>
+    <p>LocalStorage und SessionStorage werden nicht verwendet.</p>
+
+    <h3>3.6 Server-Logdateien</h3>
+    <p>Beim Aufruf der App werden automatisch folgende Daten in Server-Logdateien erfasst:</p>
+    <ul>
+      <li>IP-Adresse (gekürzt nach 24 Stunden)</li>
       <li>Datum und Uhrzeit des Zugriffs</li>
-      <li>Aufgerufene URL</li>
-      <li>Browsertyp und -version</li>
+      <li>Aufgerufene URL / HTTP-Methode</li>
+      <li>HTTP-Statuscode</li>
+      <li>User-Agent (Browsertyp)</li>
+      <li>Referrer (zuvor besuchte Seite)</li>
     </ul>
-    <p>Rechtsgrundlage: Berechtigtes Interesse gemäß Art. 6 Abs. 1 lit. f DSGVO (Sicherstellung eines störungsfreien Betriebs).</p>
+    <p>Zweck: Sicherstellung eines störungsfreien Betriebs, Fehleranalyse, Abwehr missbräuchlicher Nutzung (Art. 32 DSGVO — Sicherheit der Verarbeitung).</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).</p>
+    <p>Speicherdauer: 7 Tage, danach automatische Löschung.</p>
 
-    <h2>3. Auftragsverarbeiter und Drittanbieter</h2>
+    <h2>4. Auftragsverarbeiter und Drittanbieter</h2>
+    <p>Mit allen nachfolgend genannten Anbietern bestehen Auftragsverarbeitungsverträge gemäß Art. 28 DSGVO, sofern nicht anders vermerkt.</p>
 
-    <h3>Vercel Inc. (Hosting)</h3>
-    <p>Unsere Website wird bei Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA gehostet. Vercel ist unter dem EU-US Data Privacy Framework zertifiziert.</p>
+    <h3>4.1 Supabase (Datenbank &amp; Auth)</h3>
+    <p>Anbieter: Supabase, Inc., 970 Toa Payoh North #07-04, Singapore 318992. Die Datenverarbeitung für das Frequenz-Projekt erfolgt in der Region EU (Frankfurt am Main, Deutschland).</p>
+    <p>Funktion: Benutzerauthentifizierung, Datenbank (PostgreSQL), verschlüsseltes Token-Storage.</p>
+    <p>Verarbeitete Daten: Sämtliche unter Abschnitt 3.1–3.4 beschriebenen Daten.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. Internationale Übermittlungen erfolgen auf Grundlage der EU-Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO.</p>
+    <p>Datenschutzerklärung: <a href="https://supabase.com/privacy" target="_blank" rel="noopener">https://supabase.com/privacy</a></p>
 
-    <h3>Formspree (Formularbearbeitung)</h3>
-    <p>Das Wartelisten-Formular wird über Formspree, Inc. (USA) verarbeitet. Formspree empfängt Ihre E-Mail-Adresse zum Zweck der Formularweiterleitung.</p>
+    <h3>4.2 Hetzner Online GmbH (Hosting der App)</h3>
+    <p>Anbieter: Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Deutschland.</p>
+    <p>Funktion: Server-Hosting der Anwendung (Standort: Rechenzentrum Frankfurt am Main, Deutschland).</p>
+    <p>Verarbeitete Daten: Serverlogs (siehe 3.6), sämtlicher Traffic zur App.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+    <p>Die Datenverarbeitung erfolgt ausschließlich innerhalb der EU. Es besteht ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO.</p>
 
-    <h3>Supabase (Datenbank &amp; Authentifizierung)</h3>
-    <p>Für die App-Funktionalität nutzen wir Supabase, Inc. (USA) als Datenbank- und Authentifizierungsanbieter.</p>
+    <h3>4.3 Spotify AB (nur bei Nutzung der Spotify-Verknüpfung)</h3>
+    <p>Anbieter: Spotify AB, Regeringsgatan 19, 11153 Stockholm, Schweden.</p>
+    <p>Funktion: OAuth-Provider, Bereitstellung der Musikgeschmacksdaten des Nutzers.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p>Spotify verarbeitet teils Daten außerhalb des EWR; Grundlage sind die von Spotify verwendeten EU-Standardvertragsklauseln.</p>
+    <p>Datenschutzerklärung: <a href="https://www.spotify.com/legal/privacy-policy/" target="_blank" rel="noopener">https://www.spotify.com/legal/privacy-policy/</a></p>
 
-    <h2>4. Cookies</h2>
-    <p>Wir verwenden ausschließlich technisch notwendige Cookies (Supabase-Authentifizierung). Es werden keine Tracking- oder Analyse-Cookies eingesetzt.</p>
+    <h3>4.4 SoundCloud Global Limited &amp; Co. KG (nur bei SoundCloud-Verknüpfung)</h3>
+    <p>Anbieter: SoundCloud Global Limited &amp; Co. KG, Rheinsberger Str. 76/77, 10115 Berlin, Deutschland.</p>
+    <p>Funktion: Quelle der öffentlich zugänglichen Musikdaten. Frequenz fragt öffentliche API-Endpunkte an, ohne OAuth — ein Auftragsverarbeitungsvertrag ist aufgrund der Verwendung rein öffentlicher Schnittstellen nicht erforderlich.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+    <p>Datenschutzerklärung: <a href="https://soundcloud.com/pages/privacy" target="_blank" rel="noopener">https://soundcloud.com/pages/privacy</a></p>
 
-    <h2>5. Schriftarten</h2>
-    <p>Alle Schriftarten (Bebas Neue, DM Sans, Space Mono) werden lokal von unserem Server bereitgestellt. Es findet keine Datenübertragung an Google oder andere Drittanbieter statt.</p>
+    <h3>4.5 Telegram Messenger Inc. (interne Admin-Benachrichtigung)</h3>
+    <p>Anbieter: Telegram Messenger Inc., Britische Jungferninseln. Technische Infrastruktur: Telegram FZ-LLC, Dubai.</p>
+    <p>Funktion: Bei einer Neuanmeldung senden wir ausschließlich an den Betreiber (Marvin Schumann) eine interne Benachrichtigung mit der E-Mail-Adresse des neuen Nutzers und einem Freigabelink, um die manuelle Waitlist-Freigabe zu ermöglichen.</p>
+    <p>Empfänger: Ausschließlich der Betreiber selbst; keine Weiterleitung an Dritte.</p>
+    <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer zeitnahen manuellen Freigabe in der geschlossenen Beta-Phase). Diese Verarbeitung entfällt nach Abschluss der Beta-Phase.</p>
+    <p>Die Datenübermittlung außerhalb des EWR erfolgt auf Grundlage Ihrer informierten Zustimmung gemäß Art. 49 Abs. 1 lit. a DSGVO. Eine alternative EU-basierte Lösung ist in Vorbereitung.</p>
 
-    <h2>6. Ihre Rechte</h2>
-    <p>Gemäß Art. 15–21 DSGVO haben Sie folgende Rechte:</p>
+    <h3>4.6 Drittländer-Übersicht</h3>
     <ul>
-      <li>Auskunftsrecht (Art. 15 DSGVO)</li>
-      <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
-      <li>Recht auf Löschung (Art. 17 DSGVO)</li>
-      <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
-      <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
-      <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
+      <li>Supabase: Datenverarbeitung in der EU (Frankfurt), Muttergesellschaft in Singapur — SCC Art. 46</li>
+      <li>Hetzner: ausschließlich EU (Deutschland)</li>
+      <li>Spotify: Schweden, teils USA — SCC Art. 46 (Spotify-seitig)</li>
+      <li>SoundCloud: Deutschland / USA — öffentliche API, keine Nutzeridentifizierung erforderlich</li>
+      <li>Telegram: Drittland — Art. 49 Abs. 1 lit. a (beschränkt auf interne Admin-Benachrichtigung)</li>
     </ul>
-    <p>Zur Ausübung Ihrer Rechte wenden Sie sich an: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a></p>
 
-    <h2>7. Aufsichtsbehörde</h2>
-    <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Die für uns zuständige Aufsichtsbehörde ist:</p>
+    <h2>5. Keine Analytics, kein Tracking, keine CDNs</h2>
+    <p>Die Frequenz-App verwendet <strong>keine</strong> Analyse-Tools, <strong>keine</strong> Werbe-Tracker und <strong>keine</strong> externen CDNs. Sämtliche JavaScript-Bibliotheken (einschließlich Chart.js), Schriftarten und Bilder werden lokal vom Frequenz-Server ausgeliefert. Es erfolgt keinerlei Verbindung zu Google Fonts, Google Analytics, Facebook, jsDelivr o. ä.</p>
+
+    <h2>6. Automatisierte Entscheidungsfindung / Profiling</h2>
+    <p>Frequenz erstellt ein Musikgeschmacksprofil und nutzt dieses zur Berechnung von Event-Empfehlungen. Diese Verarbeitung stellt ein <em>Profiling</em> im Sinne des Art. 4 Nr. 4 DSGVO dar, hat jedoch keinerlei rechtliche oder ähnlich erhebliche Wirkung auf Sie (Art. 22 DSGVO findet keine Anwendung). Sie erhalten lediglich unverbindliche Empfehlungen für Veranstaltungen.</p>
+
+    <h2>7. Datensicherheit (Art. 32 DSGVO)</h2>
+    <ul>
+      <li>Transport-Verschlüsselung: TLS 1.2+ über das gesamte Internet (HSTS aktiviert)</li>
+      <li>Passwörter: ausschließlich gehasht gespeichert (bcrypt, Supabase)</li>
+      <li>OAuth-Tokens: verschlüsselt in der Datenbank</li>
+      <li>HTTP-Sicherheitsheader: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy</li>
+      <li>Row-Level-Security auf allen nutzerbezogenen Datenbanktabellen</li>
+      <li>Regelmäßige Backups: verschlüsselte Tagesbackups über Supabase, Retention 30 Tage</li>
+    </ul>
+
+    <h2>8. Ihre Rechte als betroffene Person</h2>
+    <p>Gemäß DSGVO haben Sie folgende Rechte:</p>
+    <ul>
+      <li><strong>Auskunftsrecht</strong> (Art. 15 DSGVO) — Sie können eine Bestätigung darüber verlangen, ob Sie betreffende Daten verarbeitet werden, und Auskunft über diese Daten erhalten. Für eingeloggte Nutzer steht der Self-Service-Endpunkt <code>GET /api/me/export</code> bereit.</li>
+      <li><strong>Recht auf Berichtigung</strong> (Art. 16 DSGVO)</li>
+      <li><strong>Recht auf Löschung</strong> (Art. 17 DSGVO — „Recht auf Vergessenwerden") — Sie können Ihr Konto und sämtliche verknüpften Daten jederzeit löschen lassen. Als eingeloggter Nutzer über den Self-Service-Endpunkt <code>POST /api/me/delete</code> oder per E-Mail an <a href="mailto:hello@frequenz.live">hello@frequenz.live</a>.</li>
+      <li><strong>Recht auf Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO)</li>
+      <li><strong>Recht auf Datenübertragbarkeit</strong> (Art. 20 DSGVO) — Export in strukturiertem JSON-Format über <code>GET /api/me/export</code>.</li>
+      <li><strong>Widerspruchsrecht</strong> (Art. 21 DSGVO) — gegenüber Verarbeitungen auf Grundlage berechtigten Interesses.</li>
+      <li><strong>Widerrufsrecht</strong> (Art. 7 Abs. 3 DSGVO) — Sie können Einwilligungen jederzeit mit Wirkung für die Zukunft widerrufen.</li>
+      <li><strong>Beschwerderecht</strong> (Art. 77 DSGVO) — siehe Abschnitt 9.</li>
+    </ul>
+    <p>Zur Ausübung Ihrer Rechte wenden Sie sich formlos an: <a href="mailto:hello@frequenz.live">hello@frequenz.live</a>. Anfragen werden innerhalb von 30 Tagen beantwortet (Art. 12 Abs. 3 DSGVO). Die Ausübung ist für Sie kostenlos.</p>
+
+    <h2>9. Zuständige Aufsichtsbehörde</h2>
+    <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Aufgrund des Wohnsitzes des Verantwortlichen im Saarland ist dies:</p>
     <p>Unabhängiges Datenschutzzentrum Saarland<br>
     Die Landesbeauftragte für Datenschutz und Informationsfreiheit<br>
     Fritz-Dobisch-Straße 12<br>
-    66111 Saarbrücken</p>
+    66111 Saarbrücken<br>
+    Telefon: +49 681 94781-0<br>
+    E-Mail: <a href="mailto:poststelle@datenschutz.saarland.de">poststelle@datenschutz.saarland.de</a></p>
 
-    <h2>8. Speicherdauer</h2>
-    <p>E-Mail-Adressen der Warteliste werden bis zum Launch des Dienstes oder bis zu Ihrem Löschungswunsch gespeichert. Server-Logdateien werden nach 30 Tagen automatisch gelöscht.</p>
+    <h2>10. Speicherdauer — Zusammenfassung</h2>
+    <ul>
+      <li>Konto (E-Mail, Hash): bis zur Kontolöschung; bei Inaktivität maximal 90 Tage nach letzter Anmeldung für nicht verifizierte Konten</li>
+      <li>Verknüpfte Accounts (Spotify/SoundCloud): bis zur Trennung der Verknüpfung oder Kontolöschung</li>
+      <li>Abgeleitetes Taste-Profil: bis zur Kontolöschung</li>
+      <li>Event-Matches: bis zur Kontolöschung</li>
+      <li>Session-/Refresh-Cookies: 7 bzw. 30 Tage ab Ausstellung</li>
+      <li>Server-Logdateien: 7 Tage</li>
+      <li>Supabase-Backups: 30 Tage</li>
+    </ul>
 
-    <p style="margin-top: 2.5rem; color: var(--text-dim); font-size: 0.8rem;">Stand: April 2026</p>
+    <h2>11. Minderjährigenschutz</h2>
+    <p>Frequenz richtet sich nicht an Personen unter 16 Jahren. Wir erheben wissentlich keine Daten von Minderjährigen. Sollten wir Kenntnis erlangen, dass Daten eines Minderjährigen ohne Einwilligung der Erziehungsberechtigten erhoben wurden, löschen wir diese unverzüglich.</p>
+
+    <h2>12. Änderungen dieser Datenschutzerklärung</h2>
+    <p>Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie an geänderte Rechtslagen oder Änderungen unseres Dienstes anzupassen. Wesentliche Änderungen werden Ihnen per E-Mail an die in Ihrem Konto hinterlegte Adresse mitgeteilt.</p>
+
+    <p style="margin-top: 2.5rem; color: var(--text-dim); font-size: 0.8rem;">Stand: 10. April 2026</p>
   </div>
 
   <footer>

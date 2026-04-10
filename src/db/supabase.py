@@ -284,3 +284,84 @@ def get_city_by_name(name: str) -> dict[str, Any] | None:
     db = get_admin_client()
     resp = db.table("cities").select("*").ilike("name", name).single().execute()
     return resp.data
+
+
+# ─────────────────────────────────────────
+# DSGVO — Art. 15 / 20 (Access & Portability)
+# ─────────────────────────────────────────
+
+def export_user_data(user_id: str) -> dict[str, Any]:
+    """Export all personal data stored for a user.
+
+    Implements Art. 15 DSGVO (right of access) and Art. 20 DSGVO
+    (right to data portability). Returns a dict containing every record
+    across every table where ``user_id`` appears. The OAuth tokens of
+    connected accounts are **redacted** in the export — tokens are a
+    security credential, not meaningful user content.
+    """
+    db = get_admin_client()
+    data: dict[str, Any] = {
+        "exported_at": datetime.utcnow().isoformat() + "Z",
+        "user_id": user_id,
+        "format_version": "1.0",
+    }
+
+    profile = db.table("profiles").select("*").eq("id", user_id).execute()
+    data["profile"] = (profile.data or [None])[0]
+
+    accounts = (
+        db.table("connected_accounts")
+        .select("id,user_id,platform,username,last_synced,token_expires_at")
+        .eq("user_id", user_id)
+        .execute()
+    )
+    data["connected_accounts"] = accounts.data or []
+
+    artists = db.table("user_artists").select("*").eq("user_id", user_id).execute()
+    data["user_artists"] = artists.data or []
+
+    matches = (
+        db.table("user_matches")
+        .select("*, events(*)")
+        .eq("user_id", user_id)
+        .execute()
+    )
+    data["user_matches"] = matches.data or []
+
+    return data
+
+
+# ─────────────────────────────────────────
+# DSGVO — Art. 17 (Right to erasure)
+# ─────────────────────────────────────────
+
+def delete_user_account(user_id: str) -> bool:
+    """Delete a user and cascade-delete all associated personal data.
+
+    Implements Art. 17 DSGVO. Because every table referencing ``user_id``
+    uses ``on delete cascade`` in the schema, deleting the auth user (and
+    the profile) removes connected_accounts, user_artists, and user_matches
+    automatically. We additionally call each table explicitly as a safety
+    net in case cascade is disabled.
+    """
+    db = get_admin_client()
+
+    for table in ("user_matches", "user_artists", "connected_accounts"):
+        try:
+            db.table(table).delete().eq("user_id", user_id).execute()
+        except Exception as exc:
+            logger.warning("Failed to delete from {} for {}: {}", table, user_id, exc)
+
+    try:
+        db.table("profiles").delete().eq("id", user_id).execute()
+    except Exception as exc:
+        logger.warning("Failed to delete profile for {}: {}", user_id, exc)
+
+    try:
+        db.auth.admin.delete_user(user_id)
+    except Exception as exc:
+        logger.error("Failed to delete auth user {}: {}", user_id, exc)
+        return False
+
+    logger.info("Deleted user and all associated data for {}", user_id)
+    return True

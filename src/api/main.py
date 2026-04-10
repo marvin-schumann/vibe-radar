@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -21,7 +23,16 @@ from spotipy.cache_handler import CacheHandler
 from src.api.auth import router as auth_router
 from src.api.deps import get_session_user
 from src.config import settings
-from src.db.supabase import get_admin_client, is_approved, is_pro, set_first_match_at, submit_nps, upsert_connected_account
+from src.db.supabase import (
+    delete_user_account,
+    export_user_data,
+    get_admin_client,
+    is_approved,
+    is_pro,
+    set_first_match_at,
+    submit_nps,
+    upsert_connected_account,
+)
 from src.models import Match, MatchType, TasteProfile
 
 
@@ -70,6 +81,32 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Frequenz", version="1.0.0", lifespan=lifespan)
 
+# ─────────────────────────────────────────
+# Security middleware (DSGVO / Art. 32 – Security of processing)
+# ─────────────────────────────────────────
+
+# CORS: restrictive — only allow same-origin requests. The app runs as a
+# server-rendered FastAPI template app; no cross-origin browser calls are
+# expected. Explicit empty allowlist avoids accidental opening.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+    max_age=600,
+)
+
+# TrustedHost: protect against Host header attacks. In production this is
+# restricted to the deployed hostname(s); in non-production any host is
+# accepted for local development convenience.
+_allowed_hosts = (
+    ["app.frequenz.live", "frequenz.live", "www.frequenz.live"]
+    if settings.app_environment == "production"
+    else ["*"]
+)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=_allowed_hosts)
+
 app.include_router(auth_router)
 
 app.mount(
@@ -79,6 +116,60 @@ app.mount(
 )
 
 templates = Jinja2Templates(directory="src/web/templates")
+
+
+# ─────────────────────────────────────────
+# Security headers middleware (DSGVO Art. 32)
+# ─────────────────────────────────────────
+
+# Session / auth cookie lifetime (7 days access, 30 days refresh).
+_ACCESS_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+_REFRESH_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    # All scripts, fonts, styles and images are served from the same origin
+    # (self-hosted Chart.js, self-hosted fonts). No third-party CDNs are
+    # allowed. `connect-src` includes Supabase endpoints needed for auth.
+    supabase_origin = ""
+    if settings.supabase_url:
+        try:
+            from urllib.parse import urlparse
+            p = urlparse(settings.supabase_url)
+            supabase_origin = f"{p.scheme}://{p.netloc}"
+        except Exception:
+            supabase_origin = ""
+    csp = (
+        "default-src 'self'; "
+        "base-uri 'self'; "
+        "form-action 'self'; "
+        "frame-ancestors 'none'; "
+        "object-src 'none'; "
+        "script-src 'self' 'unsafe-inline'; "
+        f"connect-src 'self' {supabase_origin}".strip() + "; "
+        "font-src 'self'; "
+        "img-src 'self' data: https:; "
+        "style-src 'self' 'unsafe-inline'; "
+        "media-src 'self'"
+    )
+    response.headers.setdefault("Content-Security-Policy", csp)
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault(
+        "Permissions-Policy",
+        "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+    )
+    response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
+    response.headers.setdefault("Cross-Origin-Resource-Policy", "same-origin")
+    if settings.app_environment == "production":
+        response.headers.setdefault(
+            "Strict-Transport-Security",
+            "max-age=63072000; includeSubDomains; preload",
+        )
+    return response
 
 
 # ─────────────────────────────────────────
@@ -92,9 +183,18 @@ async def persist_refreshed_tokens(request: Request, call_next):
     response = await call_next(request)
     if getattr(request.state, "new_tokens", None):
         access, refresh = request.state.new_tokens
-        opts = dict(httponly=True, samesite="lax", secure=(settings.app_environment == "production"))
-        response.set_cookie("session_token", access, **opts)
-        response.set_cookie("refresh_token", refresh, **opts)
+        opts = dict(
+            httponly=True,
+            samesite="lax",
+            secure=(settings.app_environment == "production"),
+            path="/",
+        )
+        response.set_cookie(
+            "session_token", access, max_age=_ACCESS_COOKIE_MAX_AGE, **opts
+        )
+        response.set_cookie(
+            "refresh_token", refresh, max_age=_REFRESH_COOKIE_MAX_AGE, **opts
+        )
     return response
 
 # ---------------------------------------------------------------------------
@@ -483,6 +583,87 @@ async def impressum(request: Request) -> HTMLResponse:
 @app.get("/datenschutz", response_class=HTMLResponse)
 async def datenschutz(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "datenschutz.html")
+
+
+# ---------------------------------------------------------------------------
+# Routes: DSGVO data-subject endpoints (Art. 15 / 17 / 20)
+# ---------------------------------------------------------------------------
+
+
+# Very small in-process rate limiter for data-subject endpoints so they
+# cannot be abused (e.g. an attacker hammering /api/me/export to enumerate
+# accounts). Keyed per user-id.
+_dsr_last_call: dict[str, float] = {}
+_DSR_COOLDOWN_SECONDS = 60
+
+
+def _rate_limit_dsr(user_id: str) -> bool:
+    """Return True if a data-subject request is allowed, False if throttled."""
+    import time
+    now = time.monotonic()
+    last = _dsr_last_call.get(user_id, 0.0)
+    if now - last < _DSR_COOLDOWN_SECONDS:
+        return False
+    _dsr_last_call[user_id] = now
+    return True
+
+
+@app.get("/api/me/export")
+async def export_my_data(user=Depends(get_session_user)) -> Response:
+    """Art. 15 DSGVO (access) / Art. 20 DSGVO (portability).
+
+    Returns a JSON file containing every personal data record associated
+    with the authenticated user. OAuth tokens are redacted.
+    """
+    if not user:
+        return JSONResponse({"error": "authentication required"}, status_code=401)
+    if not _rate_limit_dsr(user["id"]):
+        return JSONResponse(
+            {"error": "rate limited — please wait before requesting another export"},
+            status_code=429,
+        )
+    data = export_user_data(user["id"])
+    logger.info("Data export requested by user {}", user["id"])
+    return JSONResponse(
+        content=data,
+        headers={
+            "Content-Disposition": 'attachment; filename="frequenz-data-export.json"',
+            "Cache-Control": "no-store",
+        },
+    )
+
+
+@app.post("/api/me/delete")
+async def delete_my_account(request: Request, user=Depends(get_session_user)) -> Response:
+    """Art. 17 DSGVO — right to erasure.
+
+    Permanently deletes the user and all personal data. Requires
+    ``confirm=DELETE`` in the form body to avoid accidental calls.
+    Session cookies are cleared on success.
+    """
+    if not user:
+        return JSONResponse({"error": "authentication required"}, status_code=401)
+    if not _rate_limit_dsr(user["id"]):
+        return JSONResponse(
+            {"error": "rate limited — please wait before retrying"},
+            status_code=429,
+        )
+    form = await request.form()
+    if form.get("confirm") != "DELETE":
+        return JSONResponse(
+            {"error": "missing confirmation — send form field confirm=DELETE"},
+            status_code=400,
+        )
+
+    ok = delete_user_account(user["id"])
+    if not ok:
+        return JSONResponse({"error": "deletion failed"}, status_code=500)
+
+    logger.info("Account deleted by user {}", user["id"])
+    resp = JSONResponse({"status": "deleted"})
+    resp.delete_cookie("session_token", path="/")
+    resp.delete_cookie("refresh_token", path="/")
+    return resp
 
 
 # ---------------------------------------------------------------------------

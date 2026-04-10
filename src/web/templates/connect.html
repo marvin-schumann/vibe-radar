@@ -171,6 +171,14 @@
           {{ 'Update' if connected.get('soundcloud') else 'Connect' }}
         </button>
       </form>
+      <p style="margin-top:10px;font-size:0.7rem;color:#6a6a6a;line-height:1.5;">
+        Hinweis: Wenn Sie Ihren SoundCloud-Benutzernamen verbinden, ruft Frequenz
+        serverseitig über die öffentliche SoundCloud-API Ihre öffentlich sichtbaren
+        Likes, Reposts und Follows ab, um daraus Ihr Musikprofil zu erstellen. Es
+        werden keine privaten Daten, keine Passwörter und keine Zahlungsdaten
+        erhoben. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+        Details in der <a href="/datenschutz" style="color:#c4f135;">Datenschutzerklärung</a>.
+      </p>
     </div>
 
     {% if connected.get('soundcloud') %}
@@ -198,6 +206,16 @@
       {% else %}
         <a href="/auth/spotify" class="btn-spotify connect-dim">Connect Spotify</a>
       {% endif %}
+      <p style="margin-top:10px;font-size:0.7rem;color:#6a6a6a;line-height:1.5;">
+        Hinweis: Wenn Sie Spotify verbinden, leitet Sie Spotify auf einen
+        offiziellen OAuth-Login. Frequenz erhält nach Ihrer Freigabe ein
+        Access-Token mit den Scopes <code>user-top-read</code>,
+        <code>user-library-read</code> und <code>user-follow-read</code>, um Ihre
+        Top-Künstler, gespeicherten Titel und gefolgten Künstler abzurufen. Das
+        Token wird verschlüsselt in unserer Supabase-Datenbank gespeichert und
+        kann jederzeit in Ihrem Spotify-Konto widerrufen werden. Rechtsgrundlage:
+        Art. 6 Abs. 1 lit. b DSGVO.
+      </p>
     </div>
 
     <a href="/auth/logout" class="skip">Sign out</a>

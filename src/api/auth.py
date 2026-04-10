@@ -21,7 +21,14 @@ from src.db.supabase import approve_by_email, get_admin_client, upsert_connected
 router = APIRouter()
 templates = Jinja2Templates(directory="src/web/templates")
 
-_COOKIE_OPTS = dict(httponly=True, samesite="lax", secure=(settings.app_environment == "production"))
+_ACCESS_COOKIE_MAX_AGE = 60 * 60 * 24 * 7       # 7 days
+_REFRESH_COOKIE_MAX_AGE = 60 * 60 * 24 * 30     # 30 days
+_COOKIE_OPTS = dict(
+    httponly=True,
+    samesite="lax",
+    secure=(settings.app_environment == "production"),
+    path="/",
+)
 
 
 # ─────────────────────────────────────────
@@ -68,19 +75,19 @@ async def connect_page(request: Request, user=Depends(get_session_user)) -> HTML
 
 async def _notify_signup_telegram(email: str) -> None:
     """Send a Telegram notification to Marvin about a new signup."""
-    token = settings.telegram_bot_token
+    bot_token = settings.telegram_bot_token
     chat_id = settings.telegram_chat_id
-    if not token or not chat_id:
+    if not bot_token or not chat_id:
         logger.warning("Telegram notification skipped — bot token or chat_id not configured")
         return
 
-    token = create_token(email)
-    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&token={quote(token)}"
+    approval_token = create_token(email)
+    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&token={quote(approval_token)}"
     text = (
         f"\U0001f195 New Frequenz signup: {email}\n\n"
         f"Approve: {approve_url}"
     )
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.post(url, json={"chat_id": chat_id, "text": text})
@@ -128,8 +135,18 @@ async def login(
 
         redirect_to = "/" if is_approved else "/pending"
         resp = RedirectResponse(redirect_to, status_code=303)
-        resp.set_cookie("session_token", session.access_token, **_COOKIE_OPTS)
-        resp.set_cookie("refresh_token", session.refresh_token, **_COOKIE_OPTS)
+        resp.set_cookie(
+            "session_token",
+            session.access_token,
+            max_age=_ACCESS_COOKIE_MAX_AGE,
+            **_COOKIE_OPTS,
+        )
+        resp.set_cookie(
+            "refresh_token",
+            session.refresh_token,
+            max_age=_REFRESH_COOKIE_MAX_AGE,
+            **_COOKIE_OPTS,
+        )
         return resp
     except Exception as exc:
         logger.warning("Login failed for {}: {}", email, exc)
@@ -155,19 +172,34 @@ async def admin_approve_page(
     token: str = Query(...),
     request: Request = None,
 ) -> HTMLResponse:
-    """Show a confirmation page with a button that POSTs to actually approve."""
-    html = f"""<!DOCTYPE html>
+    """Show a confirmation page with a button that POSTs to actually approve.
+
+    The URL contains an email in the query string — we emit noindex / no-store
+    to minimise the chance of it being cached or indexed anywhere.
+    """
+    import html as _html
+    safe_email = _html.escape(email)
+    safe_token = _html.escape(token)
+    body = f"""<!DOCTYPE html>
 <html><head><title>Approve User</title>
+<meta name=\"robots\" content=\"noindex,nofollow,noarchive\">
 <style>body{{font-family:system-ui;max-width:420px;margin:60px auto;text-align:center}}
 button{{background:#22c55e;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:16px;cursor:pointer}}
 button:hover{{background:#16a34a}}</style></head>
-<body><h2>Approve user?</h2><p>{email}</p>
-<form method="POST" action="/admin/approve">
-<input type="hidden" name="email" value="{email}">
-<input type="hidden" name="token" value="{token}">
-<button type="submit">Approve</button>
+<body><h2>Approve user?</h2><p>{safe_email}</p>
+<form method=\"POST\" action=\"/admin/approve\">
+<input type=\"hidden\" name=\"email\" value=\"{safe_email}\">
+<input type=\"hidden\" name=\"token\" value=\"{safe_token}\">
+<button type=\"submit\">Approve</button>
 </form></body></html>"""
-    return HTMLResponse(content=html)
+    return HTMLResponse(
+        content=body,
+        headers={
+            "Cache-Control": "no-store, no-cache, must-revalidate, private",
+            "X-Robots-Tag": "noindex, nofollow, noarchive",
+            "Referrer-Policy": "no-referrer",
+        },
+    )
 
 
 @router.post("/admin/approve")

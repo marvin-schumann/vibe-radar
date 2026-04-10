@@ -139,6 +139,23 @@
       transition: border-color 0.2s;
     }
     input:focus { border-color: var(--lime); }
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 8px 0 4px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+      cursor: pointer;
+    }
+    .consent input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--lime);
+      flex-shrink: 0;
+    }
+    .consent a { color: var(--lime); text-decoration: none; }
+    .consent a:hover { text-decoration: underline; }
     .btn {
       width: 100%;
       padding: 13px;
@@ -215,6 +232,12 @@
           <label>Password</label>
           <input type="password" name="password" required minlength="8" autocomplete="new-password">
         </div>
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>
+            Ich willige ein, dass meine E-Mail-Adresse sowie die von mir später verknüpften SoundCloud-/Spotify-Daten (Künstler, Likes, Follows, Hörgewohnheiten) gemäß Art. 6 Abs. 1 lit. a &amp; b DSGVO verarbeitet werden, um mir personalisierte Event-Empfehlungen anzuzeigen. Einzelheiten und mein Widerrufsrecht finden sich in der <a href="/datenschutz" target="_blank" rel="noopener">Datenschutzerklärung</a>.
+          </span>
+        </label>
         <button class="btn" type="submit">Join Waitlist</button>
       </form>
     </div>
