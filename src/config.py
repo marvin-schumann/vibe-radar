@@ -34,8 +34,15 @@ class Settings(BaseSettings):
 
     # Admin / onboarding
     admin_secret_key: str = ""  # secret key for admin approval endpoint
-    telegram_bot_token: str = ""  # Telegram bot token for signup notifications
+    telegram_bot_token: str = ""  # Telegram bot token for signup notifications (legacy beta-only)
     telegram_chat_id: str = "1436217613"  # Marvin's Telegram chat ID
+
+    # Brevo (transactional + waitlist + campaigns)
+    brevo_api_key: str = ""
+    brevo_sender_email: str = "hello@frequenz.live"
+    brevo_sender_name: str = "Frequenz"
+    brevo_waitlist_list_id: int = 3  # "Frequenz Waitlist" list created in Brevo dashboard
+    brevo_admin_notification_email: str = "hello@frequenz.live"  # where signup notifications go
 
     # App
     app_secret_key: str = "change-me-in-production"

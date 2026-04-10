@@ -5,7 +5,6 @@ from __future__ import annotations
 import secrets
 from urllib.parse import quote
 
-import httpx
 from fastapi import APIRouter, Cookie, Depends, Form, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
@@ -17,6 +16,7 @@ from src.api.deps import get_session_user
 from src.collectors.spotify import SCOPES
 from src.config import settings
 from src.db.supabase import approve_by_email, get_admin_client, upsert_connected_account
+from src.integrations import brevo
 
 router = APIRouter()
 templates = Jinja2Templates(directory="src/web/templates")
@@ -73,28 +73,30 @@ async def connect_page(request: Request, user=Depends(get_session_user)) -> HTML
 # ─────────────────────────────────────────
 
 
-async def _notify_signup_telegram(email: str) -> None:
-    """Send a Telegram notification to Marvin about a new signup."""
-    bot_token = settings.telegram_bot_token
-    chat_id = settings.telegram_chat_id
-    if not bot_token or not chat_id:
-        logger.warning("Telegram notification skipped — bot token or chat_id not configured")
+async def _notify_signup(email: str) -> None:
+    """Send Marvin an email notification about a new signup via Brevo (FR, EU).
+
+    Replaces the previous Telegram notification flow which (a) had a
+    variable-shadowing bug that broke it silently, and (b) was a non-EU
+    transfer flagged in the DSGVO audit (Telegram Cloud API → US).
+    Brevo is French-incorporated, EU-hosted, fully covered by our DPA.
+    """
+    if not settings.brevo_api_key:
+        logger.warning("signup notification skipped — BREVO_API_KEY not configured")
         return
 
     approval_token = create_token(email)
-    approve_url = f"{settings.app_host}/admin/approve?email={quote(email)}&token={quote(approval_token)}"
-    text = (
-        f"\U0001f195 New Frequenz signup: {email}\n\n"
-        f"Approve: {approve_url}"
+    approve_url = (
+        f"{settings.app_host}/admin/approve"
+        f"?email={quote(email)}&token={quote(approval_token)}"
     )
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(url, json={"chat_id": chat_id, "text": text})
-            if resp.status_code != 200:
-                logger.warning("Telegram notification failed: {}", resp.text)
-    except Exception as exc:
-        logger.warning("Telegram notification error: {}", exc)
+        await brevo.notify_admin_signup(
+            signup_email=email, approval_url=approve_url
+        )
+    except brevo.BrevoError as exc:
+        # Don't raise — signup itself should still succeed even if notification fails
+        logger.warning("brevo signup notification failed: {}", exc)
 
 
 @router.post("/auth/signup")
@@ -106,8 +108,8 @@ async def signup(
     try:
         db.auth.sign_up({"email": email, "password": password})
         # Profile auto-created by DB trigger with is_approved=false
-        # Notify Marvin via Telegram (fire-and-forget)
-        await _notify_signup_telegram(email)
+        # Notify Marvin via Brevo email (fire-and-forget; replaces Telegram)
+        await _notify_signup(email)
         # Redirect to pending — they need to verify email first
         resp = RedirectResponse("/pending", status_code=303)
         return resp

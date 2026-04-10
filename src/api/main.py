@@ -23,6 +23,7 @@ from spotipy.cache_handler import CacheHandler
 from src.api.auth import router as auth_router
 from src.api.deps import get_session_user
 from src.config import settings
+from src.integrations import brevo as brevo_integration
 from src.db.supabase import (
     delete_user_account,
     export_user_data,
@@ -664,6 +665,92 @@ async def delete_my_account(request: Request, user=Depends(get_session_user)) ->
     resp.delete_cookie("session_token", path="/")
     resp.delete_cookie("refresh_token", path="/")
     return resp
+
+
+# ---------------------------------------------------------------------------
+# Waitlist (replaces Formspree)
+# ---------------------------------------------------------------------------
+
+# Per-IP rate limit for waitlist signups — prevents spam without breaking real users
+_WAITLIST_COOLDOWN_SECONDS = 30
+_waitlist_last_call: dict[str, float] = {}
+
+
+def _rate_limit_waitlist(ip: str) -> bool:
+    """Return True if the call is allowed, False if rate-limited."""
+    import time
+
+    now = time.time()
+    last = _waitlist_last_call.get(ip, 0.0)
+    if now - last < _WAITLIST_COOLDOWN_SECONDS:
+        return False
+    _waitlist_last_call[ip] = now
+    return True
+
+
+def _client_ip(request: Request) -> str:
+    """Best-effort client IP for rate limiting only — never logged or stored."""
+    fwd = request.headers.get("x-forwarded-for", "")
+    if fwd:
+        return fwd.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+@app.post("/api/waitlist")
+async def join_waitlist(request: Request) -> Response:
+    """Public waitlist signup endpoint — wraps Brevo contacts API.
+
+    Replaces the Formspree form on the landing page. POST a JSON body with
+    {"email": "...", "consent": true, "city": "Madrid"} (city optional).
+
+    Legal basis: Art. 6 Abs. 1 lit. a DSGVO (consent).
+    Processor: Brevo / Sendinblue SAS, Paris, France (EU).
+    Retention: until launch announcement OR explicit withdrawal, max 24 months.
+    """
+    if not _rate_limit_waitlist(_client_ip(request)):
+        return JSONResponse(
+            {"error": "rate limited — please wait a moment before retrying"},
+            status_code=429,
+        )
+
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "invalid JSON body"}, status_code=400)
+
+    email = (body.get("email") or "").strip().lower()
+    consent = bool(body.get("consent"))
+    city = (body.get("city") or "").strip() or None
+    first_name = (body.get("first_name") or "").strip() or None
+
+    # Minimal validation — defer email-format checking to Brevo
+    if not email or "@" not in email or len(email) > 254:
+        return JSONResponse({"error": "invalid email"}, status_code=400)
+    if not consent:
+        return JSONResponse(
+            {
+                "error": "consent required",
+                "detail": "Art. 6 Abs. 1 lit. a DSGVO — explicit consent must be given",
+            },
+            status_code=400,
+        )
+
+    try:
+        result = await brevo_integration.add_waitlist_contact(
+            email,
+            first_name=first_name,
+            city=city,
+            source="landing-page",
+        )
+    except brevo_integration.BrevoError as exc:
+        logger.error("waitlist signup failed for {}: {}", email, exc)
+        return JSONResponse(
+            {"error": "waitlist signup failed — please try again later"},
+            status_code=502,
+        )
+
+    logger.info("waitlist signup: {} (duplicate={})", email, result.get("duplicate", False))
+    return JSONResponse({"status": "ok"})
 
 
 # ---------------------------------------------------------------------------
