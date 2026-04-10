@@ -1,0 +1,85 @@
+# Madrid Instagram accounts to scrape for event announcements.
+#
+# Instagram is the de-facto CMS of the Madrid electronic music scene: venues
+# and collectives announce on IG, not on Resident Advisor or ticketing
+# platforms. Scraping these accounts closes the "dark matter" gap in the
+# Madrid event index.
+#
+# Edit this file to add/remove accounts or temporarily disable one.
+# Set `disabled: true` to skip an account on the next run without removing it.
+#
+# `default_venue` is used when a collective's post doesn't tag a venue. For
+# venue accounts it should match the venue's name. For collectives leave it
+# null and the scraper will try to extract the venue from the caption.
+
+accounts:
+  # ----- Venues -----
+  - handle: mondodisko_madrid
+    kind: venue
+    default_venue: Mondo Disko
+    disabled: false
+  - handle: goyasocialclub
+    kind: venue
+    default_venue: Goya Social Club
+    disabled: false
+  - handle: sala_but
+    kind: venue
+    default_venue: Sala But
+    disabled: false
+  - handle: sala_cool_madrid
+    kind: venue
+    default_venue: Sala Cool
+    disabled: false
+  - handle: ochoymediomadrid
+    kind: venue
+    default_venue: Ocho y Medio
+    disabled: false
+  - handle: cafelapalma
+    kind: venue
+    default_venue: Café La Palma
+    disabled: false
+  - handle: fabrik
+    kind: venue
+    default_venue: Fabrik
+    disabled: false
+  - handle: marularevolucion
+    kind: venue
+    default_venue: Marula Café
+    disabled: false
+  - handle: specka_club
+    kind: venue
+    default_venue: Specka
+    disabled: false
+
+  # ----- Collectives -----
+  - handle: binary_techno
+    kind: collective
+    default_venue: null
+    disabled: false
+  - handle: ravenclaw500
+    kind: collective
+    default_venue: null
+    disabled: false
+  - handle: h4t3r_club
+    kind: collective
+    default_venue: null
+    disabled: false
+  - handle: bassroom_bassroom
+    kind: collective
+    default_venue: null
+    disabled: false
+  # NOTE: verify this handle — the research wasn't sure whether it's
+  # @blackworks or @blackworks_collective. Start disabled until confirmed.
+  - handle: blackworks
+    kind: collective
+    default_venue: null
+    disabled: true
+
+# Scraper runtime knobs (overridable via CLI flags).
+settings:
+  posts_per_account: 15         # how many of the latest posts to fetch per account
+  max_requests_per_run: 50      # hard cap on total IG requests per run
+  min_delay_seconds: 5          # random delay between requests (min)
+  max_delay_seconds: 15         # random delay between requests (max)
+  retry_max_attempts: 3         # retries on rate-limit / transient errors
+  retry_base_seconds: 60        # first backoff sleep; doubles each attempt

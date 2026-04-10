@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, Query, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
@@ -22,6 +22,7 @@ from spotipy.cache_handler import CacheHandler
 
 from src.api.auth import router as auth_router
 from src.api.deps import get_session_user
+from src.api.scan import router as scan_router
 from src.config import settings
 from src.integrations import brevo as brevo_integration
 from src.db.supabase import (
@@ -109,6 +110,7 @@ _allowed_hosts = (
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=_allowed_hosts)
 
 app.include_router(auth_router)
+app.include_router(scan_router)
 
 app.mount(
     "/static",
@@ -1290,6 +1292,57 @@ async def scheduler_status(user=Depends(get_session_user)) -> JSONResponse:
     from src.api.scheduler import get_scheduler_status
 
     return JSONResponse(content=get_scheduler_status())
+
+
+# ---------------------------------------------------------------------------
+# Routes: Cron — Monday Drop (retention ritual)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/cron/monday-drop")
+async def cron_monday_drop(
+    x_cron_secret: str | None = Header(default=None, alias="X-Cron-Secret"),
+) -> JSONResponse:
+    """Send the weekly Monday Drop to every eligible user.
+
+    Protected by a shared secret passed in the ``X-Cron-Secret`` header —
+    the same value stored in ``settings.admin_secret_key``. Intended to
+    be hit by a GitHub Actions cron or Coolify scheduled task at Monday
+    08:00 local time.
+    """
+    if not settings.admin_secret_key:
+        logger.error("monday-drop cron blocked: admin_secret_key not configured")
+        raise HTTPException(status_code=503, detail="cron not configured")
+    if not x_cron_secret or x_cron_secret != settings.admin_secret_key:
+        logger.warning("monday-drop cron: unauthorized request")
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+    from src.api.monday_drop import send_monday_drop_to_all_users
+
+    logger.info("monday-drop cron: starting run")
+    started = datetime.now(tz=timezone.utc)
+    try:
+        result = await send_monday_drop_to_all_users()
+    except Exception as exc:
+        logger.exception("monday-drop cron: batch failed: {}", exc)
+        raise HTTPException(status_code=500, detail=f"batch failed: {exc}") from exc
+
+    duration_ms = int((datetime.now(tz=timezone.utc) - started).total_seconds() * 1000)
+    logger.info(
+        "monday-drop cron: done sent={} failed={} duration_ms={}",
+        result.get("sent"),
+        result.get("failed"),
+        duration_ms,
+    )
+    return JSONResponse(
+        content={
+            "sent": result.get("sent", 0),
+            "failed": result.get("failed", 0),
+            "skipped": result.get("skipped", 0),
+            "duration_ms": duration_ms,
+            "started_at": started.isoformat(),
+        }
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -18,6 +18,7 @@ class EventSource(str, Enum):
     BANDSINTOWN = "bandsintown"
     SONGKICK = "songkick"
     XCEED = "xceed"
+    INSTAGRAM = "instagram"
 
 
 class MatchType(str, Enum):

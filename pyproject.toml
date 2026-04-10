@@ -32,6 +32,12 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "ruff>=0.2.0",
 ]
+# Instagram scraping (scripts/scrape_madrid_ig.py). Kept optional so the
+# core API doesn't depend on a scraping library. Upgrade path: drop this
+# group and call Apify over HTTP instead. See /tmp/madrid-scraper-impl.md.
+scrape = [
+    "instaloader>=4.13",
+]
 
 [build-system]
 requires = ["setuptools>=68.0"]
