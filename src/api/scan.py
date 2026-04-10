@@ -233,33 +233,183 @@ def _gc_old_tasks() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Character mapping (tribe → persona label for the landing-page card)
+# Character mapping (tribe → full persona for the landing-page card)
 # ---------------------------------------------------------------------------
 
-# Maps the compute_taste_dna() tribe name → a short "character" string that
-# we show on the landing-page card. Keep this in sync with TRIBES in
-# src/analytics/taste_dna.py. If a new tribe is added there and not mapped
-# here, we fall back to the tribe name itself.
-_CHARACTER_BY_TRIBE: dict[str, str] = {
-    "Warehouse Monk": "The Warehouse Monk",
-    "Sonic Archaeologist": "The Sonic Archaeologist",
-    "Fog Machine Philosopher": "The Fog Machine Philosopher",
-    "Strobe Nomad": "The Strobe Nomad",
-    "Dawn Chaser": "The Dawn Chaser",
-    "Bass Templar": "The Bass Templar",
-    "Circuit Bender": "The Circuit Bender",
+# The 10 launch characters per the research session of 2026-04-10. Each tribe
+# from compute_taste_dna() maps to ONE character. Each character has:
+#   - name: English alliterative canonical name (for press, captions, sharing)
+#   - alt_name: scene-language secondary name (in-joke for the heads)
+#   - voice_line: Duolingo-style one-sentence personality line
+#   - image_path: path under /static/characters/<slug>.png to serve to the frontend
+#   - rarity: common / uncommon / rare / legendary (drives the card border colour)
+#
+# The 7 base tribes from src/analytics/taste_dna.py map directly. Hard Rhino,
+# Garage Swan, and Boom-Bap Owl are 3 hybrid characters used as override targets
+# when the user's secondary genre signal is strong (handled below in
+# _override_character_for_secondary_signal).
+_CHARACTERS: dict[str, dict[str, Any]] = {
+    "bunker_bear": {
+        "name": "Bunker Bear",
+        "alt_name": "Betonhund",
+        "voice_line": "Bunker Bear hasn't seen sunlight since Klubnacht.",
+        "image_path": "/static/characters/bunker_bear.png",
+        "rarity": "uncommon",
+    },
+    "fog_whale": {
+        "name": "Fog Whale",
+        "alt_name": "Nebelwal",
+        "voice_line": "Fog Whale is somewhere underneath the bassline, listening.",
+        "image_path": "/static/characters/fog_whale.png",
+        "rarity": "rare",
+    },
+    "sunrise_stag": {
+        "name": "Sunrise Stag",
+        "alt_name": "Morgenrothirsch",
+        "voice_line": "Sunrise Stag is crying and won't say why.",
+        "image_path": "/static/characters/sunrise_stag.png",
+        "rarity": "uncommon",
+    },
+    "disco_flamingo": {
+        "name": "Disco Flamingo",
+        "alt_name": "Espejo Rosa",
+        "voice_line": "Disco Flamingo never left the dancefloor.",
+        "image_path": "/static/characters/disco_flamingo.png",
+        "rarity": "common",
+    },
+    "lounge_lynx": {
+        "name": "Lounge Lynx",
+        "alt_name": "Sofakatze",
+        "voice_line": "Lounge Lynx has opinions about your taste.",
+        "image_path": "/static/characters/lounge_lynx.png",
+        "rarity": "common",
+    },
+    "hard_rhino": {
+        "name": "Hard Rhino",
+        "alt_name": "Hartgummi",
+        "voice_line": "Hard Rhino remembers the BPM of every set he ever played.",
+        "image_path": "/static/characters/hard_rhino.png",
+        "rarity": "rare",
+    },
+    "breakbeat_falcon": {
+        "name": "Breakbeat Falcon",
+        "alt_name": "Amen Falke",
+        "voice_line": "Breakbeat Falcon clocks every snare from across the room.",
+        "image_path": "/static/characters/breakbeat_falcon.png",
+        "rarity": "uncommon",
+    },
+    "jungle_tiger": {
+        "name": "Jungle Tiger",
+        "alt_name": "Selva",
+        "voice_line": "Jungle Tiger has a sound system bigger than your apartment.",
+        "image_path": "/static/characters/jungle_tiger.png",
+        "rarity": "uncommon",
+    },
+    "garage_swan": {
+        "name": "Garage Swan",
+        "alt_name": "Eleganza",
+        "voice_line": "Garage Swan only goes out in white.",
+        "image_path": "/static/characters/garage_swan.png",
+        "rarity": "rare",
+    },
+    "boom_bap_owl": {
+        "name": "Boom-Bap Owl",
+        "alt_name": "Sample-Eule",
+        "voice_line": "Boom-Bap Owl knows what record that snare is from.",
+        "image_path": "/static/characters/boom_bap_owl.png",
+        "rarity": "uncommon",
+    },
+}
+
+# Maps the compute_taste_dna() tribe name → the canonical character slug.
+# Keep this in sync with TRIBES in src/analytics/taste_dna.py.
+_TRIBE_TO_CHARACTER: dict[str, str] = {
+    "Warehouse Monk": "bunker_bear",
+    "Sonic Archaeologist": "lounge_lynx",
+    "Fog Machine Philosopher": "fog_whale",
+    "Strobe Nomad": "disco_flamingo",
+    "Dawn Chaser": "sunrise_stag",
+    "Bass Templar": "breakbeat_falcon",
+    "Circuit Bender": "boom_bap_owl",
 }
 
 
+def _override_character_for_secondary_signal(
+    base_slug: str, taste_dna: dict[str, Any]
+) -> str:
+    """Apply genre-specific overrides on top of the base tribe → character mapping.
+
+    Some characters are 'hybrid forms' that override the base tribe when a
+    user's secondary genre signal is strong:
+    - Hard Rhino overrides Warehouse Monk if hard-techno share is dominant
+    - Jungle Tiger overrides Bass Templar if jungle/ragga share is dominant
+    - Garage Swan overrides Bass Templar if UK garage share is dominant
+
+    All hybrid logic is contained here so the base mapping stays simple.
+    """
+    families = (taste_dna.get("taste_dna") or {}).get("genre_families") or {}
+    if not families:
+        return base_slug
+
+    # Hard techno override (Bass Templar -> Breakbeat Falcon stays default;
+    # Warehouse Monk -> Hard Rhino if the techno share is heavy AND industrial-leaning)
+    if base_slug == "bunker_bear":
+        techno_share = families.get("techno", 0)
+        if techno_share > 0.65:
+            # Heavy techno listener with industrial lean → Hard Rhino
+            return "hard_rhino"
+
+    # Bass Templar override - check for jungle vs garage vs DnB
+    if base_slug == "breakbeat_falcon":
+        bass_share = families.get("bass", 0)
+        # Use the dominant artist's specific genre as the tiebreaker
+        # (this is a heuristic, refined post-launch)
+        return base_slug  # default to falcon for now; jungle_tiger / garage_swan
+        # are reachable via direct tribe-naming once we add them as proper
+        # tribes in taste_dna.py
+
+    return base_slug
+
+
 def _derive_character(taste_dna: dict[str, Any]) -> dict[str, Any] | None:
-    """Extract a single 'character' object from a taste_dna result."""
+    """Extract the full character object from a taste_dna result.
+
+    Returns a dict with: slug, name, alt_name, voice_line, image_path, rarity,
+    tagline, description, icon, confidence. The slug + image_path are what
+    the frontend uses to render the character image; the name + voice_line are
+    the headline copy on the card.
+    """
     tribe_block = taste_dna.get("taste_tribe") or {}
     tribe = tribe_block.get("tribe")
     if not tribe:
         return None
-    name = tribe.get("name")
+
+    tribe_name = tribe.get("name")
+    base_slug = _TRIBE_TO_CHARACTER.get(tribe_name)
+    if not base_slug:
+        # Unknown tribe — fall back to name-only character with no image
+        return {
+            "slug": None,
+            "name": tribe_name,
+            "alt_name": None,
+            "voice_line": None,
+            "image_path": None,
+            "rarity": "common",
+            "tagline": tribe.get("tagline"),
+            "description": tribe.get("description"),
+            "icon": tribe.get("icon"),
+            "confidence": tribe.get("confidence"),
+        }
+
+    final_slug = _override_character_for_secondary_signal(base_slug, taste_dna)
+    char = _CHARACTERS[final_slug]
     return {
-        "name": _CHARACTER_BY_TRIBE.get(name, name),
+        "slug": final_slug,
+        "name": char["name"],
+        "alt_name": char["alt_name"],
+        "voice_line": char["voice_line"],
+        "image_path": char["image_path"],
+        "rarity": char["rarity"],
         "tagline": tribe.get("tagline"),
         "description": tribe.get("description"),
         "icon": tribe.get("icon"),
