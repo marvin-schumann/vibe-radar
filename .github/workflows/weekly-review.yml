@@ -1,0 +1,50 @@
+# Weekly review prompt — fires Sunday at 18:00 Madrid time (16:00 UTC in CEST)
+# Cloud-based via GitHub Actions. Fires even when laptop is sleeping.
+
+name: Weekly Review Prompt
+
+on:
+  schedule:
+    # 16:00 UTC = 18:00 CEST (Madrid summer time)
+    - cron: '0 16 * * 0'  # Sunday at 16:00 UTC
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-prompt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send weekly review via Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: "1436217613"
+        run: |
+          WEEK=$(date -u +%Y-W%V)
+
+          TEXT=$(cat <<'MSGEOF'
+          📋 *Weekly Review* \(WEEK_PLACEHOLDER\)
+
+          Take 15 min\. Be honest\.
+
+          1\. What did I *ship* this week? \(artifacts, not activity\)
+          2\. Per\-project confidence 1\-10: Frequenz / Life\-OS / Content / Pista FC
+          3\. THE one outcome for next week \(one sentence\)
+          4\. WIP check — over 2 active \+ 1 maintenance?
+          5\. Drift check — any project flat 3 weeks running?
+          6\. Energy check — which project energized me? Drained me?
+          7\. Deep work hours vs plan? Next week's blocks?
+
+          _Reply via voice\. I'll save the transcript to second\-brain\._
+          MSGEOF
+          )
+
+          TEXT=$(echo "$TEXT" | sed "s|WEEK_PLACEHOLDER|$WEEK|g")
+
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${CHAT_ID}\",
+              \"text\": \"${TEXT}\",
+              \"parse_mode\": \"MarkdownV2\"
+            }" > /dev/null
+
+          echo "Weekly review sent for $WEEK"

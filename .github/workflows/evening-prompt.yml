@@ -1,0 +1,71 @@
+# Evening reflection prompt — fires Mon-Fri at 22:00 Madrid time (20:00 UTC in CEST)
+# This runs from GitHub Actions (cloud), NOT from the laptop, so it fires
+# even when the laptop is sleeping/closed. Fixes the "3am prompt" bug.
+#
+# The Telegram bot token is stored as a GitHub Actions secret: TELEGRAM_BOT_TOKEN
+# The chat ID is hardcoded (Marvin's personal chat).
+
+name: Evening Reflection Prompt
+
+on:
+  schedule:
+    # 20:00 UTC = 22:00 CEST (Madrid summer time)
+    # Adjust to 21:00 UTC when clocks go back to CET in October
+    - cron: '0 20 * * 1-5'  # Mon-Fri at 20:00 UTC
+  workflow_dispatch:  # Manual trigger for testing
+
+jobs:
+  send-prompt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send evening reflection via Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: "1436217613"
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+
+          # Pick a quote based on day-of-year (deterministic rotation)
+          DOY=$(date -u +%j)
+          QUOTES=(
+            "The smallest good act today is the capture of a strategic point from which you may go on to victories you never dreamed of."
+            "What you do every day matters more than what you do once in a while."
+            "The obstacle is the way."
+            "You are what you do, not what you say you'll do."
+            "Discipline equals freedom."
+            "The best time to plant a tree was 20 years ago. The second best time is now."
+            "Hard choices, easy life. Easy choices, hard life."
+          )
+          QUOTE_IDX=$(( 10#$DOY % ${#QUOTES[@]} ))
+          QUOTE="${QUOTES[$QUOTE_IDX]}"
+
+          TEXT=$(cat <<'MSGEOF'
+          💪 _QUOTE_PLACEHOLDER_
+
+          🌙 *Evening reflection* \(DATE_PLACEHOLDER\)
+
+          1\. How was today 1\-10, and why?
+          2\. *What did I avoid today that I shouldn't have?* \(non\-negotiable\)
+          3\. What's one thing my 80\-year\-old self would thank me for today?
+          4\. Which project moved today? Which am I neglecting?
+          5\. One thing I'm grateful for that wasn't here a year ago?
+
+          _Short version \(tired day\): Q1 \+ Q2 only\._
+
+          ☑️ Habits: 💧Water \| 🏋️ Move \| 📵 No PMO \| 📖 Read \| 🧘 Reflect \| 😴 Sleep 8h
+          MSGEOF
+          )
+
+          # Escape the quote for MarkdownV2
+          ESCAPED_QUOTE=$(echo "$QUOTE" | sed 's/[_*\[\]()~`>#+=|{}.!-]/\\&/g')
+          TEXT=$(echo "$TEXT" | sed "s|QUOTE_PLACEHOLDER|$ESCAPED_QUOTE|g" | sed "s|DATE_PLACEHOLDER|$DATE|g")
+
+          curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"chat_id\": \"${CHAT_ID}\",
+              \"text\": \"${TEXT}\",
+              \"parse_mode\": \"MarkdownV2\"
+            }" > /dev/null
+
+          echo "Evening prompt sent for $DATE"
