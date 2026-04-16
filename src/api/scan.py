@@ -231,6 +231,12 @@ def _gc_old_tasks() -> None:
             _TASKS.pop(tid, None)
         logger.warning("scan: hard cap hit — dropped {} oldest tasks", drop)
 
+    # Prune stale rate-limit entries (older than 2× cooldown)
+    cutoff = now - _SCAN_COOLDOWN_SECONDS * 2
+    stale_ips = [ip for ip, ts in _scan_last_call.items() if ts < cutoff]
+    for ip in stale_ips:
+        _scan_last_call.pop(ip, None)
+
 
 # ---------------------------------------------------------------------------
 # Character mapping (tribe → full persona for the landing-page card)

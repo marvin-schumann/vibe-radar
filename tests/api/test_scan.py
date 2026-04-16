@@ -88,6 +88,47 @@ class TestParseSoundCloudUrl:
         # The parser should reject it — we only want profile URLs for scanning.
         assert _parse_soundcloud_url("https://soundcloud.com/marvin/my-track") is None
 
+    def test_accepts_dots_in_username(self):
+        result = _parse_soundcloud_url("https://soundcloud.com/dj.someone")
+        assert result is not None
+        assert result[1] == "dj.someone"
+
+    def test_accepts_hyphens_in_username(self):
+        result = _parse_soundcloud_url("https://soundcloud.com/marvin-schumann-794354612")
+        assert result is not None
+        assert result[1] == "marvin-schumann-794354612"
+
+    def test_accepts_underscores_in_username(self):
+        result = _parse_soundcloud_url("https://soundcloud.com/dj_cool_guy")
+        assert result is not None
+        assert result[1] == "dj_cool_guy"
+
+
+# ---------------------------------------------------------------------------
+# Rate-limit GC tests
+# ---------------------------------------------------------------------------
+
+
+class TestRateLimitGC:
+    """Tests that stale rate-limit entries are cleaned up."""
+
+    def test_gc_cleans_stale_rate_limit_entries(self):
+        from src.api.scan import _gc_old_tasks, _scan_last_call, _SCAN_COOLDOWN_SECONDS
+
+        # Insert a stale entry (well past 2× cooldown)
+        _scan_last_call["1.2.3.4"] = time.time() - _SCAN_COOLDOWN_SECONDS * 3
+        _gc_old_tasks()
+        assert "1.2.3.4" not in _scan_last_call
+
+    def test_gc_keeps_recent_rate_limit_entries(self):
+        from src.api.scan import _gc_old_tasks, _scan_last_call
+
+        _scan_last_call["5.6.7.8"] = time.time()
+        _gc_old_tasks()
+        assert "5.6.7.8" in _scan_last_call
+        # Clean up
+        _scan_last_call.pop("5.6.7.8", None)
+
 
 # ---------------------------------------------------------------------------
 # Character mapping tests

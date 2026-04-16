@@ -27,30 +27,13 @@ COPY pyproject.toml ./
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Install dependencies declared in pyproject.toml (without installing the
-# project itself — we'll copy the source in the runtime stage)
+# Install deps directly from pyproject.toml — single source of truth for
+# dependency versions (no manual list to keep in sync).
 RUN pip install --upgrade pip && \
-    pip install \
-      "spotipy>=2.23.0" \
-      "httpx>=0.27.0" \
-      "beautifulsoup4>=4.12.0" \
-      "pydantic>=2.5.0" \
-      "pydantic-settings>=2.1.0" \
-      "fastapi>=0.109.0" \
-      "uvicorn[standard]>=0.27.0" \
-      "jinja2>=3.1.0" \
-      "python-dotenv>=1.0.0" \
-      "thefuzz[speedup]>=0.22.0" \
-      "plotly>=5.18.0" \
-      "loguru>=0.7.0" \
-      "rich>=13.7.0" \
-      "supabase>=2.3.0" \
-      "python-jose[cryptography]>=3.3.0" \
-      "fpdf2>=2.7.0" \
-      "apscheduler>=3.10.0" \
-      "python-multipart>=0.0.9" \
-      "Pillow>=10.0.0" \
-      "numpy>=1.26.0"
+    python -c "import tomllib; \
+deps = tomllib.load(open('pyproject.toml','rb'))['project']['dependencies']; \
+print('\n'.join(deps))" > /tmp/requirements.txt && \
+    pip install --no-cache-dir -r /tmp/requirements.txt
 
 # ──────────────────────────────────────────────────────────────────────────
 # Stage 2: runtime — minimal image with the venv + source

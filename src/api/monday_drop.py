@@ -173,15 +173,17 @@ async def compute_weekly_drop_for_user(user_id: str) -> dict[str, Any]:
     from src.api.main import _run_pipeline, _user_cache  # lazy — avoids cycle
 
     cache = _user_cache(user_id)
-    matches: list[Match] = cache.get("matches") or []
+    matches: list[Match] | None = cache.get("matches")
 
-    if not matches:
+    if matches is None:
         logger.info("monday_drop: no cached matches for user {}, running pipeline", user_id)
         try:
             await _run_pipeline(user_id=user_id)
         except Exception as exc:
             logger.warning("monday_drop: pipeline failed for user {}: {}", user_id, exc)
-        matches = cache.get("matches") or []
+        matches = cache.get("matches") or []  # after pipeline, fallback to empty
+
+    matches = matches or []
 
     top = _pick_top_events_for_week(matches)
     cards = [_match_to_card(m) for m in top]
@@ -241,7 +243,7 @@ async def send_monday_drop_to_user(user_id: str) -> None:
     db = get_admin_client()
 
     # Pull profile + auth email
-    profile_resp = db.table("profiles").select("*").eq("id", user_id).single().execute()
+    profile_resp = db.table("profiles").select("*").eq("id", user_id).maybe_single().execute()
     profile = profile_resp.data or {}
 
     email = profile.get("email")
