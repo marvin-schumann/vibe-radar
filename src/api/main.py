@@ -87,15 +87,22 @@ app = FastAPI(title="Frequenz", version="1.0.0", lifespan=lifespan)
 # Security middleware (DSGVO / Art. 32 – Security of processing)
 # ─────────────────────────────────────────
 
-# CORS: restrictive — only allow same-origin requests. The app runs as a
-# server-rendered FastAPI template app; no cross-origin browser calls are
-# expected. Explicit empty allowlist avoids accidental opening.
+# CORS: the landing page (frequenz.live on Vercel) makes cross-origin fetch
+# calls to the API (app.frequenz.live on Hetzner) for /api/scan and /api/waitlist.
+_cors_origins = (
+    [
+        "https://frequenz.live",
+        "https://www.frequenz.live",
+    ]
+    if settings.app_environment == "production"
+    else ["*"]
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[],
+    allow_origins=_cors_origins,
     allow_credentials=False,
     allow_methods=["GET", "POST"],
-    allow_headers=["*"],
+    allow_headers=["Content-Type"],
     max_age=600,
 )
 
