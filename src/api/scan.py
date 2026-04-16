@@ -82,7 +82,7 @@ _POLL_STALE_SECONDS = 120            # a running task that hasn't progressed
 #   https://www.soundcloud.com/username
 #   https://m.soundcloud.com/username
 _SC_URL_PATTERN = re.compile(
-    r"^https?://(?:www\.|m\.)?soundcloud\.com/([a-zA-Z0-9][a-zA-Z0-9_\-]{1,49})/?$"
+    r"^https?://(?:www\.|m\.)?soundcloud\.com/([a-zA-Z0-9][a-zA-Z0-9_.\-]{1,49})/?$"
 )
 
 
@@ -722,12 +722,6 @@ async def start_scan(request: Request) -> JSONResponse:
         400: invalid / malformed URL
         429: rate-limited
     """
-    if not _rate_limit_scan(_client_ip(request)):
-        return JSONResponse(
-            {"error": "rate limited — please wait a moment before retrying"},
-            status_code=429,
-        )
-
     try:
         body = await request.json()
     except Exception:
@@ -744,6 +738,13 @@ async def start_scan(request: Request) -> JSONResponse:
                 )
             },
             status_code=400,
+        )
+
+    # Rate-limit AFTER validation so typos don't burn the cooldown
+    if not _rate_limit_scan(_client_ip(request)):
+        return JSONResponse(
+            {"error": "rate limited — please wait a moment before retrying"},
+            status_code=429,
         )
 
     canonical_url, username = parsed

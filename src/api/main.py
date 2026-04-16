@@ -103,7 +103,7 @@ app.add_middleware(
 # restricted to the deployed hostname(s); in non-production any host is
 # accepted for local development convenience.
 _allowed_hosts = (
-    ["app.frequenz.live", "frequenz.live", "www.frequenz.live"]
+    ["app.frequenz.live", "frequenz.live", "www.frequenz.live", "localhost"]
     if settings.app_environment == "production"
     else ["*"]
 )
