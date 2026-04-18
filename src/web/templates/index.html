@@ -1494,9 +1494,11 @@
         </div>
         <div style="display:flex;align-items:center;gap:0.5rem;">
             <!-- Artists toggle -->
+            {% if not scan_task_id %}
             <button class="gp-btn" id="toggleArtistsBtn" onclick="toggleArtistsSection()">Artists</button>
             <span class="gp-btn active">Dashboard</span>
             <a href="/analysis" class="gp-btn">Analysis</a>
+            {% endif %}
         </div>
     </header>
 
@@ -1511,8 +1513,8 @@
             <span id="statusText">Loading...</span>
         </div>
 
-        <!-- Taste Profile Section -->
-        <section class="taste-section">
+        <!-- Taste Profile Section (hidden in scan mode — needs Spotify data) -->
+        <section class="taste-section" {% if scan_task_id %}style="display:none"{% endif %}>
             <h2 class="section-title"><span class="accent">//</span> Taste Profile</h2>
             <div class="taste-grid">
                 <!-- Genre Distribution -->
@@ -1661,8 +1663,8 @@
         </section>
     </div>
 
-    <!-- Floating Action Buttons -->
-    <div class="fab-group">
+    <!-- Floating Action Buttons (hidden in scan mode) -->
+    <div class="fab-group" {% if scan_task_id %}style="display:none"{% endif %}>
         <button class="pdf-fab" id="pdfBtn" aria-label="Export PDF">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
@@ -1723,6 +1725,44 @@
             } else {
                 dot.classList.add('offline');
             }
+        }
+
+        // ============================================================
+        // Scan mode: rewrite API URLs when viewing a public scan result
+        // ============================================================
+        const SCAN_TASK_ID = '{{ scan_task_id | default("") }}';
+        const _origFetch = window.fetch;
+        if (SCAN_TASK_ID) {
+            const rewriteMap = {
+                '/api/taste-dna': '/api/taste-dna/scan/' + SCAN_TASK_ID,
+                '/api/depth-score': '/api/depth-score/scan/' + SCAN_TASK_ID,
+                '/api/artists': '/api/artists/scan/' + SCAN_TASK_ID,
+                '/api/taste': '/api/taste/scan/' + SCAN_TASK_ID,
+            };
+            window.fetch = function(url, opts) {
+                if (typeof url === 'string') {
+                    // Rewrite known endpoints
+                    for (const [from, to] of Object.entries(rewriteMap)) {
+                        if (url === from || url.startsWith(from + '?')) {
+                            return _origFetch(to, opts);
+                        }
+                    }
+                    // Events endpoint needs special handling (has query params)
+                    if (url.startsWith('/api/events')) {
+                        return _origFetch('/api/events/scan/' + SCAN_TASK_ID, opts);
+                    }
+                    // Block auth-only endpoints silently
+                    if (url.startsWith('/api/refresh') || url.startsWith('/api/pipeline-status') || url.startsWith('/api/nps')) {
+                        return Promise.resolve(new Response(JSON.stringify({}), {status: 200, headers: {'Content-Type': 'application/json'}}));
+                    }
+                }
+                return _origFetch(url, opts);
+            };
+            // Hide auth-only UI elements
+            document.addEventListener('DOMContentLoaded', () => {
+                // Hide refresh button, pipeline indicator, NPS modal
+                document.querySelectorAll('.refresh-btn, .pipeline-indicator, .nps-modal, [data-auth-only]').forEach(el => el.style.display = 'none');
+            });
         }
 
         // ============================================================
@@ -1787,8 +1827,10 @@
                 if (data.last_refresh) {
                     const d = new Date(data.last_refresh);
                     updateStatus(`${total} matched event${total !== 1 ? 's' : ''} found \u00b7 Last refresh: ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`, true);
-                } else {
+                } else if (!SCAN_TASK_ID) {
                     updateStatus('No data yet \u2014 hit refresh to start', false);
+                } else {
+                    updateStatus(`${total} matched event${total !== 1 ? 's' : ''} found`, true);
                 }
             } catch (err) {
                 console.error('Failed to load events:', err);
@@ -2694,6 +2736,27 @@
         });
 
     </script>
+    {% if scan_task_id %}
+    <!-- Shareable card + email signup (scan mode only) -->
+    <section style="max-width:680px;margin:0 auto 3rem;padding:0 1.5rem;text-align:center;">
+        <h2 style="font-family:var(--font-display);font-size:2rem;letter-spacing:0.04em;margin-bottom:1.5rem;"><span style="color:var(--lime);">//</span> Your Taste Card</h2>
+        <img src="/api/scan/{{ scan_task_id }}/card.png" alt="Your Frequenz taste card" style="width:100%;max-width:360px;border-radius:12px;border:1px solid #2e2e2e;box-shadow:0 8px 40px rgba(0,0,0,0.5);margin-bottom:1rem;">
+        <div style="margin-bottom:2rem;">
+            <a href="/api/scan/{{ scan_task_id }}/card.png" download="frequenz-taste-card.png" style="display:inline-block;padding:0.8rem 1.5rem;background:var(--lime);color:#0c0c0c;font-family:var(--font-mono);font-weight:700;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;border-radius:var(--radius);text-decoration:none;">Download Card</a>
+        </div>
+
+        <div style="border-top:1px solid #1e1e1e;padding-top:2rem;margin-top:1rem;">
+            <h3 style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;margin-bottom:0.5rem;">Get matched every week</h3>
+            <p style="font-family:var(--font-body);font-size:0.9rem;color:var(--text-dim);margin-bottom:1rem;max-width:400px;margin-left:auto;margin-right:auto;">Monday Drop: 5 events matched to your taste, in your inbox every Monday at 8am.</p>
+            <form id="revealSignup" style="display:flex;gap:0.5rem;max-width:400px;margin:0 auto;" onsubmit="event.preventDefault(); const e=document.getElementById('revealEmail').value; if(!e)return; const b=this.querySelector('button'); b.disabled=true; b.textContent='Joining...'; fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,consent:true,source:'reveal-page'})}).then(()=>{b.textContent='You\\'re in';}).catch(()=>{b.disabled=false;b.textContent='Try again';});">
+                <input type="email" id="revealEmail" placeholder="your@email.com" required autocomplete="email" style="flex:1;padding:0.8rem 1rem;background:#111;border:1px solid #2e2e2e;border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:0.9rem;outline:none;">
+                <button type="submit" style="padding:0.8rem 1.2rem;background:var(--lime);color:#0c0c0c;font-family:var(--font-mono);font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;border:none;border-radius:var(--radius);cursor:pointer;white-space:nowrap;">Join</button>
+            </form>
+            <p style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;margin-top:0.5rem;">By joining you agree to our <a href="/datenschutz" style="color:#6a6a6a;">Datenschutz</a>.</p>
+        </div>
+    </section>
+    {% endif %}
+
     <footer style="border-top:1px solid #1e1e1e;padding:1.5rem 0;text-align:center;font-family:'Space Mono','Courier New',monospace;font-size:0.6rem;letter-spacing:0.06em;color:#303030;">
         <a href="/impressum" style="color:#6a6a6a;text-decoration:none;">Impressum</a> &nbsp;&middot;&nbsp; <a href="/datenschutz" style="color:#6a6a6a;text-decoration:none;">Datenschutz</a>
     </footer>

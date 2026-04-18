@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frequenz — SoundCloud Analysis</title>
+    <title>Frequenz — {% if scan_task_id %}Your Taste Decoded{% else %}SoundCloud Analysis{% endif %}</title>
 
     <!-- Chart.js + matrix plugin (self-hosted for DSGVO compliance — no CDN IP leak) -->
     <script src="/static/js/chart.umd.min.js"></script>
@@ -343,10 +343,12 @@
                 <h1>Frequenz</h1>
             </a>
         </div>
+        {% if not scan_task_id %}
         <div style="display:flex;align-items:center;gap:0.5rem;">
             <a href="/" class="gp-btn">Dashboard</a>
             <span class="gp-btn active">Analysis</span>
         </div>
+        {% endif %}
     </header>
 
     <!-- Main content -->
@@ -498,11 +500,11 @@
             const topCity = cities.length > 0 ? cities[0].city + ' ' + cities[0].percentage + '%' : '';
 
             header.innerHTML =
-                (char.image_path ? '<img src="' + char.image_path + '" style="width:100px;height:100px;border-radius:50%;border:2px solid #c4f135;margin-bottom:1rem;" alt="character">' : '') +
+                (char.image_path ? '<img src="' + char.image_path + '" style="width:140px;height:140px;border-radius:50%;border:2px solid #c4f135;box-shadow:0 0 60px rgba(196,241,53,0.12);margin-bottom:1.2rem;" alt="character">' : '') +
                 '<div style="font-family:var(--font-display);font-size:2.4rem;color:#c4f135;letter-spacing:0.04em;">' + (char.name || '') + '</div>' +
                 '<div style="font-family:var(--font-mono);font-size:0.65rem;color:#303030;text-transform:uppercase;letter-spacing:0.1em;">' + (char.alt_name || '') + '</div>' +
                 '<div style="font-style:italic;color:#6a6a6a;margin:0.5rem 0 1rem;font-size:0.95rem;">"' + (char.voice_line || '') + '"</div>' +
-                (data.uncanny_headline ? '<div style="font-family:var(--font-mono);font-size:0.75rem;color:#c4f135;letter-spacing:0.04em;margin-bottom:1.5rem;">' + data.uncanny_headline + '</div>' : '') +
+                (data.uncanny_headline ? '<div style="font-family:var(--font-mono);font-size:0.7rem;color:#6a6a6a;letter-spacing:0.04em;margin-bottom:1.5rem;">' + data.uncanny_headline + '</div>' : '') +
                 '<div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;padding:1rem 0;margin-bottom:1rem;">' +
                     '<div style="text-align:center"><div style="font-family:var(--font-display);font-size:1.4rem;color:#c4f135;">' + (tribe.name || '') + '</div><div style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;text-transform:uppercase;">Tribe</div></div>' +
                     (topCity ? '<div style="text-align:center"><div style="font-family:var(--font-display);font-size:1.4rem;color:#c4f135;">' + topCity + '</div><div style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;text-transform:uppercase;">Top Scene</div></div>' : '') +

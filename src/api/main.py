@@ -1445,18 +1445,14 @@ async def reveal_page(request: Request, task_id: str) -> HTMLResponse:
 
     return templates.TemplateResponse(
         request,
-        "analysis.html",
+        "index.html",
         {"user": None, "scan_task_id": task_id},
     )
 
 
 @app.get("/api/analysis/scan/{task_id}")
 async def get_scan_analysis(task_id: str) -> JSONResponse:
-    """Return analysis chart data for a public scan result.
-
-    Same format as /api/analysis/soundcloud but uses the scan's cached
-    artist data instead of requiring auth.
-    """
+    """Return analysis chart data for a public scan result."""
     from src.analytics.soundcloud import aggregate_soundcloud_data
     from src.api.scan import _TASKS
 
@@ -1469,12 +1465,104 @@ async def get_scan_analysis(task_id: str) -> JSONResponse:
     track_counts = result.get("_track_counts", {})
 
     data = aggregate_soundcloud_data(artist_objects, track_counts)
-    # Inject taste DNA + character + events so the reveal page can show everything
     data["taste_dna"] = result.get("taste_dna", {})
     data["character"] = result.get("character", {})
     data["matched_events"] = result.get("events", [])
     data["uncanny_headline"] = result.get("uncanny_headline", "")
     return JSONResponse(content=data)
+
+
+# --- Scan-mode API adapters (mirror the auth endpoints for public scans) ---
+
+def _get_scan_task(task_id: str):
+    from src.api.scan import _TASKS
+    task = _TASKS.get(task_id)
+    if not task or task.status != "done" or not task.result:
+        return None
+    return task
+
+
+@app.get("/api/taste-dna/scan/{task_id}")
+async def get_scan_taste_dna(task_id: str) -> JSONResponse:
+    """Public taste DNA for a scan result."""
+    task = _get_scan_task(task_id)
+    if not task:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+    return JSONResponse(content=task.result.get("taste_dna", {}))
+
+
+@app.get("/api/events/scan/{task_id}")
+async def get_scan_events(task_id: str) -> JSONResponse:
+    """Public matched events for a scan result."""
+    task = _get_scan_task(task_id)
+    if not task:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+    events = task.result.get("top_5_matched_events", [])
+    return JSONResponse(content={"matches": events, "total_events": len(events)})
+
+
+@app.get("/api/taste/scan/{task_id}")
+async def get_scan_taste(task_id: str) -> JSONResponse:
+    """Public taste profile summary for a scan result."""
+    task = _get_scan_task(task_id)
+    if not task:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+    result = task.result
+    character = result.get("character", {})
+    return JSONResponse(content={
+        "character": character,
+        "uncanny_headline": result.get("uncanny_headline", ""),
+        "stats": result.get("stats", {}),
+    })
+
+
+@app.get("/api/depth-score/scan/{task_id}")
+async def get_scan_depth_score(task_id: str) -> JSONResponse:
+    """Public depth score for a scan result.
+
+    Returns error to keep the depth card hidden — depth score requires
+    Spotify popularity data which isn't available from SoundCloud scraping.
+    """
+    return JSONResponse(content={"error": "depth score unavailable for SoundCloud-only scans"})
+
+
+@app.get("/api/artists/scan/{task_id}")
+async def get_scan_artists(task_id: str) -> JSONResponse:
+    """Public artist list for a scan result."""
+    task = _get_scan_task(task_id)
+    if not task:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+    artists = task.result.get("_artist_objects", [])
+    return JSONResponse(content={"artists": artists, "total": len(artists)})
+
+
+@app.get("/api/scan/{task_id}/card.png")
+async def get_scan_card(task_id: str) -> Response:
+    """Generate and return the shareable taste card as a PNG image."""
+    from src.cards.composer import compose_card
+
+    task = _get_scan_task(task_id)
+    if not task:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+
+    result = task.result
+    character = result.get("character", {})
+    taste_dna = result.get("taste_dna", {})
+    events = result.get("events", [])
+    top_event = events[0] if events else None
+
+    img = compose_card(character, taste_dna=taste_dna, top_event=top_event)
+
+    import io
+    buf = io.BytesIO()
+    img.save(buf, format="PNG", optimize=True)
+    buf.seek(0)
+
+    return Response(
+        content=buf.getvalue(),
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -258,7 +258,7 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
     "bunker_bear": {
         "name": "Bunker Bear",
         "alt_name": "Betonhund",
-        "voice_line": "Bunker Bear hasn't seen sunlight since Klubnacht.",
+        "voice_line": "Bunker Bear hasn't seen sunlight since last weekend.",
         "image_path": "/static/characters/bunker_bear.png",
         "rarity": "uncommon",
     },
