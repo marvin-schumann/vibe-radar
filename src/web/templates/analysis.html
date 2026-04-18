@@ -458,21 +458,74 @@
             padding: 10,
         };
 
+        // Detect public reveal mode (scan_task_id injected by Jinja)
+        const SCAN_TASK_ID = '{{ scan_task_id | default("") }}';
+        const ANALYSIS_URL = SCAN_TASK_ID
+            ? '/api/analysis/scan/' + SCAN_TASK_ID
+            : '/api/analysis/soundcloud';
+
         async function loadAnalysis() {
             try {
-                const resp = await fetch('/api/analysis/soundcloud');
+                const resp = await fetch(ANALYSIS_URL);
                 const data = await resp.json();
                 renderStats(data);
                 renderTrackChart(data.top_artists_by_tracks);
                 renderGenreChart(data.genre_distribution);
                 renderPlayChart(data.top_artists_by_play_count);
                 renderTimeCharts(data);
+                // If in reveal mode, show character + events + insight
+                if (SCAN_TASK_ID && data.character) {
+                    renderRevealHeader(data);
+                }
             } catch (err) {
                 console.error('Failed to load analysis:', err);
                 document.querySelectorAll('.empty-msg').forEach(el => {
                     el.textContent = 'No data available. Run a refresh on the dashboard first.';
                 });
             }
+        }
+
+        function renderRevealHeader(data) {
+            // Inject a character + taste DNA header above the charts
+            const main = document.querySelector('main') || document.querySelector('.container') || document.body;
+            const header = document.createElement('div');
+            header.style.cssText = 'text-align:center;padding:2rem 1rem 1rem;';
+            const char = data.character || {};
+            const dna = data.taste_dna || {};
+            const tribe = (dna.taste_tribe || {}).tribe || {};
+            const cities = ((dna.scene_city || {}).cities || []);
+            const df = (dna.dancefloor_ratio || {});
+            const topCity = cities.length > 0 ? cities[0].city + ' ' + cities[0].percentage + '%' : '';
+
+            header.innerHTML =
+                (char.image_path ? '<img src="' + char.image_path + '" style="width:100px;height:100px;border-radius:50%;border:2px solid #c4f135;margin-bottom:1rem;" alt="character">' : '') +
+                '<div style="font-family:var(--font-display);font-size:2.4rem;color:#c4f135;letter-spacing:0.04em;">' + (char.name || '') + '</div>' +
+                '<div style="font-family:var(--font-mono);font-size:0.65rem;color:#303030;text-transform:uppercase;letter-spacing:0.1em;">' + (char.alt_name || '') + '</div>' +
+                '<div style="font-style:italic;color:#6a6a6a;margin:0.5rem 0 1rem;font-size:0.95rem;">"' + (char.voice_line || '') + '"</div>' +
+                (data.uncanny_headline ? '<div style="font-family:var(--font-mono);font-size:0.75rem;color:#c4f135;letter-spacing:0.04em;margin-bottom:1.5rem;">' + data.uncanny_headline + '</div>' : '') +
+                '<div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;padding:1rem 0;margin-bottom:1rem;">' +
+                    '<div style="text-align:center"><div style="font-family:var(--font-display);font-size:1.4rem;color:#c4f135;">' + (tribe.name || '') + '</div><div style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;text-transform:uppercase;">Tribe</div></div>' +
+                    (topCity ? '<div style="text-align:center"><div style="font-family:var(--font-display);font-size:1.4rem;color:#c4f135;">' + topCity + '</div><div style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;text-transform:uppercase;">Top Scene</div></div>' : '') +
+                    '<div style="text-align:center"><div style="font-family:var(--font-display);font-size:1.4rem;color:#c4f135;">' + (df.dancefloor_pct || 0) + '%</div><div style="font-family:var(--font-mono);font-size:0.55rem;color:#303030;text-transform:uppercase;">Dancefloor</div></div>' +
+                '</div>';
+
+            // Show matched events
+            const events = data.matched_events || [];
+            if (events.length > 0) {
+                let evHtml = '<div style="max-width:480px;margin:0 auto 2rem;text-align:left;">';
+                evHtml += '<div style="font-family:var(--font-mono);font-size:0.65rem;color:#303030;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">// Matched Events</div>';
+                events.forEach(ev => {
+                    evHtml += '<div style="background:#111;border:1px solid #2e2e2e;border-radius:6px;padding:0.8rem 1rem;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;">' +
+                        '<div><div style="font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.04em;">' + (ev.name || '') + '</div>' +
+                        '<div style="font-family:var(--font-mono);font-size:0.6rem;color:#6a6a6a;">' + (ev.venue || '') + (ev.date ? ' · ' + ev.date.substring(0, 10) : '') + '</div></div>' +
+                        '<div style="font-family:var(--font-display);font-size:1.2rem;color:#c4f135;">' + (ev.match_score || 0) + '%</div>' +
+                    '</div>';
+                });
+                evHtml += '</div>';
+                header.innerHTML += evHtml;
+            }
+
+            main.insertBefore(header, main.firstChild);
         }
 
         function renderTimeCharts(data) {

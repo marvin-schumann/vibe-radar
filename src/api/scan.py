@@ -623,6 +623,9 @@ async def _run_scan(task_id: str) -> None:
             "events_scanned": task.progress.events_scanned,
             "city": settings.city,
         },
+        # Raw data for the reveal page (analysis charts)
+        "_artist_objects": artist_objects,
+        "_track_counts": dict(collector.track_counts),
     }
     task.status = "done"
     task.progress.current_step = "done"

@@ -1422,6 +1422,62 @@ async def get_card_png(card_name: str, user=Depends(get_session_user)) -> Respon
 
 
 # ---------------------------------------------------------------------------
+# Routes: Public Reveal (no auth — accessible via scan task_id)
+# ---------------------------------------------------------------------------
+
+
+@app.get("/reveal/{task_id}", response_class=HTMLResponse)
+async def reveal_page(request: Request, task_id: str) -> HTMLResponse:
+    """Public reveal page — shows the full analysis for a completed scan.
+
+    No auth required. Uses the scan task's cached data to render the same
+    analysis template the authenticated dashboard uses.
+    """
+    from src.api.scan import _TASKS
+
+    task = _TASKS.get(task_id)
+    if not task or task.status != "done" or not task.result:
+        return HTMLResponse(
+            "<h1>Scan not found</h1><p>This scan may have expired or is still processing. "
+            "<a href='/'>Try again</a></p>",
+            status_code=404,
+        )
+
+    return templates.TemplateResponse(
+        request,
+        "analysis.html",
+        {"user": None, "scan_task_id": task_id},
+    )
+
+
+@app.get("/api/analysis/scan/{task_id}")
+async def get_scan_analysis(task_id: str) -> JSONResponse:
+    """Return analysis chart data for a public scan result.
+
+    Same format as /api/analysis/soundcloud but uses the scan's cached
+    artist data instead of requiring auth.
+    """
+    from src.analytics.soundcloud import aggregate_soundcloud_data
+    from src.api.scan import _TASKS
+
+    task = _TASKS.get(task_id)
+    if not task or task.status != "done" or not task.result:
+        return JSONResponse({"error": "scan not found"}, status_code=404)
+
+    result = task.result
+    artist_objects = result.get("_artist_objects", [])
+    track_counts = result.get("_track_counts", {})
+
+    data = aggregate_soundcloud_data(artist_objects, track_counts)
+    # Inject taste DNA + character + events so the reveal page can show everything
+    data["taste_dna"] = result.get("taste_dna", {})
+    data["character"] = result.get("character", {})
+    data["matched_events"] = result.get("events", [])
+    data["uncanny_headline"] = result.get("uncanny_headline", "")
+    return JSONResponse(content=data)
+
+
+# ---------------------------------------------------------------------------
 # Routes: Analysis
 # ---------------------------------------------------------------------------
 
