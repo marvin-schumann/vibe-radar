@@ -465,7 +465,21 @@ def _derive_uncanny_insight(
                     break
             return f"You've liked {top_count} tracks from {display}."
 
-    return None
+    # 4. Dancefloor ratio (fallback)
+    df = taste_dna.get("dancefloor_ratio") or {}
+    df_pct = df.get("dancefloor_pct", 0)
+    if df_pct >= 80:
+        return f"{df_pct}% of your library is pure dancefloor energy."
+    elif df_pct <= 30:
+        return f"Only {df_pct}% dancefloor — you're a headphones-first listener."
+
+    # 5. Tribe-based generic (ultimate fallback — never returns None)
+    tribe = (taste_dna.get("taste_tribe") or {}).get("tribe") or {}
+    tribe_name = tribe.get("name", "")
+    if tribe_name:
+        return f"Your listening pattern marks you as a {tribe_name}."
+
+    return "Your taste is uncanny."
 
 
 # ---------------------------------------------------------------------------
@@ -574,7 +588,31 @@ async def _run_scan(task_id: str) -> None:
         top_events = []
 
     # --- 4. Done --------------------------------------------------------------
+    # Build result in TWO formats:
+    #   - full: the detailed internal representation (for debugging / future API)
+    #   - top-level fields flattened for the landing page JS (renderReveal)
+    flat_events = []
+    for m in top_events:
+        ev = m.get("event", {})
+        venue = ev.get("venue") or {}
+        flat_events.append({
+            "name": ev.get("name", ""),
+            "venue": venue.get("name", ""),
+            "date": ev.get("date", ""),
+            "match_score": round(m.get("confidence", 0) * 100),
+            "url": ev.get("url", ""),
+            "blurred": False,
+        })
+
     task.result = {
+        # Flat fields the landing page JS expects
+        "uncanny_headline": insight or "Your taste is uncanny.",
+        "character_name": character.get("name", ""),
+        "character_alt": character.get("alt_name", ""),
+        "voice_line": character.get("voice_line", ""),
+        "character_image": character.get("image_path", ""),
+        "events": flat_events,
+        # Full structured data (for API consumers, Monday Drop, cards)
         "taste_dna": taste_dna,
         "character": character,
         "top_5_matched_events": top_events,
