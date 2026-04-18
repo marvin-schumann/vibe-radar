@@ -59,8 +59,10 @@ COPY --from=builder /opt/venv /opt/venv
 
 # Copy application source
 COPY --chown=frequenz:frequenz src ./src
-COPY --chown=frequenz:frequenz data ./data
 COPY --chown=frequenz:frequenz pyproject.toml ./
+
+# Create empty data dir (event data is scraped at runtime, not bundled)
+RUN mkdir -p data
 
 USER frequenz
 
