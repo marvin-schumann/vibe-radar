@@ -1508,10 +1508,27 @@
     <div class="container">
 
         <!-- Status bar -->
-        <div class="status-bar" style="margin-bottom: 1.5rem;">
+        <div class="status-bar" style="margin-bottom: 1.5rem;" {% if scan_task_id %}hidden{% endif %}>
             <div class="status-dot" id="statusDot"></div>
             <span id="statusText">Loading...</span>
         </div>
+
+        {% if scan_task_id %}
+        <!-- SCAN MODE: Card hero + insight (vision v2 layout) -->
+        <section style="text-align:center;padding:2rem 0 1rem;margin-bottom:2rem;">
+            <img src="/api/scan/{{ scan_task_id }}/card.png"
+                 alt="Your Frequenz taste card"
+                 style="width:100%;max-width:400px;border-radius:12px;border:1px solid #2e2e2e;box-shadow:0 12px 60px rgba(0,0,0,0.6);margin-bottom:1.5rem;">
+            <div style="margin-bottom:1.5rem;">
+                <a href="/api/scan/{{ scan_task_id }}/card.png"
+                   download="frequenz-taste-card.png"
+                   style="display:inline-block;padding:0.9rem 2rem;background:var(--lime);color:#0c0c0c;font-family:var(--font-mono);font-weight:700;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;border-radius:var(--radius);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;"
+                   onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(196,241,53,0.22)'"
+                   onmouseout="this.style.transform='';this.style.boxShadow=''">Download Your Card</a>
+            </div>
+            <div id="scanInsightWhisper" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-dim);letter-spacing:0.04em;max-width:480px;margin:0 auto;"></div>
+        </section>
+        {% endif %}
 
         <!-- Taste Profile Section (hidden in scan mode — needs Spotify data) -->
         <section class="taste-section" {% if scan_task_id %}style="display:none"{% endif %}>
@@ -1758,10 +1775,14 @@
                 }
                 return _origFetch(url, opts);
             };
-            // Hide auth-only UI elements
+            // Hide auth-only UI elements + populate insight whisper
             document.addEventListener('DOMContentLoaded', () => {
-                // Hide refresh button, pipeline indicator, NPS modal
                 document.querySelectorAll('.refresh-btn, .pipeline-indicator, .nps-modal, [data-auth-only]').forEach(el => el.style.display = 'none');
+                // Fetch the scan result to get the uncanny insight
+                _origFetch('/api/taste/scan/' + SCAN_TASK_ID).then(r => r.json()).then(d => {
+                    const whisper = document.getElementById('scanInsightWhisper');
+                    if (whisper && d.uncanny_headline) whisper.textContent = d.uncanny_headline;
+                }).catch(() => {});
             });
         }
 
