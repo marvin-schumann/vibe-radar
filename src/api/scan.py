@@ -260,7 +260,7 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
         "alt_name": "Betonhund",
         "voice_line": "Bunker Bear hasn't seen sunlight since last weekend.",
         "image_path": "/static/characters/bunker_bear.png",
-        "rarity": "uncommon",
+        "rarity": "legendary",
     },
     "fog_whale": {
         "name": "Fog Whale",
@@ -281,28 +281,28 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
         "alt_name": "Espejo Rosa",
         "voice_line": "Disco Flamingo never left the dancefloor.",
         "image_path": "/static/characters/disco_flamingo.png",
-        "rarity": "common",
+        "rarity": "rare",
     },
     "lounge_lynx": {
         "name": "Lounge Lynx",
         "alt_name": "Sofakatze",
         "voice_line": "Lounge Lynx found that record before Discogs existed.",
         "image_path": "/static/characters/lounge_lynx.png",
-        "rarity": "common",
+        "rarity": "rare",
     },
     "hard_rhino": {
         "name": "Hard Rhino",
         "alt_name": "Stahlhorn",
         "voice_line": "Hard Rhino remembers the BPM of every set he ever played.",
         "image_path": "/static/characters/hard_rhino.png",
-        "rarity": "rare",
+        "rarity": "legendary",
     },
     "breakbeat_falcon": {
         "name": "Breakbeat Falcon",
         "alt_name": "Amen Falke",
         "voice_line": "Breakbeat Falcon clocks every snare from across the room.",
         "image_path": "/static/characters/breakbeat_falcon.png",
-        "rarity": "uncommon",
+        "rarity": "common",
     },
     "jungle_tiger": {
         "name": "Jungle Tiger",
@@ -323,7 +323,7 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
         "alt_name": "Patchwerk",
         "voice_line": "Circuit Owl knows what oscillator made that sound.",
         "image_path": "/static/characters/boom_bap_owl.png",
-        "rarity": "uncommon",
+        "rarity": "common",
     },
 }
 
