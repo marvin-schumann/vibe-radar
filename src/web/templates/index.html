@@ -2758,17 +2758,11 @@
 
     </script>
     {% if scan_task_id %}
-    <!-- Shareable card + email signup (scan mode only) -->
+    <!-- Email signup CTA (scan mode only) — card is already at top -->
     <section style="max-width:680px;margin:0 auto 3rem;padding:0 1.5rem;text-align:center;">
-        <h2 style="font-family:var(--font-display);font-size:2rem;letter-spacing:0.04em;margin-bottom:1.5rem;"><span style="color:var(--lime);">//</span> Your Taste Card</h2>
-        <img src="/api/scan/{{ scan_task_id }}/card.png" alt="Your Frequenz taste card" style="width:100%;max-width:360px;border-radius:12px;border:1px solid #2e2e2e;box-shadow:0 8px 40px rgba(0,0,0,0.5);margin-bottom:1rem;">
-        <div style="margin-bottom:2rem;">
-            <a href="/api/scan/{{ scan_task_id }}/card.png" download="frequenz-taste-card.png" style="display:inline-block;padding:0.8rem 1.5rem;background:var(--lime);color:#0c0c0c;font-family:var(--font-mono);font-weight:700;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;border-radius:var(--radius);text-decoration:none;">Download Card</a>
-        </div>
-
-        <div style="border-top:1px solid #1e1e1e;padding-top:2rem;margin-top:1rem;">
-            <h3 style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;margin-bottom:0.5rem;">Get matched every week</h3>
-            <p style="font-family:var(--font-body);font-size:0.9rem;color:var(--text-dim);margin-bottom:1rem;max-width:400px;margin-left:auto;margin-right:auto;">Monday Drop: 5 events matched to your taste, in your inbox every Monday at 8am.</p>
+        <div style="border-top:1px solid #1e1e1e;padding-top:2rem;">
+            <h3 style="font-family:var(--font-display);font-size:1.6rem;letter-spacing:0.04em;margin-bottom:0.5rem;">Get matched every Monday</h3>
+            <p style="font-family:var(--font-body);font-size:0.9rem;color:var(--text-dim);margin-bottom:1rem;max-width:400px;margin-left:auto;margin-right:auto;">5 events matched to your taste, every Monday at 08:00 in your inbox.</p>
             <form id="revealSignup" style="display:flex;gap:0.5rem;max-width:400px;margin:0 auto;" onsubmit="event.preventDefault(); const e=document.getElementById('revealEmail').value; if(!e)return; const b=this.querySelector('button'); b.disabled=true; b.textContent='Joining...'; fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,consent:true,source:'reveal-page'})}).then(()=>{b.textContent='You\\'re in';}).catch(()=>{b.disabled=false;b.textContent='Try again';});">
                 <input type="email" id="revealEmail" placeholder="your@email.com" required autocomplete="email" style="flex:1;padding:0.8rem 1rem;background:#111;border:1px solid #2e2e2e;border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:0.9rem;outline:none;">
                 <button type="submit" style="padding:0.8rem 1.2rem;background:var(--lime);color:#0c0c0c;font-family:var(--font-mono);font-weight:700;font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;border:none;border-radius:var(--radius);cursor:pointer;white-space:nowrap;">Join</button>
