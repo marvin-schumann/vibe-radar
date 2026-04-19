@@ -1914,3 +1914,52 @@ async def export_pdf() -> Response:
     )
 
 
+# ---------------------------------------------------------------------------
+# City voting (expansion voting widget on landing page)
+# ---------------------------------------------------------------------------
+
+_VALID_CITIES = {"Berlin", "Barcelona", "Amsterdam", "London", "Lisbon", "Paris", "Ibiza"}
+_city_votes: dict[str, int] = {city: 0 for city in sorted(_VALID_CITIES)}
+_vote_ips: dict[str, float] = {}  # IP -> last vote timestamp
+_VOTE_COOLDOWN_SECONDS = 86400  # 24 hours
+
+
+@app.get("/api/votes")
+async def get_votes() -> JSONResponse:
+    """Return current city vote counts, sorted descending by count."""
+    sorted_votes = dict(
+        sorted(_city_votes.items(), key=lambda item: item[1], reverse=True)
+    )
+    return JSONResponse({"votes": sorted_votes})
+
+
+@app.post("/api/vote/{city}")
+async def vote_for_city(city: str, request: Request) -> JSONResponse:
+    """Record a vote for a city. Rate-limited to 1 vote per IP per 24 hours."""
+    import time
+
+    if city not in _VALID_CITIES:
+        return JSONResponse(
+            {"error": f"invalid city — must be one of: {', '.join(sorted(_VALID_CITIES))}"},
+            status_code=400,
+        )
+
+    ip = _client_ip(request)
+    now = time.time()
+    last = _vote_ips.get(ip, 0.0)
+    if now - last < _VOTE_COOLDOWN_SECONDS:
+        remaining = int(_VOTE_COOLDOWN_SECONDS - (now - last))
+        return JSONResponse(
+            {"error": "already voted — you can vote again in {remaining}s".format(remaining=remaining)},
+            status_code=429,
+        )
+
+    _vote_ips[ip] = now
+    _city_votes[city] += 1
+
+    sorted_votes = dict(
+        sorted(_city_votes.items(), key=lambda item: item[1], reverse=True)
+    )
+    return JSONResponse({"status": "ok", "voted": city, "votes": sorted_votes})
+
+
