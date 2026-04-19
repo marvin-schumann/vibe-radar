@@ -272,7 +272,7 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
     "sunrise_stag": {
         "name": "Sunrise Stag",
         "alt_name": "Morgenrothirsch",
-        "voice_line": "Sunrise Stag is crying and won't say why.",
+        "voice_line": "Sunrise Stag is still listening to the same set from 6am.",
         "image_path": "/static/characters/sunrise_stag.png",
         "rarity": "uncommon",
     },
@@ -286,13 +286,13 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
     "lounge_lynx": {
         "name": "Lounge Lynx",
         "alt_name": "Sofakatze",
-        "voice_line": "Lounge Lynx has opinions about your taste.",
+        "voice_line": "Lounge Lynx found that record before Discogs existed.",
         "image_path": "/static/characters/lounge_lynx.png",
         "rarity": "common",
     },
     "hard_rhino": {
         "name": "Hard Rhino",
-        "alt_name": "Hartgummi",
+        "alt_name": "Stahlhorn",
         "voice_line": "Hard Rhino remembers the BPM of every set he ever played.",
         "image_path": "/static/characters/hard_rhino.png",
         "rarity": "rare",
@@ -319,9 +319,9 @@ _CHARACTERS: dict[str, dict[str, Any]] = {
         "rarity": "rare",
     },
     "boom_bap_owl": {
-        "name": "Boom-Bap Owl",
-        "alt_name": "Sample-Eule",
-        "voice_line": "Boom-Bap Owl knows what record that snare is from.",
+        "name": "Circuit Owl",
+        "alt_name": "Patchwerk",
+        "voice_line": "Circuit Owl knows what oscillator made that sound.",
         "image_path": "/static/characters/boom_bap_owl.png",
         "rarity": "uncommon",
     },
