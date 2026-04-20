@@ -39,26 +39,12 @@ def _headers() -> dict[str, str]:
 # ---------------------------------------------------------------------------
 
 
-async def add_waitlist_contact(
+async def _add_contact_direct(
     email: str,
-    *,
-    first_name: str | None = None,
-    city: str | None = None,
-    source: str = "landing-page",
-    list_id: int | None = None,
+    attributes: dict[str, Any],
+    target_list: int,
 ) -> dict[str, Any]:
-    """Add an email to the waitlist contact list.
-
-    Idempotent — Brevo updates the existing contact if the email already exists.
-    Raises BrevoError on hard failures (4xx/5xx other than 'already exists').
-    """
-    target_list = list_id or settings.brevo_waitlist_list_id
-    attributes: dict[str, Any] = {"SOURCE": source}
-    if first_name:
-        attributes["FIRSTNAME"] = first_name
-    if city:
-        attributes["CITY"] = city
-
+    """Direct contact creation (fallback when DOI template is not configured)."""
     payload = {
         "email": email,
         "attributes": attributes,
@@ -72,25 +58,132 @@ async def add_waitlist_contact(
                 f"{BREVO_API_BASE}/contacts", headers=_headers(), json=payload
             )
         except httpx.HTTPError as e:
-            logger.error("brevo waitlist add failed (network): {}", e)
+            logger.error("brevo direct add failed (network): {}", e)
             raise BrevoError(f"network error: {e}") from e
 
     if r.status_code in (200, 201, 204):
-        logger.info("brevo waitlist contact added: {}", email)
-        return {"ok": True, "status": r.status_code}
+        logger.info("brevo contact added directly (no DOI): {}", email)
+        return {"ok": True, "status": r.status_code, "doi": False}
 
-    # 400 with code "duplicate_parameter" means already exists — that's fine
     try:
         body = r.json()
     except Exception:
         body = {"raw": r.text}
 
     if r.status_code == 400 and body.get("code") == "duplicate_parameter":
-        logger.info("brevo waitlist contact already existed: {}", email)
-        return {"ok": True, "status": 200, "duplicate": True}
+        logger.info("brevo contact already existed: {}", email)
+        return {"ok": True, "status": 200, "duplicate": True, "doi": False}
 
-    logger.error("brevo waitlist add failed: {} {}", r.status_code, body)
+    logger.error("brevo direct add failed: {} {}", r.status_code, body)
     raise BrevoError(f"brevo {r.status_code}: {body}")
+
+
+async def _add_contact_doi(
+    email: str,
+    attributes: dict[str, Any],
+    target_list: int,
+    template_id: int,
+    redirection_url: str,
+) -> dict[str, Any]:
+    """Double Opt-In contact creation via Brevo DOI endpoint.
+
+    Brevo sends a confirmation email; contact is only added after the user
+    clicks the confirmation link. Required for DSGVO compliance.
+    """
+    payload: dict[str, Any] = {
+        "email": email,
+        "includeListIds": [target_list],
+        "templateId": template_id,
+        "redirectionUrl": redirection_url,
+    }
+    if attributes:
+        payload["attributes"] = attributes
+
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            r = await client.post(
+                f"{BREVO_API_BASE}/contacts/doubleOptinConfirmation",
+                headers=_headers(),
+                json=payload,
+            )
+        except httpx.HTTPError as e:
+            logger.error("brevo DOI request failed (network): {}", e)
+            raise BrevoError(f"network error: {e}") from e
+
+    if r.status_code in (200, 201, 204):
+        logger.info("brevo DOI confirmation email sent to: {}", email)
+        return {"ok": True, "status": r.status_code, "doi": True}
+
+    try:
+        body = r.json()
+    except Exception:
+        body = {"raw": r.text}
+
+    # Contact already exists and is confirmed — treat as success
+    if r.status_code == 400 and body.get("code") == "duplicate_parameter":
+        logger.info("brevo DOI contact already existed: {}", email)
+        return {"ok": True, "status": 200, "duplicate": True, "doi": True}
+
+    logger.error("brevo DOI request failed: {} {}", r.status_code, body)
+    raise BrevoError(f"brevo DOI {r.status_code}: {body}")
+
+
+async def add_waitlist_contact(
+    email: str,
+    *,
+    first_name: str | None = None,
+    city: str | None = None,
+    source: str = "landing-page",
+    list_id: int | None = None,
+) -> dict[str, Any]:
+    """Add an email to the waitlist contact list using Double Opt-In (DOI).
+
+    DSGVO-compliant flow:
+    1. If BREVO_DOI_TEMPLATE_ID is configured (> 0), use the DOI endpoint.
+       Brevo sends a confirmation email; contact is only added after click.
+    2. If DOI template is not configured (= 0) or the DOI call fails,
+       fall back to direct contact creation with a warning log.
+
+    Idempotent — Brevo updates the existing contact if the email already exists.
+    Raises BrevoError on hard failures (4xx/5xx other than 'already exists').
+    """
+    target_list = list_id or settings.brevo_waitlist_list_id
+    attributes: dict[str, Any] = {"SOURCE": source}
+    if first_name:
+        attributes["FIRSTNAME"] = first_name
+    if city:
+        attributes["CITY"] = city
+
+    doi_template = settings.brevo_doi_template_id
+
+    # --- Try Double Opt-In first ---
+    if doi_template > 0:
+        try:
+            return await _add_contact_doi(
+                email,
+                attributes,
+                target_list,
+                template_id=doi_template,
+                redirection_url=settings.brevo_doi_redirection_url,
+            )
+        except BrevoError:
+            logger.warning(
+                "brevo DOI failed for {} — falling back to direct add "
+                "(check BREVO_DOI_TEMPLATE_ID={})",
+                email,
+                doi_template,
+            )
+            # Fall through to direct add
+    else:
+        logger.warning(
+            "brevo DOI not configured (BREVO_DOI_TEMPLATE_ID=0) — "
+            "using direct contact add for {}. Set up a DOI template in Brevo "
+            "dashboard for full DSGVO compliance.",
+            email,
+        )
+
+    # --- Fallback: direct add ---
+    return await _add_contact_direct(email, attributes, target_list)
 
 
 # ---------------------------------------------------------------------------

@@ -43,6 +43,8 @@ class Settings(BaseSettings):
     brevo_sender_name: str = "Frequenz"
     brevo_waitlist_list_id: int = 3  # "Frequenz Waitlist" list created in Brevo dashboard
     brevo_admin_notification_email: str = "hello@frequenz.live"  # where signup notifications go
+    brevo_doi_template_id: int = 0  # Brevo DOI confirmation template; 0 = not configured (fallback to direct add)
+    brevo_doi_redirection_url: str = "https://frequenz.live/confirmed"  # URL user lands on after DOI click
 
     # App
     app_secret_key: str = "change-me-in-production"

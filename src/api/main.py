@@ -758,8 +758,21 @@ async def join_waitlist(request: Request) -> Response:
             status_code=502,
         )
 
-    logger.info("waitlist signup: {} (duplicate={})", email, result.get("duplicate", False))
-    return JSONResponse({"status": "ok"})
+    used_doi = result.get("doi", False)
+    is_duplicate = result.get("duplicate", False)
+    logger.info("waitlist signup: {} (doi={}, duplicate={})", email, used_doi, is_duplicate)
+
+    if used_doi and not is_duplicate:
+        return JSONResponse({
+            "status": "ok",
+            "doi": True,
+            "message": "Check your email to confirm your signup.",
+        })
+    return JSONResponse({
+        "status": "ok",
+        "doi": False,
+        "message": "You're on the list.",
+    })
 
 
 # ---------------------------------------------------------------------------
