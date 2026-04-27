@@ -81,7 +81,12 @@ class ExactMatcher:
 
                     score = max(score_raw, score_norm)
 
-                    if score >= self.threshold:
+                    # Short names (under 5 chars) require near-exact match
+                    # to avoid false positives like JAWS→JAW, AG→AGE, etc.
+                    min_len = min(len(artist_normalized), len(event_normalized))
+                    effective_threshold = 95 if min_len < 5 else self.threshold
+
+                    if score >= effective_threshold:
                         if best_match is None or score > best_match[1]:
                             best_match = (artist, score, event_artist_name)
 
