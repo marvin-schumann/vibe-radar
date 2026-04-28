@@ -14,6 +14,9 @@ from src.models import Artist, Event, Match, MatchType
 # Common prefixes/suffixes to strip for better matching
 _STRIP_TOKENS = {"dj", "mc", "the", "djs", "live", "b2b"}
 
+# Names that should never be matched — generic placeholders, not real artists
+SKIP_NAMES = {"various artists", "tba", "tbc", "special guest", "b2b"}
+
 
 def _normalize_artist_name(name: str) -> str:
     """Normalize an artist name for comparison.
@@ -63,9 +66,17 @@ class ExactMatcher:
                 event_raw = event_artist_name.lower().strip()
                 event_normalized = _normalize_artist_name(event_artist_name)
 
+                # Skip generic placeholder names
+                if event_raw in SKIP_NAMES or event_normalized in SKIP_NAMES:
+                    continue
+
                 best_match: tuple[Artist, int, str] | None = None
 
                 for artist, artist_raw, artist_normalized in artist_lookup:
+                    # Skip generic placeholder names on the user side too
+                    if artist_raw in SKIP_NAMES or artist_normalized in SKIP_NAMES:
+                        continue
+
                     # Only use partial_ratio when BOTH names are 8+ chars.
                     # Short names like "Juli", "GREG", "AG" cause massive
                     # false positives via substring matching.
@@ -73,11 +84,16 @@ class ExactMatcher:
 
                     score_raw = fuzz.ratio(artist_raw, event_raw)
                     if use_partial:
-                        score_raw = max(score_raw, fuzz.partial_ratio(artist_raw, event_raw))
+                        # partial_ratio is more permissive — require 92+ to reduce false positives
+                        partial_raw = fuzz.partial_ratio(artist_raw, event_raw)
+                        if partial_raw >= 92:
+                            score_raw = max(score_raw, partial_raw)
 
                     score_norm = fuzz.ratio(artist_normalized, event_normalized)
                     if use_partial:
-                        score_norm = max(score_norm, fuzz.partial_ratio(artist_normalized, event_normalized))
+                        partial_norm = fuzz.partial_ratio(artist_normalized, event_normalized)
+                        if partial_norm >= 92:
+                            score_norm = max(score_norm, partial_norm)
 
                     score = max(score_raw, score_norm)
 

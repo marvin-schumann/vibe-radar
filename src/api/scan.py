@@ -640,16 +640,19 @@ async def _match_top_events(
     sc_artists: list[Any],  # list[Artist] but local import avoidance
     task: ScanTask,
 ) -> list[dict[str, Any]]:
-    """Run the full exact + vibe matching pipeline and return top 5 as dicts.
+    """Run the full exact + vibe + DJ-vector matching pipeline and return top 5 as dicts.
 
     Collects events from the same three sources as the authenticated
-    pipeline (RA, Bandsintown, Songkick), runs ExactMatcher + VibeMatcher,
-    and returns the top 5 serialised matches. Returns [] if no events are
-    available for the configured city.
+    pipeline (RA, Bandsintown, Songkick), enriches events with genres
+    inferred from DJ taste vectors, then runs ExactMatcher + VibeMatcher +
+    DJ-profile matching, deduplicates, and returns the top 5.
+    Returns [] if no events are available for the configured city.
     """
     from src.collectors.events.bandsintown import BandsintownCollector
     from src.collectors.events.resident_advisor import ResidentAdvisorCollector
     from src.collectors.events.songkick import SongkickCollector
+    from src.matching.dj_event import match_events_via_dj_profiles
+    from src.matching.dj_twin import get_user_genre_distribution, load_dj_vectors
     from src.matching.exact import ExactMatcher
     from src.matching.vibe import VibeMatcher, build_taste_profile
 
@@ -682,11 +685,21 @@ async def _match_top_events(
     if not all_events:
         return []
 
+    # --- FIX 2: Enrich events with genres inferred from DJ taste vectors ---
+    # RA events often have empty genre tags. Before running VibeMatcher, look
+    # up each performing artist in our DJ vectors and add their top genres to
+    # the event so that genre-based matching has data to work with.
+    dj_vectors = load_dj_vectors()
+    if dj_vectors:
+        _enrich_event_genres(all_events, dj_vectors)
+
     taste_profile = build_taste_profile(sc_artists)
 
+    # --- ExactMatcher ---
     exact = ExactMatcher().match(sc_artists, all_events)
     matched_urls = {m.event.url for m in exact if m.event.url}
 
+    # --- VibeMatcher ---
     vibe = VibeMatcher().match(
         sc_artists,
         all_events,
@@ -694,11 +707,107 @@ async def _match_top_events(
         exclude_event_ids=matched_urls,
     )
 
-    combined = exact + vibe
+    # --- FIX 1: DJ-profile-based event matching ---
+    matched_so_far = matched_urls | {m.event.url for m in vibe if m.event.url}
+    user_genres = get_user_genre_distribution(taste_profile=taste_profile)
+    dj_matches = match_events_via_dj_profiles(
+        user_genres,
+        all_events,
+        exclude_event_urls=matched_so_far,
+    )
+
+    logger.info(
+        "scan {}: matching results — {} exact, {} vibe, {} dj-profile",
+        task.task_id, len(exact), len(vibe), len(dj_matches),
+    )
+
+    # --- FIX 4: Deduplicate matches ---
+    # Same event matched by multiple methods keeps only the highest-confidence match.
+    combined = exact + vibe + dj_matches
+    combined = _deduplicate_matches(combined)
     combined.sort(key=lambda m: (-m.confidence, m.event.date))
     top = combined[:5]
 
     return [_serialise_match(m) for m in top]
+
+
+def _enrich_event_genres(
+    events: list[Any],
+    dj_vectors: dict[str, dict[str, Any]],
+) -> None:
+    """Add genres to events by looking up performing artists in DJ taste vectors.
+
+    For each event with an empty or sparse genre list, fuzzy-match each artist
+    name against the DJ vector database. If found, take the DJ's top 3 genres
+    and add them to the event.
+    """
+    from thefuzz import fuzz as _fuzz
+
+    # Build a normalized name → original name lookup
+    name_lookup: dict[str, str] = {name.lower().strip(): name for name in dj_vectors}
+
+    enriched_count = 0
+    for event in events:
+        added_genres: set[str] = set()
+        for artist_name in event.artists:
+            normalized = artist_name.lower().strip()
+
+            # Fast path: exact normalized match
+            original: str | None = name_lookup.get(normalized)
+
+            # Fuzzy match fallback (threshold 90)
+            if original is None:
+                best_score = 0
+                for norm_name, orig_name in name_lookup.items():
+                    score = _fuzz.ratio(normalized, norm_name)
+                    if score > best_score:
+                        best_score = score
+                        original = orig_name
+                if best_score < 90:
+                    original = None
+
+            if original is None:
+                continue
+
+            dj_data = dj_vectors[original]
+            genre_dist = dj_data.get("genre_distribution", {})
+            if not genre_dist:
+                continue
+
+            # Take top 3 genres by weight
+            top_genres = sorted(genre_dist.items(), key=lambda x: -x[1])[:3]
+            for genre, _weight in top_genres:
+                added_genres.add(genre.lower().strip())
+
+        if added_genres:
+            existing = {g.lower().strip() for g in event.genres}
+            new_genres = added_genres - existing
+            if new_genres:
+                event.genres = list(existing | new_genres)
+                enriched_count += 1
+
+    if enriched_count:
+        logger.info("Enriched {} events with genres from DJ vectors", enriched_count)
+
+
+def _deduplicate_matches(matches: list[Any]) -> list[Any]:
+    """Deduplicate matches by event URL, keeping the highest-confidence match per event.
+
+    Events without a URL are always kept (no dedup key available).
+    """
+    best_by_url: dict[str, Any] = {}
+    no_url: list[Any] = []
+
+    for match in matches:
+        url = match.event.url
+        if not url:
+            no_url.append(match)
+            continue
+        existing = best_by_url.get(url)
+        if existing is None or match.confidence > existing.confidence:
+            best_by_url[url] = match
+
+    return list(best_by_url.values()) + no_url
 
 
 def _serialise_match(match: Any) -> dict[str, Any]:
